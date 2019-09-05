@@ -10,4 +10,8 @@ project "GLEW"
 		"src/**.c"
 	}
 
+	includedirs {
+		"include"
+	}
+
 	defines "GLEW_STATIC"
