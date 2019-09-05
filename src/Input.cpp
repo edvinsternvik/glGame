@@ -28,6 +28,14 @@ namespace glGame {
 		return m_keys[keycode] && !m_keysPrevious[keycode];
 	}
 
+	bool Input::getKeyUp(int keycode) {
+		if (keycode < 0 || keycode > KEY_LAST) {
+			return false;
+		}
+
+		return !m_keys[keycode] && m_keysPrevious[keycode];
+	}
+
 	bool Input::getMouseKeyDown(int keycode) {
 		return true;
 	}

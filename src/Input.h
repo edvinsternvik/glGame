@@ -12,6 +12,7 @@ namespace glGame {
 
 		static bool getKeyDown(int keycode);
 		static bool getKey(int keycode);
+		static bool getKeyUp(int keycode);
 
 		static bool getMouseKeyDown(int keycode);
 		static bool getMouseKey(int keycode);
