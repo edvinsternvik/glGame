@@ -1,4 +1,5 @@
 #pragma once
+#include "Rendering/Renderer.h"
 #include "Window.h"
 #include "Input.h"
 
@@ -18,5 +19,6 @@ namespace glGame {
 	private:
 		bool m_running = true;
 		std::unique_ptr<Window> m_window;
+		std::unique_ptr<Renderer> m_renderer;
 	};
 }

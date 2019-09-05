@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include "Application.h"
 
 int main() {
