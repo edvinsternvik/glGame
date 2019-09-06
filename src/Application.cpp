@@ -4,10 +4,10 @@
 namespace glGame {
 
 	Application::Application() {
-		m_renderer = std::make_unique<Renderer>();
 		std::string title = "glGame";
 		m_window = std::make_unique<Window>(title, 1280, 720);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
+		m_renderer = std::make_unique<Renderer>();
 	}
 
 	void Application::run() {

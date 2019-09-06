@@ -32,6 +32,8 @@ project "glGame"
 		"opengl32.lib"
 	}
 
+	defines "GLEW_STATIC"
+
 	filter "system:linux"
 		linkoptions { "-lX11", "-ldl", "-lGL", "-lpthread" }
 
