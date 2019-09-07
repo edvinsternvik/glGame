@@ -8,16 +8,20 @@ namespace glGame {
 		m_window = std::make_unique<Window>(title, 1280, 720);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
 		m_renderer = std::make_unique<Renderer>();
+
+		m_scene = std::make_unique<Scene>();
 	}
 
 	void Application::run() {
 		while(m_running) {
 
+			m_scene->update();
+
 			m_renderer->render();
 
 			Input::update();
-			m_window->swapBuffers();
 			m_window->pollEvents();
+			m_window->swapBuffers();
 		}
 	}
 
