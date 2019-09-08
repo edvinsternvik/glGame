@@ -4,3 +4,5 @@ bin*/
 *.vcxproj*
 premake5
 premake5.exe
+Makefile
+*.make
