@@ -2,3 +2,5 @@
 bin*/
 *.sln
 *.vcxproj*
+premake5
+premake5.exe
