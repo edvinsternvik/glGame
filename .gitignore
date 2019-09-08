@@ -6,3 +6,5 @@ premake5
 premake5.exe
 Makefile
 *.make
+.vscode/
+imgui.ini

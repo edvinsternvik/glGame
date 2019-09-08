@@ -14,6 +14,8 @@ namespace glGame {
 		void swapBuffers();
 		void pollEvents();
 		inline void setEventFunction(std::function<void(Event&)> eventFunction) { m_data.eventFunction = eventFunction; }
+
+		GLFWwindow* getWindow() const; 
 		
 	public:
 

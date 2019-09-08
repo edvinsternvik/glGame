@@ -44,6 +44,10 @@ namespace glGame {
 		glfwPollEvents();
 	}
 
+	GLFWwindow* Window::getWindow() const {
+		return m_window;
+	}
+
 	void Window::setEventCallbackFunctions() {
 		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
 			windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
