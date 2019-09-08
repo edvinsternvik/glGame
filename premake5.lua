@@ -28,11 +28,13 @@ project "glGame"
 
 	links {
 		"GLEW",
-		"GLFW",
-		"opengl32.lib"
+		"GLFW"
 	}
 
 	defines "GLEW_STATIC"
+
+	filter "system:windows"
+		links "opengl32.lib"
 
 	filter "system:linux"
 		linkoptions { "-lX11", "-ldl", "-lGL", "-lpthread" }
