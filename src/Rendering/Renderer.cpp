@@ -9,6 +9,9 @@ namespace glGame {
 
 		tempvb = std::make_unique<VertexBuffer>();
 		m_framebuffer = std::make_unique<FrameBuffer>();
+		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
+		m_postProcessingShader = std::make_unique<Shader>("shaders/postProcessing/vertex.glsl", "shaders/postProcessing/fragment.glsl");
+		m_shader->useShader();
 	}
 
 	void Renderer::render() {
