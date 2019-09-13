@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include "VertexBuffer.h"
+#include "FrameBuffer.h"
 
 #include <memory>
 
@@ -14,10 +15,12 @@ namespace glGame {
 		void render();
 
 	private:
+
 		void clearScreen();
 
 	private:
 		std::unique_ptr<VertexBuffer> tempvb;
+		std::unique_ptr<FrameBuffer> m_framebuffer;
 		
 	};
 }

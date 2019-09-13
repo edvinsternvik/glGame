@@ -8,6 +8,7 @@ namespace glGame {
 		initGLEW();
 
 		tempvb = std::make_unique<VertexBuffer>();
+		m_framebuffer = std::make_unique<FrameBuffer>();
 	}
 
 	void Renderer::render() {
