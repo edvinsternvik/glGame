@@ -4,14 +4,12 @@ namespace glGame {
 
 	class VertexBuffer {
 	public:
-		VertexBuffer();
+		VertexBuffer(float* data, unsigned int arrayLength);
 
 		void bindBuffer();
 
 	private:
 		unsigned int m_bufferID;
-
-		float m_tempData[6];
 	};
 
 }

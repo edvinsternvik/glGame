@@ -14,6 +14,10 @@ void glGame::FrameBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 }
 
+void glGame::FrameBuffer::unbind() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void glGame::FrameBuffer::genFramebuffer() {
 	glGenFramebuffers(1, &m_frameBuffer);
 

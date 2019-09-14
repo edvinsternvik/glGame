@@ -9,6 +9,7 @@ namespace glGame {
 		~FrameBuffer();
 
 		void bind();
+		void unbind();
 
 	private:
 		void genFramebuffer();
