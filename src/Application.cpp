@@ -12,7 +12,6 @@ namespace glGame {
 
 		m_scene = std::make_unique<Scene>();
 		m_gui = std::make_unique<Gui>(m_window->getWindow());
-		std::cout << "Hello: " << m_renderer->getFrameTexture() << std::endl;
 		m_gui->m_windows.push_back(std::make_unique<ViewportWindow>(m_renderer->getFrameTexture(), width / (float)height));
 	}
 
