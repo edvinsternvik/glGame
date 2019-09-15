@@ -12,18 +12,23 @@ glGame::FrameBuffer::~FrameBuffer() {
 
 void glGame::FrameBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+	glBindTexture(GL_TEXTURE_2D, m_frameTexture);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
 }
 
 void glGame::FrameBuffer::unbind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void glGame::FrameBuffer::genFramebuffer() {
 	glGenFramebuffers(1, &m_frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
 	m_frameTexture = genTexture(1280, 720);
 	glBindTexture(GL_TEXTURE_2D, m_frameTexture);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE0, GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_frameTexture, 0);
 
 	m_renderBuffer = genRenderBuffer(1280, 720);
 	glBindRenderbuffer(1, m_renderBuffer);
@@ -33,9 +38,7 @@ void glGame::FrameBuffer::genFramebuffer() {
 		std::cout << "Framebuffer not complete" << std::endl;
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	unbind();
 }
 
 unsigned int glGame::FrameBuffer::genTexture(int width, int height) {

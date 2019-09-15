@@ -14,8 +14,9 @@ namespace glGame {
 		void initGLEW();
 		void render();
 
+		inline unsigned int getFrameTexture() { return m_framebuffer->getTexture(); }
+
 	private:
-		
 		void clearScreen();
 
 	private:

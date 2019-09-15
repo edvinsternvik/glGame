@@ -14,17 +14,20 @@ namespace glGame {
 		m_postProcessingShader = std::make_unique<Shader>("shaders/postProcessing/vertex.glsl", "shaders/postProcessing/fragment.glsl");
 
 		m_shader->useShader();
+
 	}
 
 	void Renderer::render() {
 		clearScreen();
 
-		// m_framebuffer->bind();
-		// clearScreen();
+		//Render to frame texture
+		m_framebuffer->bind();
+		clearScreen();
 
-
+		m_shader->useShader();
 		m_tempTriangle->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//----------------------
 
 		m_framebuffer->unbind();
 	}

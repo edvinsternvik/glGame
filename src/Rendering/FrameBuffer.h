@@ -11,6 +11,8 @@ namespace glGame {
 		void bind();
 		void unbind();
 
+		inline unsigned int getTexture() { return m_frameTexture; }
+
 	private:
 		void genFramebuffer();
 		unsigned int genTexture(int width, int height);
