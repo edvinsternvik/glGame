@@ -2,9 +2,10 @@
 #include <iostream>
 
 namespace glGame {
-
+	GameObject::GameObject(std::string& name) : name(name) {
+	}
 	void glGame::GameObject::onUpdate() {
-		std::cout << "hello" << std::endl;
+		
 	}
 
 }

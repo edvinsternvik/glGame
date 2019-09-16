@@ -9,7 +9,9 @@ namespace glGame {
 	class Scene {
 	public:
 
-		GameObject* createGameObject();
+		GameObject* createGameObject(std::string name);
+		std::unique_ptr<GameObject> const& getGameObject(int index);
+		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void update();
 
