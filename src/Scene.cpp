@@ -2,17 +2,28 @@
 
 namespace glGame {
 
-	GameObject* Scene::createGameObject(std::string name) {
-		m_gameObjects.push_back(std::make_unique<GameObject>(name));
-		return m_gameObjects.back().get();
+	Scene::~Scene() {
+		for (GameObject* go : m_gameObjects) {
+			delete go;
+		}
 	}
 
-	std::unique_ptr<GameObject> const& Scene::getGameObject(int index) {
+	GameObject* Scene::createGameObject(std::string name) {
+		GameObject* newGameObject = new GameObject(name);
+		m_gameObjects.push_back(newGameObject);
+		return newGameObject;
+	}
+
+	GameObject* Scene::getGameObject(int index) {
 		if (index < 0 || index > m_gameObjects.size()) {
 			return nullptr;
 		}
 
 		return m_gameObjects[index];
+	}
+
+	void Scene::selectGameObject(int index) {
+		m_selectedGameObject = getGameObject(index);
 	}
 
 	void Scene::update() {

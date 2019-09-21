@@ -16,7 +16,7 @@ void glGame::Gui::OnGuiRender() {
 		m_windows[i]->renderWindow();
 		ImGui::End();
 	}
-	
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

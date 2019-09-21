@@ -22,7 +22,7 @@ namespace glGame {
 		bool m_running = true;
 		std::unique_ptr<Window> m_window;
 		std::unique_ptr<Renderer> m_renderer;
-		std::shared_ptr<Scene> m_scene;
+		std::unique_ptr<Scene> m_scene;
 		std::unique_ptr<Gui> m_gui;
 	};
 }

@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include <iostream>
 
 namespace glGame {
 	GameObject::GameObject(std::string& name) : name(name) {
