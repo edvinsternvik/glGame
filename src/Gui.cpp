@@ -7,8 +7,7 @@ glGame::Gui::Gui(GLFWwindow* window) {
 void glGame::Gui::OnGuiRender() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
-
-
+	
 	ImGui::NewFrame();
 
 	for(int i = 0; i < m_windows.size(); ++i) {

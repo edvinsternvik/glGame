@@ -45,15 +45,22 @@ namespace glGame {
 	}
 
 	void PropertiesWindow::renderWindow() {
-		if ((*m_scene)->getSelectedGameObject()) {
-			std::string msg = (*m_scene)->getSelectedGameObject()->name;
+		GameObject* selectedObj = (*m_scene)->getSelectedGameObject();
+
+		if (selectedObj) {
+			std::string msg = selectedObj->name;
 			msg.resize(128);
 			char* test = (char*)msg.c_str();
 			if (ImGui::InputText("###NAME", test, msg.size())) {
-				(*m_scene)->getSelectedGameObject()->name = std::string(test);
+				selectedObj->name = std::string(test);
 			}
 
 			ImGui::Separator();
+
+			int componentSize = selectedObj->getComponentSize();
+			for(int i = 0; i < componentSize; ++i) {
+				ImGui::Text("hello");
+			}
 		}
 	}
 
