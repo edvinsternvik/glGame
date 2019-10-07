@@ -46,7 +46,14 @@ namespace glGame {
 
 	void PropertiesWindow::renderWindow() {
 		if ((*m_scene)->getSelectedGameObject()) {
-			ImGui::Text("hello");
+			std::string msg = (*m_scene)->getSelectedGameObject()->name;
+			msg.resize(128);
+			char* test = (char*)msg.c_str();
+			if (ImGui::InputText("###NAME", test, msg.size())) {
+				(*m_scene)->getSelectedGameObject()->name = std::string(test);
+			}
+
+			ImGui::Separator();
 		}
 	}
 
