@@ -27,14 +27,17 @@ namespace glGame {
 			(*m_scene)->createGameObject("New GameObject");
 		}
 		ImGui::Separator();
-		//ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
+		GameObject* current = (*m_scene)->getSelectedGameObject();
+		
 		int gameObjects = (*m_scene)->getGameObjectCount();
 		for (int i = 0; i < gameObjects; ++i) {
-			if (ImGui::Button((*m_scene)->getGameObject(i)->name.c_str(), ImVec2(0, 0))) {
+			bool selected = (current == (*m_scene)->getGameObject(i));
+			ImGui::PushID(i);
+			if (ImGui::Selectable((*m_scene)->getGameObject(i)->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
 				(*m_scene)->selectGameObject(i);
 			}
-			//ImGui::TreeNodeEx((*m_scene)->getGameObject(i)->name.c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen);
+			ImGui::PopID();
 		}
 	}
 

@@ -13,7 +13,7 @@ namespace glGame {
 		GameObject* createGameObject(std::string name);
 		GameObject* getGameObject(int index);
 		void selectGameObject(int index);
-		inline void unselectGameObject() { m_selectedGameObject = nullptr; }
+		inline void deselectGameObject() { m_selectedGameObject = nullptr; }
 		inline GameObject* getSelectedGameObject() const { return m_selectedGameObject; }
 		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
