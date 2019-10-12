@@ -55,11 +55,16 @@ namespace glGame {
 				selectedObj->name = std::string(test);
 			}
 
+			ImGui::Spacing();
 			ImGui::Separator();
+			ImGui::Spacing();
 
 			int componentSize = selectedObj->getComponentSize();
 			for(int i = 0; i < componentSize; ++i) {
-				ImGui::Text("hello");
+				ImGui::Text(selectedObj->getComponent(i)->getName().c_str());
+				ImGui::Spacing();
+				ImGui::Separator();
+				ImGui::Spacing();
 			}
 		}
 	}

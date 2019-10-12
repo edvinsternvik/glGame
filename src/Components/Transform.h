@@ -7,6 +7,8 @@ namespace glGame {
 	public:
 		Transform();
 
+		virtual std::string getName() const { return "Transform"; }
+
 		virtual void update() override;
 
 	public:

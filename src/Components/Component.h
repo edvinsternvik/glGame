@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace glGame {
 
@@ -6,6 +7,7 @@ namespace glGame {
 	public:
 		Component() {}
 
+		virtual std::string getName() const = 0;
 		virtual void update() = 0;
 
 	};
