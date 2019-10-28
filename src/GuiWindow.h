@@ -28,24 +28,24 @@ namespace glGame {
 
 	class SceneWindow : public GuiWindow {
 	public:
-		SceneWindow(std::unique_ptr<Scene>* scene);
+		SceneWindow(std::shared_ptr<Scene>* scene);
 
 		inline virtual std::string getWindowName() { return "Scene"; }
 		virtual void renderWindow() override;
 
 	private:
-		std::unique_ptr<Scene>* m_scene;
+		std::shared_ptr<Scene>* m_scene;
 	};
 
 	class PropertiesWindow : public GuiWindow {
 	public:
-		PropertiesWindow(std::unique_ptr<Scene>* scene);
+		PropertiesWindow(std::shared_ptr<Scene>* scene);
 
 		inline virtual std::string getWindowName() { return "Properties"; }
 		virtual void renderWindow() override;
 
 	private:
-		std::unique_ptr<Scene>* m_scene;
+		std::shared_ptr<Scene>* m_scene;
 	};
 
 }

@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "../Scene.h"
 
 #include <iostream>
 
@@ -17,7 +18,7 @@ namespace glGame {
 
 	}
 
-	void Renderer::render() {
+	void Renderer::render(std::shared_ptr<Scene>* scene) {
 		clearScreen();
 
 		//Render to frame texture
@@ -27,6 +28,9 @@ namespace glGame {
 		m_shader->useShader();
 		m_tempTriangle->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// (*scene)->
+
 		//----------------------
 
 		m_framebuffer->unbind();

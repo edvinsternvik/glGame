@@ -8,9 +8,11 @@ namespace glGame {
 		int width = 1280, height = 720;
 		m_window = std::make_unique<Window>(title, width, height);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
+
+		m_scenes.push_back(std::make_shared<Scene>());
+		m_scene = m_scenes[0];
 		m_renderer = std::make_unique<Renderer>();
 
-		m_scene = std::make_unique<Scene>();
 		m_gui = std::make_unique<Gui>(m_window->getWindow());
 		m_gui->m_windows.push_back(std::make_unique<ViewportWindow>(m_renderer->getFrameTexture(), width / (float)height));
 		m_gui->m_windows.push_back(std::make_unique<SceneWindow>(&m_scene));
@@ -22,7 +24,7 @@ namespace glGame {
 
 			m_scene->update();
 
-			m_renderer->render();
+			m_renderer->render(&m_scene);
 			m_gui->OnGuiRender();
 
 			Input::update();

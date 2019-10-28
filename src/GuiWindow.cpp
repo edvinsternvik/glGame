@@ -19,7 +19,7 @@ namespace glGame {
 		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(width, height));
 	}
 
-	SceneWindow::SceneWindow(std::unique_ptr<Scene>* scene) : m_scene(scene) {
+	SceneWindow::SceneWindow(std::shared_ptr<Scene>* scene) : m_scene(scene) {
 	}
 
 	void SceneWindow::renderWindow() {
@@ -41,7 +41,7 @@ namespace glGame {
 		}
 	}
 
-	PropertiesWindow::PropertiesWindow(std::unique_ptr<Scene>* scene) : m_scene(scene) {
+	PropertiesWindow::PropertiesWindow(std::shared_ptr<Scene>* scene) : m_scene(scene) {
 	}
 
 	void PropertiesWindow::renderWindow() {

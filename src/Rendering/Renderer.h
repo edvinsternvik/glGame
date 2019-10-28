@@ -7,12 +7,14 @@
 
 namespace glGame {
 
+	class Scene;
+
 	class Renderer {
 	public:
 		Renderer();
 
 		void initGLEW();
-		void render();
+		void render(std::shared_ptr<Scene>* scene);
 
 		inline unsigned int getFrameTexture() { return m_framebuffer->getTexture(); }
 

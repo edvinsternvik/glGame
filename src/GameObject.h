@@ -5,6 +5,9 @@
 
 namespace glGame{
 
+	class Transform;
+	class MeshRenderer;
+
 	class GameObject {
 	public:
 		GameObject(std::string& name);
@@ -12,13 +15,16 @@ namespace glGame{
 
 		void onUpdate();
 
-		void addComponent(Component* component);
+		template<class T>
+		void addComponent();
+
 		const Component* const getComponent(int index) const;
 		int getComponentSize() const { return m_components.size(); }
 
 	public:
 		std::string name;
-		Component* transform;
+		Transform* transform;
+		MeshRenderer* meshRenderer;
 
 	private:
 		void init();
