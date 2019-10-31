@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "Input.h"
 #include "Scene.h"
-#include "Gui.h"
+#include "Editor/Gui.h"
 
 #include <memory>
 

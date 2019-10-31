@@ -5,7 +5,7 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include "Scene.h"
+#include "../Scene.h"
 
 namespace glGame {
 
@@ -38,34 +38,6 @@ namespace glGame {
 				(*m_scene)->selectGameObject(i);
 			}
 			ImGui::PopID();
-		}
-	}
-
-	PropertiesWindow::PropertiesWindow(std::shared_ptr<Scene>* scene) : m_scene(scene) {
-	}
-
-	void PropertiesWindow::renderWindow() {
-		GameObject* selectedObj = (*m_scene)->getSelectedGameObject();
-
-		if (selectedObj) {
-			std::string msg = selectedObj->name;
-			msg.resize(128);
-			char* test = (char*)msg.c_str();
-			if (ImGui::InputText("###NAME", test, msg.size())) {
-				selectedObj->name = std::string(test);
-			}
-
-			ImGui::Spacing();
-			ImGui::Separator();
-			ImGui::Spacing();
-
-			int componentSize = selectedObj->getComponentSize();
-			for(int i = 0; i < componentSize; ++i) {
-				ImGui::Text(selectedObj->getComponent(i)->getName().c_str());
-				ImGui::Spacing();
-				ImGui::Separator();
-				ImGui::Spacing();
-			}
 		}
 	}
 
