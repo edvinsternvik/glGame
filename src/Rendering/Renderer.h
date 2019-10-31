@@ -27,10 +27,10 @@ namespace glGame {
 			-1.0, -1.0, 1.0, -1.0, 1.0, 1.0,	 1.0, 1.0, -1.0, 1.0, -1.0, -1.0  
 		};
 
-		std::unique_ptr<Model> m_renderQuad;
+		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_framebuffer;
 		std::unique_ptr<Shader> m_shader;
-		std::unique_ptr<Shader> m_postProcessingShader;
+		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};
 }

@@ -23,6 +23,11 @@ namespace glGame {
 		glUseProgram(m_shaderProgramID);
 	}
 
+	void Shader::setUniform3f(const char* name, float v1, float v2, float v3) {
+		int uniformLocation = getUniformLocation(name);
+		glUniform3f(uniformLocation, v1, v2, v3);
+	}
+
 	std::string Shader::getShaderStringFromFile(std::string& filepath) {
 		std::fstream filestream(filepath, std::ios::in | std::ios::binary);
 		if(!filestream.is_open()) {
@@ -74,6 +79,18 @@ namespace glGame {
 		}
 
 		return programID;
+	}
+
+	int Shader::getUniformLocation(const char* name) {
+		auto search = m_uniformLocations.find(name);
+		if(search != m_uniformLocations.end()) {
+			return search->second;
+		}
+
+		int uniformLocation = glGetUniformLocation(m_shaderProgramID, name);
+		m_uniformLocations.insert(std::pair<const char*, int>(name, uniformLocation));
+
+		return uniformLocation;
 	}
 
 }
