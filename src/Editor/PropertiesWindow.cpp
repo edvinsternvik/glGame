@@ -18,6 +18,8 @@ namespace glGame {
 			return;
 		}
 
+		ImGui::Spacing();
+
 		std::string msg = selectedObj->name;
 		msg.resize(128);
 		char* test = (char*)msg.c_str();
@@ -26,6 +28,14 @@ namespace glGame {
 		}
 
 		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Text("Components");
+		ImGui::Spacing();
+		ImGui::Separator();
 		ImGui::Separator();
 		ImGui::Spacing();
 
@@ -34,10 +44,13 @@ namespace glGame {
 			const Component* selectedComponent = selectedObj->getComponent(i);
 			ImGui::Text(selectedComponent->getName().c_str());
 
+			ImGui::Spacing();
+
 			int editorVariableCount = selectedComponent->getEditorVariableCount();
 			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; editorVariableIndex++) {
 				const std::pair<void*, EditorVariableType>* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex); 
 				drawComponentVariableGui(editorVariable->first, editorVariable->second);
+				ImGui::Spacing();
 			}
 
 			ImGui::Spacing();
@@ -50,15 +63,26 @@ namespace glGame {
 		switch(varType) {
 
 		case EditorVariableType::Int:
-			ImGui::InputInt("Test int", (int*)data);
+			ImGui::DragInt("int", (int*)data, 0.01f);
 			break;
 		case EditorVariableType::Float:
-			ImGui::InputFloat("Test float", (float*)data);
+			ImGui::DragFloat("float", (float*)data, 0.01f);
 			break;
 		case EditorVariableType::Double:
-			ImGui::InputDouble("Test double", (double*)data);
+			ImGui::InputDouble("double", (double*)data);
 			break;
-
+		case EditorVariableType::Vec2:
+			ImGui::DragFloat2("float2", (float*)data, 0.01f);
+			break;
+		case EditorVariableType::Vec3:
+			ImGui::DragFloat3("float3", (float*)data, 0.01f);
+			break;
+		case EditorVariableType::String:
+			ImGui::InputText("string", (char*)data, 256);
+			break;
+		case EditorVariableType::Color:
+			ImGui::ColorPicker3("color", (float*)data);
+			break;
 		}
 	}
 

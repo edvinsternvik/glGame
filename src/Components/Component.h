@@ -5,7 +5,7 @@
 namespace glGame {
 
 	enum class EditorVariableType {
-		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset
+		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color
 	};
 
 	class Component {
