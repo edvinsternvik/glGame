@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "../Scene.h"
+#include "../Components/MeshRenderer.h"
 
 #include <iostream>
 
@@ -8,7 +9,6 @@ namespace glGame {
 	Renderer::Renderer() {
 		initGLEW();
 
-		m_tempTriangle = std::make_unique<Model>(m_tempTriangleVerticies, 6);
 		m_renderQuad = std::make_unique<Model>(m_renderQuadVerticies, 12);
 		m_framebuffer = std::make_unique<FrameBuffer>();
 		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
@@ -25,12 +25,19 @@ namespace glGame {
 		m_framebuffer->bind();
 		clearScreen();
 
+		//Render scene
 		m_shader->useShader();
-		m_tempTriangle->bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		int gameObjectCount = (*scene)->getGameObjectCount();
+		for(int i = 0; i < gameObjectCount; ++i) {
+			MeshRenderer* meshRenderer = (*scene)->getGameObject(i)->meshRenderer;
+			if(meshRenderer) {
+				
+				//Render object
+				meshRenderer->model->bind();
+				glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		// (*scene)->
-
+			}
+		}
 		//----------------------
 
 		m_framebuffer->unbind();
