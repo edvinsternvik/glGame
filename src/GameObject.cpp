@@ -22,7 +22,9 @@ namespace glGame {
 	
 	template<class T>
 	void GameObject::addComponent() {
-		m_components.push_back(new T);
+		T* newComponent = new T;
+		m_components.push_back(newComponent);
+		newComponent->setParentGameObject(this);
 	}
 
 	const Component* const GameObject::getComponent(int index) const {

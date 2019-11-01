@@ -4,6 +4,8 @@
 
 namespace glGame {
 
+	class GameObject;
+
 	enum class EditorVariableType {
 		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color
 	};
@@ -16,20 +18,29 @@ namespace glGame {
 		virtual void update() = 0;
 
 		inline const int getEditorVariableCount() const {
-			return editorVariables.size();
+			return m_editorVariables.size();
 		}
 
 		inline const std::pair<void*, EditorVariableType>& getEditorVariable(int index) const {
-			return editorVariables[index];
+			return m_editorVariables[index];
 		}
 
 	protected:
 		inline void addEditorVariable(void* variable, EditorVariableType varType) {
-			editorVariables.push_back(std::pair<void*, EditorVariableType>(variable, varType));
+			m_editorVariables.push_back(std::pair<void*, EditorVariableType>(variable, varType));
 		}
 
+		GameObject* gameObject;
+
 	private:
-		std::vector<std::pair<void*, EditorVariableType>> editorVariables;
+		inline void setParentGameObject(GameObject* parent) {
+			gameObject = parent;
+		}
+		friend class GameObject;
+
+	private:
+		std::vector<std::pair<void*, EditorVariableType>> m_editorVariables;
+		
 	};
 
 }
