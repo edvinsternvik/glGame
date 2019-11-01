@@ -25,6 +25,7 @@ project "glGame"
 	includedirs {
 		"vendor/GLEW/include",
 		"vendor/GLFW/include",
+		"vendor/glm/include",
 		"vendor"
 	}
 
