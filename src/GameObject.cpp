@@ -1,8 +1,6 @@
 #include "GameObject.h"
 #include "Components/Transform.h"
 
-#include "Components/MeshRenderer.h"
-
 namespace glGame {
 	GameObject::GameObject(std::string& name) : name(name) {
 		init();
@@ -28,11 +26,7 @@ namespace glGame {
 	}
 
 	void GameObject::init() {
-		addComponent<Transform>();
-		transform = (Transform*)m_components[0];
-
-		addComponent<MeshRenderer>();
-		meshRenderer = (MeshRenderer*)m_components[1];
+		transform = addComponent<Transform>();
 	}
 
 }

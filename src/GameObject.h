@@ -29,8 +29,8 @@ namespace glGame{
 
 	public:
 		std::string name;
-		Transform* transform;
-		MeshRenderer* meshRenderer;
+		Transform* transform = nullptr;
+		MeshRenderer* meshRenderer = nullptr;
 
 	private:
 		void init();

@@ -6,6 +6,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Scene.h"
+#include "../Components/MeshRenderer.h"
 
 namespace glGame {
 
@@ -24,7 +25,8 @@ namespace glGame {
 
 	void SceneWindow::renderWindow() {
 		if (ImGui::Button("Create GameObject", ImVec2(0, 0))) {
-			(*m_scene)->createGameObject("New GameObject");
+			GameObject* newGameObject = (*m_scene)->createGameObject("New GameObject");
+			newGameObject->meshRenderer = newGameObject->addComponent<MeshRenderer>();
 		}
 		ImGui::Separator();
 
