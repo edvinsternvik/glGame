@@ -10,6 +10,14 @@ namespace glGame {
 		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color
 	};
 
+	struct EditorVariable {
+		void* data;
+		EditorVariableType variableType;
+		const char* name;
+
+		EditorVariable(void* data, EditorVariableType variableType, const char* name) : data(data), variableType(variableType), name(name) {}
+	};
+
 	class Component {
 	public:
 		Component() {}
@@ -21,13 +29,13 @@ namespace glGame {
 			return m_editorVariables.size();
 		}
 
-		inline const std::pair<void*, EditorVariableType>& getEditorVariable(int index) const {
+		inline const EditorVariable& getEditorVariable(int index) const {
 			return m_editorVariables[index];
 		}
 
 	protected:
-		inline void addEditorVariable(void* variable, EditorVariableType varType) {
-			m_editorVariables.push_back(std::pair<void*, EditorVariableType>(variable, varType));
+		inline void addEditorVariable(void* variable, EditorVariableType varType, const char* name) {
+			m_editorVariables.push_back(EditorVariable(variable, varType, name));
 		}
 
 		GameObject* gameObject;
@@ -39,7 +47,7 @@ namespace glGame {
 		friend class GameObject;
 
 	private:
-		std::vector<std::pair<void*, EditorVariableType>> m_editorVariables;
+		std::vector<EditorVariable> m_editorVariables;
 		
 	};
 

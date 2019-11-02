@@ -48,10 +48,10 @@ namespace glGame {
 
 			int editorVariableCount = selectedComponent->getEditorVariableCount();
 			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; ++editorVariableIndex) {
-				const std::pair<void*, EditorVariableType>* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex);
+				const EditorVariable* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex);
 
 				ImGui::PushID(componentVariableIndex++); 
-				drawComponentVariableGui(editorVariable->first, editorVariable->second);
+				drawComponentVariableGui(editorVariable);
 				ImGui::PopID();
 
 				ImGui::Spacing();
@@ -63,29 +63,29 @@ namespace glGame {
 		}
 	}
 
-	void PropertiesWindow::drawComponentVariableGui(void* data, EditorVariableType varType) {
-		switch(varType) {
+	void PropertiesWindow::drawComponentVariableGui(const EditorVariable* editorVariable) {
+		switch(editorVariable->variableType) {
 
 		case EditorVariableType::Int:
-			ImGui::DragInt("int", (int*)data, 0.01f);
+			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, 0.01f);
 			break;
 		case EditorVariableType::Float:
-			ImGui::DragFloat("float", (float*)data, 0.01f);
+			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, 0.01f);
 			break;
 		case EditorVariableType::Double:
-			ImGui::InputDouble("double", (double*)data);
+			ImGui::InputDouble(editorVariable->name, (double*)editorVariable->data);
 			break;
 		case EditorVariableType::Vec2:
-			ImGui::DragFloat2("float2", (float*)data, 0.01f);
+			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, 0.01f);
 			break;
 		case EditorVariableType::Vec3:
-			ImGui::DragFloat3("float3", (float*)data, 0.01f);
+			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, 0.01f);
 			break;
 		case EditorVariableType::String:
-			ImGui::InputText("string", (char*)data, 256);
+			ImGui::InputText(editorVariable->name, (char*)editorVariable->data, 256);
 			break;
 		case EditorVariableType::Color:
-			ImGui::ColorPicker3("color", (float*)data);
+			ImGui::ColorPicker3(editorVariable->name, (float*)editorVariable->data);
 			break;
 		}
 	}
