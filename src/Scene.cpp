@@ -41,4 +41,10 @@ namespace glGame {
 			go->onUpdate();
 		}
 	}
+
+	void Scene::onRender() {
+		for (auto& go : m_gameObjects) {
+			go->onRender();
+		}
+	}
 }

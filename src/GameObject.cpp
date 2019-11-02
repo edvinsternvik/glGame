@@ -18,6 +18,12 @@ namespace glGame {
 		}
 	}
 
+	void glGame::GameObject::onRender() {
+		for (Component* c : m_components) {
+			c->onRender();
+		}
+	}
+
 	const Component* const GameObject::getComponent(int index) const {
 		if(index < 0 || index > getComponentSize())
 			return nullptr;

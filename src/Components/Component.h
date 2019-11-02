@@ -24,6 +24,7 @@ namespace glGame {
 
 		virtual std::string getName() const = 0;
 		virtual void update() = 0;
+		virtual void onRender() {}
 
 		inline const int getEditorVariableCount() const {
 			return m_editorVariables.size();
@@ -38,7 +39,7 @@ namespace glGame {
 			m_editorVariables.push_back(EditorVariable(variable, varType, name));
 		}
 
-		GameObject* gameObject;
+		GameObject* gameObject = nullptr;
 
 	private:
 		inline void setParentGameObject(GameObject* parent) {

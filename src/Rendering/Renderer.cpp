@@ -28,6 +28,7 @@ namespace glGame {
 		clearScreen();
 
 		//Render scene
+		(*scene)->onRender();
 		m_shader->useShader();
 		Camera* camera = (*scene)->activeCamera;
 		m_shader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
@@ -42,7 +43,7 @@ namespace glGame {
 				
 				//Render object
 				meshRenderer->model->bind();
-				m_shader->setUniform3f("u_position", transform->position.x, transform->position.y, transform->position.z);
+				m_shader->setUniformMat4("u_model", &(meshRenderer->modelMatrix[0][0]));
 				glDrawArrays(GL_TRIANGLES, 0, 3);
 
 			}

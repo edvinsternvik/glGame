@@ -14,6 +14,7 @@ namespace glGame{
 		~GameObject();
 
 		void onUpdate();
+		void onRender();
 
 		template<class T>
 		T* addComponent() {

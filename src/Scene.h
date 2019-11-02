@@ -21,6 +21,7 @@ namespace glGame {
 		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void update();
+		void onRender();
 
 	public:
 		Camera* activeCamera;
