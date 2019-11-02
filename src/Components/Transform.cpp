@@ -2,8 +2,10 @@
 
 namespace glGame {
 
-	Transform::Transform() : Component(), x(0), y(0), z(0), scaleX(1), scaleY(1), scaleZ(1), rotationX(0), rotationY(0), rotationZ(0) {
-		addEditorVariable(&x, EditorVariableType::Vec3);
+	Transform::Transform() : Component(), position(0, 0, 0), scale(0, 0, 0), rotation(0, 0, 0) {
+		addEditorVariable(&position, EditorVariableType::Vec3);
+		addEditorVariable(&rotation, EditorVariableType::Vec3);
+		//addEditorVariable()
 	}
 
 	void Transform::update() {

@@ -42,7 +42,7 @@ namespace glGame {
 				
 				//Render object
 				meshRenderer->model->bind();
-				m_shader->setUniform3f("u_position", transform->x, transform->y, transform->z);
+				m_shader->setUniform3f("u_position", transform->position.x, transform->position.y, transform->position.z);
 				glDrawArrays(GL_TRIANGLES, 0, 3);
 
 			}

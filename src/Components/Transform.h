@@ -1,4 +1,5 @@
 #pragma once
+#include "../Math/Vector.h"
 #include "Component.h"
 
 namespace glGame {
@@ -12,9 +13,7 @@ namespace glGame {
 		virtual void update() override;
 
 	public:
-		float x, y, z;
-		float scaleX, scaleY, scaleZ;
-		float rotationX, rotationY, rotationZ;
+		Vector3 position, scale, rotation;
 	};
 
 }
