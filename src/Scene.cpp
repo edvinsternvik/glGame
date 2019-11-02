@@ -1,6 +1,16 @@
 #include "Scene.h"
 
+#include "Components/Camera.h"
+#include "Components/Transform.h"
+
 namespace glGame {
+
+	Scene::Scene() {
+		GameObject* cameraObject = createGameObject("Camera");
+		Camera* cameraComponent = cameraObject->addComponent<Camera>();
+
+		activeCamera = cameraComponent;
+	}
 
 	Scene::~Scene() {
 		for (GameObject* go : m_gameObjects) {

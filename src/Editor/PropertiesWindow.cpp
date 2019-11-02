@@ -39,7 +39,7 @@ namespace glGame {
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		int componentSize = selectedObj->getComponentSize();
+		int componentSize = selectedObj->getComponentSize(), componentVariableIndex = 0;
 		for(int i = 0; i < componentSize; ++i) {
 			const Component* selectedComponent = selectedObj->getComponent(i);
 			ImGui::Text(selectedComponent->getName().c_str());
@@ -47,9 +47,13 @@ namespace glGame {
 			ImGui::Spacing();
 
 			int editorVariableCount = selectedComponent->getEditorVariableCount();
-			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; editorVariableIndex++) {
-				const std::pair<void*, EditorVariableType>* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex); 
+			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; ++editorVariableIndex) {
+				const std::pair<void*, EditorVariableType>* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex);
+
+				ImGui::PushID(componentVariableIndex++); 
 				drawComponentVariableGui(editorVariable->first, editorVariable->second);
+				ImGui::PopID();
+
 				ImGui::Spacing();
 			}
 

@@ -19,13 +19,6 @@ namespace glGame {
 			c->update();
 		}
 	}
-	
-	template<class T>
-	void GameObject::addComponent() {
-		T* newComponent = new T;
-		m_components.push_back(newComponent);
-		newComponent->setParentGameObject(this);
-	}
 
 	const Component* const GameObject::getComponent(int index) const {
 		if(index < 0 || index > getComponentSize())

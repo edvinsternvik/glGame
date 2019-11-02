@@ -6,8 +6,11 @@
 
 namespace glGame {
 
+	class Camera;
+
 	class Scene {
 	public:
+		Scene();
 		~Scene();
 
 		GameObject* createGameObject(std::string name);
@@ -18,6 +21,9 @@ namespace glGame {
 		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void update();
+
+	public:
+		Camera* activeCamera;
 
 	private:
 		std::vector<GameObject*> m_gameObjects;
