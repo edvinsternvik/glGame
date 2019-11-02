@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "../Scene.h"
+#include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
 
@@ -28,6 +29,11 @@ namespace glGame {
 
 		//Render scene
 		m_shader->useShader();
+		Camera* camera = (*scene)->activeCamera;
+		m_shader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
+		m_shader->setUniformMat4("u_view", &(camera->getViewMatrix()[0][0]));
+
+		//Render GameObjects
 		int gameObjectCount = (*scene)->getGameObjectCount();
 		for(int i = 0; i < gameObjectCount; ++i) {
 			MeshRenderer* meshRenderer = (*scene)->getGameObject(i)->meshRenderer;

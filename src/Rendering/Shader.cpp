@@ -28,6 +28,11 @@ namespace glGame {
 		glUniform3f(uniformLocation, v1, v2, v3);
 	}
 
+	void Shader::setUniformMat4(const char* name, const float* matrix) {
+		int uniformLocation = getUniformLocation(name);
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
+	}
+
 	std::string Shader::getShaderStringFromFile(std::string& filepath) {
 		std::fstream filestream(filepath, std::ios::in | std::ios::binary);
 		if(!filestream.is_open()) {
