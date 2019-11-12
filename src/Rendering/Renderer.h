@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include "FrameBuffer.h"
 #include "Shader.h"
-#include "../Model.h"
+#include "../Resources/Model.h"
 #include <memory>
 
 namespace glGame {

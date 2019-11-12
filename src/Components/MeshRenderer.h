@@ -2,7 +2,7 @@
 #include <memory>
 #include "Component.h"
 #include <glm/glm.hpp>
-#include "../Model.h"
+#include "../Resources/Model.h"
 
 namespace glGame {
 	

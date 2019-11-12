@@ -44,7 +44,7 @@ namespace glGame {
 				//Render object
 				meshRenderer->model->bind();
 				m_shader->setUniformMat4("u_model", &(meshRenderer->modelMatrix[0][0]));
-				glDrawArrays(GL_TRIANGLES, 0, 3);
+				glDrawArrays(GL_TRIANGLES, 0, meshRenderer->model->getVerticiesCount());
 
 			}
 		}
