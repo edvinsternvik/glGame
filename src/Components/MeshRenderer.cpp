@@ -6,7 +6,7 @@
 namespace glGame {
 
 	MeshRenderer::MeshRenderer() {
-		model = std::make_unique<Model>("tempCube.obj");
+		model = std::make_unique<Model>("epicMonkey.obj");
 	}
 
 	void MeshRenderer::update() {

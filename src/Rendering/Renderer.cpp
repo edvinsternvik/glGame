@@ -11,7 +11,6 @@ namespace glGame {
 	Renderer::Renderer() {
 		initGLEW();
 
-		glEnable(GL_CULL_FACE);
 
 		// m_renderQuad = std::make_unique<Model>(m_renderQuadVerticies, 12);
 		m_framebuffer = std::make_unique<FrameBuffer>();
@@ -58,11 +57,16 @@ namespace glGame {
 	void Renderer::initGLEW() {
 		if (glewInit() != GLEW_OK) {
 			std::cout << "Could not initialize GLEW" << std::endl;
+			return;
 		}
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void Renderer::clearScreen() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 }
