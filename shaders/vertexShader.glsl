@@ -7,7 +7,15 @@ uniform mat4 u_projection;
 uniform mat4 u_view;
 uniform mat4 u_model;
 
+vec3 lightPos = vec3(4.0, 4.0, 4.0);
+
+out float lightDir;
+
 void main() {
-	vec3 pos = aPos;
-	gl_Position = u_projection * u_view * u_model * vec4(pos, 1.0);
+//	lightDir = 1.0;
+	vec4 pos = u_model * vec4(aPos, 1.0);
+	vec3 hello = normalize(lightPos - vec3(pos));
+	lightDir = dot(aNormal, hello);
+
+	gl_Position = u_projection * u_view * pos;
 }

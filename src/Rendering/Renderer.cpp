@@ -11,6 +11,8 @@ namespace glGame {
 	Renderer::Renderer() {
 		initGLEW();
 
+		glEnable(GL_CULL_FACE);
+
 		// m_renderQuad = std::make_unique<Model>(m_renderQuadVerticies, 12);
 		m_framebuffer = std::make_unique<FrameBuffer>();
 		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
