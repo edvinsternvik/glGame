@@ -7,6 +7,7 @@ workspace "glGame"
 include "vendor/GLEW"
 include "vendor/GLFW"
 include "vendor/imgui"
+include "vendor/lua"
 
 project "glGame"
 	kind "ConsoleApp"
@@ -32,7 +33,8 @@ project "glGame"
 	links {
 		"GLEW",
 		"GLFW",
-		"ImGui"
+		"ImGui",
+		"lua"
 	}
 
 	defines "GLEW_STATIC"
