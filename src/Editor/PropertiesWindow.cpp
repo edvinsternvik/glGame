@@ -64,22 +64,23 @@ namespace glGame {
 	}
 
 	void PropertiesWindow::drawComponentVariableGui(const EditorVariable* editorVariable) {
+		float speedMultiplier = 0.01f;
 		switch(editorVariable->variableType) {
 
 		case EditorVariableType::Int:
-			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, 0.01f);
+			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
 			break;
 		case EditorVariableType::Float:
-			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, 0.01f);
+			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
 			break;
 		case EditorVariableType::Double:
 			ImGui::InputDouble(editorVariable->name, (double*)editorVariable->data);
 			break;
 		case EditorVariableType::Vec2:
-			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, 0.01f);
+			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
 			break;
 		case EditorVariableType::Vec3:
-			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, 0.01f);
+			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
 			break;
 		case EditorVariableType::String:
 			ImGui::InputText(editorVariable->name, (char*)editorVariable->data, 256);

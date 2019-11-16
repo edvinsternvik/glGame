@@ -14,8 +14,10 @@ namespace glGame {
 		void* data;
 		EditorVariableType variableType;
 		const char* name;
+		float sliderSpeed;
 
-		EditorVariable(void* data, EditorVariableType variableType, const char* name) : data(data), variableType(variableType), name(name) {}
+		EditorVariable(void* data, EditorVariableType variableType, const char* name) : data(data), variableType(variableType), name(name), sliderSpeed(1.0f) {}
+		EditorVariable(void* data, EditorVariableType variableType, const char* name, float sliderSpeed) : data(data), variableType(variableType), name(name), sliderSpeed(sliderSpeed) {}
 	};
 
 	class Component {
@@ -37,6 +39,10 @@ namespace glGame {
 	protected:
 		inline void addEditorVariable(void* variable, EditorVariableType varType, const char* name) {
 			m_editorVariables.push_back(EditorVariable(variable, varType, name));
+		}
+
+		inline void addEditorVariable(void* variable, EditorVariableType varType, const char* name, float sliderSpeed) {
+			m_editorVariables.push_back(EditorVariable(variable, varType, name, sliderSpeed));
 		}
 
 		GameObject* gameObject = nullptr;
