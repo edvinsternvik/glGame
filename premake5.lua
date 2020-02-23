@@ -46,9 +46,11 @@ project "glGame"
 		linkoptions { "-lX11", "-ldl", "-lGL", "-lpthread" }
 
 	filter "configurations:Debug"
+		defines "GL_GAME_EDITOR"
 		symbols "On"
 		runtime "Debug"
 
 	filter "configurations:Release"
+		defines "GL_GAME_GAME"
 		optimize "On"
 		runtime "Release"

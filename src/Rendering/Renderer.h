@@ -16,7 +16,7 @@ namespace glGame {
 		void initGLEW();
 		void render(std::shared_ptr<Scene>* scene);
 
-		inline unsigned int getFrameTexture() { return m_framebuffer->getTexture(); }
+		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
 
 	private:
 		void clearScreen();
@@ -28,7 +28,7 @@ namespace glGame {
 		};
 
 		// std::unique_ptr<Model> m_renderQuad;
-		std::unique_ptr<FrameBuffer> m_framebuffer;
+		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		std::unique_ptr<Shader> m_shader;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 

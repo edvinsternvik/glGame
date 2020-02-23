@@ -11,11 +11,11 @@ namespace glGame {
 	Renderer::Renderer() {
 		initGLEW();
 
+		#ifdef GL_GAME_EDITOR
+		m_editorFramebuffer = std::make_unique<FrameBuffer>();
+		#endif
 
-		// m_renderQuad = std::make_unique<Model>(m_renderQuadVerticies, 12);
-		m_framebuffer = std::make_unique<FrameBuffer>();
 		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
-		// m_postProcessingShader = std::make_unique<Shader>("shaders/postProcessing/vertex.glsl", "shaders/postProcessing/fragment.glsl");
 
 		m_shader->useShader();
 
@@ -24,8 +24,11 @@ namespace glGame {
 	void Renderer::render(std::shared_ptr<Scene>* scene) {
 		clearScreen();
 
+		#ifdef GL_GAME_EDITOR
 		//Render to frame texture
-		m_framebuffer->bind();
+		m_editorFramebuffer->bind();
+		#endif
+
 		clearScreen();
 
 		//Render scene
@@ -51,7 +54,9 @@ namespace glGame {
 		}
 		//----------------------
 
-		m_framebuffer->unbind();
+		#ifdef GL_GAME_EDITOR
+		m_editorFramebuffer->unbind();
+		#endif
 	}
 
 	void Renderer::initGLEW() {

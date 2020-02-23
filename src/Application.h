@@ -3,7 +3,10 @@
 #include "Window.h"
 #include "Input.h"
 #include "Scene.h"
+
+#ifdef GL_GAME_EDITOR
 #include "Editor/Gui.h"
+#endif
 
 #include <memory>
 
@@ -17,6 +20,7 @@ namespace glGame {
 
 	private:
 		void onEvent(Event& e);
+		void setUpEditor();
 
 	private:
 		bool m_running = true;
@@ -24,6 +28,11 @@ namespace glGame {
 		std::unique_ptr<Renderer> m_renderer;
 		std::vector<std::shared_ptr<Scene>> m_scenes;
 		std::shared_ptr<Scene> m_scene;
-		std::unique_ptr<Gui> m_gui;
+		
+		#ifdef GL_GAME_EDITOR
+		std::unique_ptr<Gui> m_editorGui;
+		#endif
+
+		float m_viewportAspectRatio;
 	};
 }
