@@ -24,6 +24,9 @@ namespace glGame {
 
 	private:
 		void init(GLFWwindow* window);
+
+	private:
+		ImGuiWindowFlags m_windowFlags;
 	};
 
 }

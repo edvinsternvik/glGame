@@ -13,6 +13,9 @@ namespace glGame {
 
 		virtual std::string getWindowName() = 0;
 		virtual void renderWindow() = 0;
+
+	public:
+		bool isOpen = true;
 	};
 
 	class ViewportWindow : public GuiWindow {
