@@ -44,7 +44,7 @@ void glGame::Gui::OnGuiRender() {
 		}
 		if (ImGui::BeginMenu("Windows")) {
 			for(int i = 0; i < m_windows.size(); ++i) {
-				const char* windowName = m_windows[i]->getWindowName().c_str();
+				const char* windowName = m_windows[i]->getWindowName();
 
 				if(m_windows[i]->isOpen) {
 					ImGui::Text(windowName);
@@ -67,7 +67,7 @@ void glGame::Gui::OnGuiRender() {
 	//Render Windows
 	for(int i = 0; i < m_windows.size(); ++i) {
 		if(m_windows[i]->isOpen) {
-			ImGui::Begin(m_windows[i]->getWindowName().c_str(), &m_windows[i]->isOpen);
+			ImGui::Begin(m_windows[i]->getWindowName(), &m_windows[i]->isOpen);
 			m_windows[i]->renderWindow();
 			ImGui::End();
 		}
