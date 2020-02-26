@@ -6,18 +6,18 @@ namespace glGame {
 
 	class GameObject;
 
-	enum class EditorVariableType {
+	enum class PublicVariableType {
 		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color
 	};
 
-	struct EditorVariable {
+	struct PublicVariable {
 		void* data;
-		EditorVariableType variableType;
+		PublicVariableType variableType;
 		const char* name;
-		float sliderSpeed;
+		float editor_sliderSpeed;
 
-		EditorVariable(void* data, EditorVariableType variableType, const char* name) : data(data), variableType(variableType), name(name), sliderSpeed(1.0f) {}
-		EditorVariable(void* data, EditorVariableType variableType, const char* name, float sliderSpeed) : data(data), variableType(variableType), name(name), sliderSpeed(sliderSpeed) {}
+		PublicVariable(void* data, PublicVariableType variableType, const char* name) : data(data), variableType(variableType), name(name), editor_sliderSpeed(1.0f) {}
+		PublicVariable(void* data, PublicVariableType variableType, const char* name, float sliderSpeed) : data(data), variableType(variableType), name(name), editor_sliderSpeed(sliderSpeed) {}
 	};
 
 	class Component {
@@ -28,21 +28,21 @@ namespace glGame {
 		virtual void update() = 0;
 		virtual void onRender() {}
 
-		inline const int getEditorVariableCount() const {
-			return m_editorVariables.size();
+		inline const int getPublicVariableCount() const {
+			return m_publicVariables.size();
 		}
 
-		inline const EditorVariable& getEditorVariable(int index) const {
-			return m_editorVariables[index];
+		inline const PublicVariable& getPublicVariable(int index) const {
+			return m_publicVariables[index];
 		}
 
 	protected:
-		inline void addEditorVariable(void* variable, EditorVariableType varType, const char* name) {
-			m_editorVariables.push_back(EditorVariable(variable, varType, name));
+		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name) {
+			m_publicVariables.push_back(PublicVariable(variable, varType, name));
 		}
 
-		inline void addEditorVariable(void* variable, EditorVariableType varType, const char* name, float sliderSpeed) {
-			m_editorVariables.push_back(EditorVariable(variable, varType, name, sliderSpeed));
+		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name, float sliderSpeed) {
+			m_publicVariables.push_back(PublicVariable(variable, varType, name, sliderSpeed));
 		}
 
 		GameObject* gameObject = nullptr;
@@ -54,7 +54,7 @@ namespace glGame {
 		friend class GameObject;
 
 	private:
-		std::vector<EditorVariable> m_editorVariables;
+		std::vector<PublicVariable> m_publicVariables;
 		
 	};
 

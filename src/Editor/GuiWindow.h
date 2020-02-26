@@ -5,7 +5,7 @@
 namespace glGame {
 
 	class Scene;
-	class EditorVariable;
+	class PublicVariable;
 
 	class GuiWindow {
 	public:
@@ -49,7 +49,7 @@ namespace glGame {
 		virtual void renderWindow() override;
 
 	private:
-		void drawComponentVariableGui(const EditorVariable* editorVariable);
+		void drawComponentVariableGui(const PublicVariable* editorVariable);
 
 	private:
 		std::shared_ptr<Scene>* m_scene;

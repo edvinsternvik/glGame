@@ -46,12 +46,12 @@ namespace glGame {
 
 			ImGui::Spacing();
 
-			int editorVariableCount = selectedComponent->getEditorVariableCount();
+			int editorVariableCount = selectedComponent->getPublicVariableCount();
 			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; ++editorVariableIndex) {
-				const EditorVariable* editorVariable = &selectedComponent->getEditorVariable(editorVariableIndex);
+				const PublicVariable* publicVariable = &selectedComponent->getPublicVariable(editorVariableIndex);
 
 				ImGui::PushID(componentVariableIndex++); 
-				drawComponentVariableGui(editorVariable);
+				drawComponentVariableGui(publicVariable);
 				ImGui::PopID();
 
 				ImGui::Spacing();
@@ -63,29 +63,29 @@ namespace glGame {
 		}
 	}
 
-	void PropertiesWindow::drawComponentVariableGui(const EditorVariable* editorVariable) {
+	void PropertiesWindow::drawComponentVariableGui(const PublicVariable* editorVariable) {
 		float speedMultiplier = 0.01f;
 		switch(editorVariable->variableType) {
 
-		case EditorVariableType::Int:
-			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
+		case PublicVariableType::Int:
+			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case EditorVariableType::Float:
-			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
+		case PublicVariableType::Float:
+			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case EditorVariableType::Double:
+		case PublicVariableType::Double:
 			ImGui::InputDouble(editorVariable->name, (double*)editorVariable->data);
 			break;
-		case EditorVariableType::Vec2:
-			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
+		case PublicVariableType::Vec2:
+			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case EditorVariableType::Vec3:
-			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, editorVariable->sliderSpeed * speedMultiplier);
+		case PublicVariableType::Vec3:
+			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case EditorVariableType::String:
+		case PublicVariableType::String:
 			ImGui::InputText(editorVariable->name, (char*)editorVariable->data, 256);
 			break;
-		case EditorVariableType::Color:
+		case PublicVariableType::Color:
 			ImGui::ColorPicker3(editorVariable->name, (float*)editorVariable->data);
 			break;
 		}
