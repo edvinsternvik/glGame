@@ -1,5 +1,4 @@
-#pragma once
-#include <string>
+#pragma
 #include <memory>
 
 namespace glGame {
@@ -11,7 +10,7 @@ namespace glGame {
 	public:
 		GuiWindow() = default;
 
-		virtual std::string getWindowName() = 0;
+		virtual const char* getWindowName() = 0;
 		virtual void renderWindow() = 0;
 
 	public:
@@ -22,7 +21,7 @@ namespace glGame {
 	public:
 		ViewportWindow(unsigned int texture, float aspectRatio);
 
-		inline virtual std::string getWindowName() { return "Viewport"; }
+		inline virtual const char* getWindowName() { return "Viewport"; }
 		virtual void renderWindow() override;
 
 	private:
@@ -34,7 +33,7 @@ namespace glGame {
 	public:
 		SceneWindow(std::shared_ptr<Scene>* scene);
 
-		inline virtual std::string getWindowName() { return "Scene"; }
+		inline virtual const char* getWindowName() { return "Scene"; }
 		virtual void renderWindow() override;
 
 	private:
@@ -45,7 +44,7 @@ namespace glGame {
 	public:
 		PropertiesWindow(std::shared_ptr<Scene>* scene);
 
-		inline virtual std::string getWindowName() { return "Properties"; }
+		inline virtual const char* getWindowName() { return "Properties"; }
 		virtual void renderWindow() override;
 
 	private:
