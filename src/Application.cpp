@@ -12,8 +12,7 @@ namespace glGame {
 
 		m_renderer = std::make_unique<Renderer>(); // Initializes glew, has to be called before any opengl code
 
-		m_scenes.push_back(std::make_shared<Scene>());
-		m_scene = m_scenes[0];
+		m_sceneManager = std::make_unique<SceneManager>();
 
 		setUpEditor();
 	}
@@ -21,9 +20,9 @@ namespace glGame {
 	void Application::run() {
 		while(m_running) {
 
-			m_scene->update();
+			m_sceneManager->updateScene();
 
-			m_renderer->render(&m_scene);
+			m_renderer->render(m_sceneManager->getActiveScene());
 			
 			#ifdef GL_GAME_EDITOR
 			m_editorGui->OnGuiRender();
@@ -51,8 +50,8 @@ namespace glGame {
 	void Application::setUpEditor() {
 		m_editorGui = std::make_unique<Gui>(m_window->getWindow());
 		m_editorGui->m_windows.push_back(std::make_unique<ViewportWindow>(m_renderer->getEditorFrameTexture(), m_viewportAspectRatio));
-		m_editorGui->m_windows.push_back(std::make_unique<SceneWindow>(&m_scene));
-		m_editorGui->m_windows.push_back(std::make_unique<PropertiesWindow>(&m_scene));
+		m_editorGui->m_windows.push_back(std::make_unique<SceneWindow>(m_sceneManager->getActiveScene()));
+		m_editorGui->m_windows.push_back(std::make_unique<PropertiesWindow>(m_sceneManager->getActiveScene()));
 	}
 	#else
 	void Application::setUpEditor() {

@@ -1,7 +1,7 @@
 #include "Scene.h"
 
-#include "Components/Camera.h"
-#include "Components/Transform.h"
+#include "../Components/Camera.h"
+#include "../Components/Transform.h"
 
 namespace glGame {
 

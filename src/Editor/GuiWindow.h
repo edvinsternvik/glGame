@@ -31,18 +31,18 @@ namespace glGame {
 
 	class SceneWindow : public GuiWindow {
 	public:
-		SceneWindow(std::shared_ptr<Scene>* scene);
+		SceneWindow(Scene* scene);
 
 		inline virtual const char* getWindowName() { return "Scene"; }
 		virtual void renderWindow() override;
 
 	private:
-		std::shared_ptr<Scene>* m_scene;
+		Scene* m_scene;
 	};
 
 	class PropertiesWindow : public GuiWindow {
 	public:
-		PropertiesWindow(std::shared_ptr<Scene>* scene);
+		PropertiesWindow(Scene* scene);
 
 		inline virtual const char* getWindowName() { return "Properties"; }
 		virtual void renderWindow() override;
@@ -51,7 +51,7 @@ namespace glGame {
 		void drawComponentVariableGui(const PublicVariable* editorVariable);
 
 	private:
-		std::shared_ptr<Scene>* m_scene;
+		Scene* m_scene;
 	};
 
 }

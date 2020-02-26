@@ -4,15 +4,15 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include "../Scene.h"
+#include "../Resources/Scene.h"
 
 namespace glGame {
 
-	PropertiesWindow::PropertiesWindow(std::shared_ptr<Scene>* scene) : m_scene(scene) {
+	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
 
 	void PropertiesWindow::renderWindow() {
-		GameObject* selectedObj = (*m_scene)->getSelectedGameObject();
+		GameObject* selectedObj = m_scene->getSelectedGameObject();
 
 		if (!selectedObj) {
 			return;

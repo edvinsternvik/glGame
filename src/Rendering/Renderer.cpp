@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "../Scene.h"
+#include "../Resources/Scene.h"
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
@@ -21,7 +21,7 @@ namespace glGame {
 
 	}
 
-	void Renderer::render(std::shared_ptr<Scene>* scene) {
+	void Renderer::render(Scene* scene) {
 		clearScreen();
 
 		#ifdef GL_GAME_EDITOR
@@ -32,17 +32,17 @@ namespace glGame {
 		clearScreen();
 
 		//Render scene
-		(*scene)->onRender();
+		scene->onRender();
 		m_shader->useShader();
-		Camera* camera = (*scene)->activeCamera;
+		Camera* camera = scene->activeCamera;
 		m_shader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
 		m_shader->setUniformMat4("u_view", &(camera->getViewMatrix()[0][0]));
 
 		//Render GameObjects
-		int gameObjectCount = (*scene)->getGameObjectCount();
+		int gameObjectCount = scene->getGameObjectCount();
 		for(int i = 0; i < gameObjectCount; ++i) {
-			MeshRenderer* meshRenderer = (*scene)->getGameObject(i)->meshRenderer;
-			Transform* transform = (*scene)->getGameObject(i)->transform;
+			MeshRenderer* meshRenderer = scene->getGameObject(i)->meshRenderer;
+			Transform* transform = scene->getGameObject(i)->transform;
 			if(meshRenderer) {
 				
 				//Render object

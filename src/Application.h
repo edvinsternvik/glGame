@@ -2,7 +2,7 @@
 #include "Rendering/Renderer.h"
 #include "Window.h"
 #include "Input.h"
-#include "Scene.h"
+#include "Resources/SceneManager.h"
 
 #ifdef GL_GAME_EDITOR
 #include "Editor/Gui.h"
@@ -26,8 +26,7 @@ namespace glGame {
 		bool m_running = true;
 		std::unique_ptr<Window> m_window;
 		std::unique_ptr<Renderer> m_renderer;
-		std::vector<std::shared_ptr<Scene>> m_scenes;
-		std::shared_ptr<Scene> m_scene;
+		std::unique_ptr<SceneManager> m_sceneManager;
 		
 		#ifdef GL_GAME_EDITOR
 		std::unique_ptr<Gui> m_editorGui;

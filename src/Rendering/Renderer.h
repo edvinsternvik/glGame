@@ -14,7 +14,7 @@ namespace glGame {
 		Renderer();
 
 		void initGLEW();
-		void render(std::shared_ptr<Scene>* scene);
+		void render(Scene* scene);
 
 		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
 
