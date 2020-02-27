@@ -24,7 +24,7 @@ namespace glGame {
 		void onRender();
 
 	public:
-		Camera* activeCamera;
+		Camera* activeCamera = nullptr;
 
 	private:
 		std::vector<GameObject*> m_gameObjects;

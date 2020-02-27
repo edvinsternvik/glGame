@@ -13,6 +13,7 @@ namespace glGame {
 		m_renderer = std::make_unique<Renderer>(); // Initializes glew, has to be called before any opengl code
 
 		m_sceneManager = std::make_unique<SceneManager>();
+		m_sceneManager->initializeScene();
 
 		setUpEditor();
 	}
@@ -42,6 +43,7 @@ namespace glGame {
 		if(e.isInCategory(EventCategory::Application)) {
 			if(e.getEventType() == EventType::WindowClose) {
 				m_running = false;
+				m_sceneManager->saveActiveScene();
 			}
 		}
 	}

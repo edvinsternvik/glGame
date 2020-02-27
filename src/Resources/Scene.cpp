@@ -6,10 +6,6 @@
 namespace glGame {
 
 	Scene::Scene() {
-		GameObject* cameraObject = createGameObject("Camera");
-		Camera* cameraComponent = cameraObject->addComponent<Camera>();
-
-		activeCamera = cameraComponent;
 	}
 
 	Scene::~Scene() {

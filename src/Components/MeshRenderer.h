@@ -10,7 +10,7 @@ namespace glGame {
 	public:
 		MeshRenderer();
 
-		virtual std::string getName() const { return "Mesh Renderer"; }
+		virtual std::string getName() const { return "MeshRenderer"; }
 
 		virtual void update() override;
 		virtual void onRender() override;

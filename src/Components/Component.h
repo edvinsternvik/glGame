@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <iostream>
+#include <string.h>
 
 namespace glGame {
 
@@ -34,6 +36,14 @@ namespace glGame {
 
 		inline const PublicVariable& getPublicVariable(int index) const {
 			return m_publicVariables[index];
+		}
+
+		inline PublicVariable* const getPublicVariable(const char* name) {
+			for(PublicVariable& pVar : m_publicVariables) {
+				if(strcmp(name, pVar.name) == 0) return &pVar;
+			}
+
+			return nullptr;
 		}
 
 	protected:
