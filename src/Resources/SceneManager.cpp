@@ -36,8 +36,10 @@ namespace glGame {
 		const char* fileName = "Scene0.scene";
 
 		std::ifstream file(fileName);
+		bool fileOpen = file.is_open();
+		file.close();
 
-		if(file.is_open()) {
+		if(fileOpen) {
 			loadScene(fileName);
 		}
 		else {
