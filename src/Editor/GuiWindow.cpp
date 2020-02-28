@@ -17,7 +17,7 @@ namespace glGame {
 	void ViewportWindow::renderWindow() {
 		float width = ImGui::GetContentRegionAvail().x;
 		float height = width / m_aspectRatio;
-		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(width, height));
+		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
 	}
 
 	SceneWindow::SceneWindow(Scene* scene) : m_scene(scene) {
