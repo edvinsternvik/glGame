@@ -5,9 +5,7 @@
 #include <iostream>
 #include "../Math/Vector.h"
 
-#include "../Components/Transform.h"
-#include "../Components/Camera.h"
-#include "../Components/MeshRenderer.h"
+#include "../Components/ComponentList.h"
 
 namespace glGame {
 
@@ -77,12 +75,8 @@ namespace glGame {
 				int publicVariables = component->getPublicVariableCount();
 				for(int k = 0; k < publicVariables; ++k) {
 					PublicVariable pVar = component->getPublicVariable(k);
-
-					if(pVar.variableType == PublicVariableType::Vec3) {
-						Vector3 vec = *((Vector3*)pVar.data);
-
-						file << "Attribute: " << pVar.name << " " << "{" << vec.x << "," << vec.y << "," << vec.z << "}\n";
-					}
+					
+					file << "Attribute: " << pVar.name << " " << getPublicVariableString(pVar) << "\n";
 				}
 			}
 		}
@@ -134,15 +128,7 @@ namespace glGame {
 					break;
 				}
 
-				if(strings[1] == "Transform") activeComponent = activeGameObject->transform;
-				else if(strings[1] == "Camera") {
-					m_activeScene->activeCamera = activeGameObject->addComponent<Camera>();
-					activeComponent = (Component*)m_activeScene->activeCamera;
-				}
-				else if(strings[1] == "MeshRenderer") {
-					activeGameObject->meshRenderer = activeGameObject->addComponent<MeshRenderer>();
-					activeComponent = (Component*)activeGameObject->meshRenderer;
-				}
+				activeComponent = addComponent(strings[1], activeGameObject);
 			}
 			else if(strings[0] == "Attribute:") {
 				if(strings.size() != 3) {
@@ -157,25 +143,7 @@ namespace glGame {
 
 				PublicVariable* pVar = activeComponent->getPublicVariable(strings[1].c_str());
 				if(pVar != nullptr) {
-
-					switch(pVar->variableType) {
-					case PublicVariableType::Vec3:
-						Vector3 tmpData(0, 0, 0);
-
-						std::stringstream valueBuffer;
-						valueBuffer << strings[2].substr(1, strings[2].size() - 2);
-						std::string tmp;
-						for(int i = 0; i < 3; ++i) {
-							std::getline(valueBuffer, tmp, ',');
-							
-							((float*)&tmpData)[i] = std::stof(tmp);
-						};
-						
-						*(Vector3*)pVar->data = tmpData;
-						break;
-					}
-
-					// activeComponent->setPublicVariable()
+					parsePublicVariableString(strings[2], *pVar);
 				}
 			}
 		}
@@ -184,6 +152,93 @@ namespace glGame {
 
 	}
 
+	std::string SceneManager::getPublicVariableString(PublicVariable& pVar) {
+		switch(pVar.variableType) {
+		case PublicVariableType::Int: return std::to_string(*((int*)pVar.data));
+		case PublicVariableType::Float: return std::to_string(*((float*)pVar.data));
+		case PublicVariableType::Double: return std::to_string(*((double*)pVar.data));
+		case PublicVariableType::Char: return std::to_string(*((char*)pVar.data));
+		case PublicVariableType::String: return "";
+		case PublicVariableType::GameObject: return "";
+		case PublicVariableType::Component: return "";
+		case PublicVariableType::Vec2: {
+			Vector2 vec2 = *((Vector2*)pVar.data);
+			return "{" + std::to_string(vec2.x) + "," + std::to_string(vec2.y) + "}";
+		}
+		case PublicVariableType::Vec3: {
+			Vector3 vec3 = *((Vector3*)pVar.data);
+			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
+		}
+		case PublicVariableType::Asset: return "";
+		case PublicVariableType::Color: return "";
+		}
+		return "";
+	}
+
+	Component* SceneManager::addComponent(std::string& component, GameObject* gameObject) {
+		if(component == "Transform") return gameObject->transform;
+		else if(component == "Camera") {
+			m_activeScene->activeCamera = gameObject->addComponent<Camera>();
+			return (Component*)m_activeScene->activeCamera;
+		}
+		else if(component == "MeshRenderer") {
+			gameObject->meshRenderer = gameObject->addComponent<MeshRenderer>();
+			return (Component*)gameObject->meshRenderer;
+		}
 
 
+		return nullptr;
+	}
+
+	void SceneManager::parsePublicVariableString(std::string& str, PublicVariable& pVar) {
+		switch(pVar.variableType) {
+		case PublicVariableType::Int: {
+			*(int*)pVar.data = std::stoi(str);
+		}
+		case PublicVariableType::Float: {
+			*(float*)pVar.data = std::stof(str);
+		}
+		case PublicVariableType::Double: {
+			*(double*)pVar.data = std::stod(str);
+		}
+		case PublicVariableType::Char: {
+			*(char*)pVar.data = str[0];
+		}
+		// case PublicVariableType::String: 
+		// case PublicVariableType::GameObject:
+		// case PublicVariableType::Component:
+		case PublicVariableType::Vec2: {
+			Vector2 tmpData(0, 0);
+
+			std::stringstream valueBuffer;
+			valueBuffer << str.substr(1, str.size() - 2);
+			std::string tmp;
+			for(int i = 0; i < 2; ++i) {
+				std::getline(valueBuffer, tmp, ',');
+				
+				((float*)&tmpData)[i] = std::stof(tmp);
+			};
+			
+			*(Vector2*)pVar.data = tmpData;
+			return;
+		}
+		case PublicVariableType::Vec3: {
+			Vector3 tmpData(0, 0, 0);
+
+			std::stringstream valueBuffer;
+			valueBuffer << str.substr(1, str.size() - 2);
+			std::string tmp;
+			for(int i = 0; i < 3; ++i) {
+				std::getline(valueBuffer, tmp, ',');
+				
+				((float*)&tmpData)[i] = std::stof(tmp);
+			};
+			
+			*(Vector3*)pVar.data = tmpData;
+			return;
+		}
+		// case PublicVariableType::Asset:
+		// case PublicVariableType::Color:
+		}
+	}
 }
