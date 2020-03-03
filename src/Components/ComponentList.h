@@ -1,5 +1,6 @@
 #pragma once
 
-#include "../Components/Transform.h"
-#include "../Components/Camera.h"
-#include "../Components/MeshRenderer.h"
+#include "Transform.h"
+#include "Camera.h"
+#include "MeshRenderer.h"
+#include "Script.h"
