@@ -1,8 +1,6 @@
 #pragma once
 #include "Component.h"
 
-struct lua_State;
-
 namespace glGame {
 
     class Script : public Component {
@@ -16,9 +14,6 @@ namespace glGame {
 
     public:
         const char* filename;
-
-    private:
-        lua_State* m_luaState;
 
     };
 
