@@ -29,7 +29,8 @@ project "glGame"
 		"vendor/GLFW/include",
 		"vendor/glm/include",
 		"vendor",
-		"vendor/angelscript/include"
+		"vendor/angelscript/include",
+		"vendor/angelscript/add_on"
 	}
 
 	links {

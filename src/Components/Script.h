@@ -1,6 +1,9 @@
 #pragma once
 #include "Component.h"
 
+class asIScriptEngine;
+class asIScriptFunction;
+
 namespace glGame {
 
     class Script : public Component {
@@ -15,6 +18,9 @@ namespace glGame {
     public:
         const char* filename;
 
+    private:
+        asIScriptEngine* m_asScriptEngine;
+        asIScriptFunction* m_asScriptUpdateFunction;
     };
 
 }
