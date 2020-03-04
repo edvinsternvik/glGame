@@ -6,9 +6,9 @@ project "angelscript"
 	objdir "bin-int/%{cfg.buildcfg}"
 
 	files {
-		"source/src/*.h",
-		"source/src/*.c",
-		"source/src/*.hpp",
+		"source/*.h",
+		"source/*.cpp",
+		"source/*.hpp",
 		"include/angelscript.h"
 	}
 
