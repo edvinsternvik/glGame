@@ -10,6 +10,7 @@ namespace glGame {
 	public:
 		SceneManager();
 
+		void initScene();
 		void updateScene();
 		void addScene();
 		void setActiveScene(int index);

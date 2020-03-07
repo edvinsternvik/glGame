@@ -13,6 +13,7 @@ namespace glGame{
 		GameObject(std::string& name);
 		~GameObject();
 
+		void onInit();
 		void onUpdate();
 		void onRender();
 

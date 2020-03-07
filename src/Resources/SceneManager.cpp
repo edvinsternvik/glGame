@@ -14,6 +14,10 @@ namespace glGame {
 		setActiveScene(0);
 	}
 
+	void SceneManager::initScene() {
+		m_activeScene->init();
+	}
+
 	void SceneManager::updateScene() {
 		m_activeScene->update();
 	}

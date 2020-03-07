@@ -12,13 +12,19 @@ namespace glGame {
 		}
 	}
 
-	void glGame::GameObject::onUpdate() {
+	void GameObject::onInit() {
+		for(Component* c : m_components) {
+			c->init();
+		}
+	}
+
+	void GameObject::onUpdate() {
 		for(Component* c : m_components) {
 			c->update();
 		}
 	}
 
-	void glGame::GameObject::onRender() {
+	void GameObject::onRender() {
 		for (Component* c : m_components) {
 			c->onRender();
 		}

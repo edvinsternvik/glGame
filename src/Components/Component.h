@@ -27,6 +27,7 @@ namespace glGame {
 		Component() {}
 
 		virtual std::string getName() const = 0;
+		virtual void init() {}
 		virtual void update() = 0;
 		virtual void onRender() {}
 

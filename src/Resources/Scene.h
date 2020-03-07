@@ -20,6 +20,7 @@ namespace glGame {
 		inline GameObject* getSelectedGameObject() const { return m_selectedGameObject; }
 		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
+		void init();
 		void update();
 		void onRender();
 

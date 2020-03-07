@@ -19,6 +19,8 @@ namespace glGame {
 	}
 
 	void Application::run() {
+		m_sceneManager->initScene();
+
 		while(m_running) {
 
 			m_sceneManager->updateScene();

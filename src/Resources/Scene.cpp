@@ -32,6 +32,12 @@ namespace glGame {
 		m_selectedGameObject = getGameObject(index);
 	}
 
+	void Scene::init() {
+		for (auto& go : m_gameObjects) {
+			go->onInit();
+		}
+	}
+
 	void Scene::update() {
 		for (auto& go : m_gameObjects) {
 			go->onUpdate();
