@@ -24,7 +24,7 @@ namespace glGame {
     }
 
     Script::Script() : filename("test") {
-        addPublicVariable((void*)filename, PublicVariableType::String, "scriptfile");
+        addPublicVariable(&filename, PublicVariableType::String, "scriptfile");
 
         asIScriptEngine *m_asScriptEngine = asCreateScriptEngine();
         int r = m_asScriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);

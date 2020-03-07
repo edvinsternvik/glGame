@@ -15,8 +15,8 @@ namespace glGame {
 
 		virtual void update() override;
 
-    public:
-        const char* filename;
+    private:
+        std::string filename;
 
     private:
         asIScriptEngine* m_asScriptEngine;

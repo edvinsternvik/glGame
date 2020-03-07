@@ -8,6 +8,8 @@
 
 namespace glGame {
 
+	void InputText(const char* name, std::string& str, int maxSize);
+
 	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
 
@@ -20,12 +22,7 @@ namespace glGame {
 
 		ImGui::Spacing();
 
-		std::string msg = selectedObj->name;
-		msg.resize(128);
-		char* test = (char*)msg.c_str();
-		if (ImGui::InputText("###NAME", test, msg.size())) {
-			selectedObj->name = std::string(test);
-		}
+		InputText("###NAME", selectedObj->name, 64);
 
 		ImGui::Spacing();
 		ImGui::Spacing();
@@ -82,12 +79,24 @@ namespace glGame {
 		case PublicVariableType::Vec3:
 			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case PublicVariableType::String:
-			ImGui::InputText(editorVariable->name, (char*)editorVariable->data, 256);
+		case PublicVariableType::String: {
+			InputText(editorVariable->name, *(std::string*)editorVariable->data, 64);
 			break;
+		}
 		case PublicVariableType::Color:
 			ImGui::ColorPicker3(editorVariable->name, (float*)editorVariable->data);
 			break;
+		}
+	}
+
+	void InputText(const char* name, std::string& str, int maxSize) {
+		int editorVariableStrLen = str.size();
+		std::vector<char> charBuffer(maxSize);
+		for(int i = 0; i < editorVariableStrLen; ++i) charBuffer[i] = str[i];
+		if(ImGui::InputText(name, charBuffer.data(), 64)) {
+			if(charBuffer[0] != 0 && strcmp(str.c_str(), charBuffer.data()) != 0) {
+				str.assign(charBuffer.data());
+			}
 		}
 	}
 

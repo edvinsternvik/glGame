@@ -158,7 +158,7 @@ namespace glGame {
 		case PublicVariableType::Float: return std::to_string(*((float*)pVar.data));
 		case PublicVariableType::Double: return std::to_string(*((double*)pVar.data));
 		case PublicVariableType::Char: return std::to_string(*((char*)pVar.data));
-		case PublicVariableType::String: return "";
+		case PublicVariableType::String: return *(std::string*)pVar.data;
 		case PublicVariableType::GameObject: return "";
 		case PublicVariableType::Component: return "";
 		case PublicVariableType::Vec2: {
@@ -185,6 +185,7 @@ namespace glGame {
 			gameObject->meshRenderer = gameObject->addComponent<MeshRenderer>();
 			return (Component*)gameObject->meshRenderer;
 		}
+		else if(component == "Script") return (Component*)gameObject->addComponent<Script>();
 
 
 		return nullptr;
@@ -193,18 +194,21 @@ namespace glGame {
 	void SceneManager::parsePublicVariableString(std::string& str, PublicVariable& pVar) {
 		switch(pVar.variableType) {
 		case PublicVariableType::Int: {
-			*(int*)pVar.data = std::stoi(str);
+			*(int*)pVar.data = std::stoi(str); return;
 		}
 		case PublicVariableType::Float: {
-			*(float*)pVar.data = std::stof(str);
+			*(float*)pVar.data = std::stof(str); return;
 		}
 		case PublicVariableType::Double: {
-			*(double*)pVar.data = std::stod(str);
+			*(double*)pVar.data = std::stod(str); return;
 		}
 		case PublicVariableType::Char: {
-			*(char*)pVar.data = str[0];
+			*(char*)pVar.data = str[0]; return;
 		}
-		// case PublicVariableType::String: 
+		case PublicVariableType::String: {
+			*(std::string*)pVar.data = str;
+			return;
+		}
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		case PublicVariableType::Vec2: {

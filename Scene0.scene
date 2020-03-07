@@ -1,12 +1,14 @@
 GameObject: Camera
 Component: Transform
-Attribute: position {0,0,0}
-Attribute: scale {1,1,1}
-Attribute: rotation {0,0,0}
+Attribute: position {0.000000,0.000000,0.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
 GameObject: New GameObject
 Component: Transform
-Attribute: position {0,0,-2.85}
-Attribute: scale {1,1,1}
-Attribute: rotation {0,0,0}
+Attribute: position {0.000000,0.000000,-2.850000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
+Component: Script
+Attribute: scriptfile testfile
