@@ -13,6 +13,7 @@ namespace glGame {
 
         virtual std::string getName() const { return "Script"; }
 
+        virtual void init() override;
 		virtual void update() override;
 
     private:
@@ -20,7 +21,7 @@ namespace glGame {
 
     private:
         asIScriptEngine* m_asScriptEngine;
-        asIScriptFunction* m_asScriptUpdateFunction;
+        asIScriptFunction* m_asScriptInitFunction;
     };
 
 }
