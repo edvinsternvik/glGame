@@ -38,6 +38,10 @@ namespace glGame {
     }
 
     Script::~Script() {
+        for(auto pVar : m_scriptPublicVars) {
+            free(pVar.first);
+            free(pVar.second);
+        }
     }
 
     void Script::init() {
@@ -66,8 +70,29 @@ namespace glGame {
         r = scriptbuilder.BuildModule();
         if(r < 0) std::cout << "ERROR when building module" << std::endl;
 
-        asIScriptModule* mod = m_asScriptEngine->GetModule("ScriptModule");
-        m_asScriptInitFunction = mod->GetFunctionByDecl("void init()");
+        asIScriptModule* asScriptModule = m_asScriptEngine->GetModule("ScriptModule");
+
+        // Showing public variables from script
+        unsigned int globalVariableCount = asScriptModule->GetGlobalVarCount();
+        for(unsigned int i = 0; i < globalVariableCount; ++i) {
+            const char* globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
+            void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
+
+            void* var = malloc(sizeof(int));
+            *(int*)var = *((int*)globalVarAddr);
+            m_scriptPublicVars.push_back(std::pair<void*, void*>(var, 0));
+
+            int strLength = strlen(globalVarDecl);
+            void* name = malloc(strLength * sizeof(char));
+            for(int j = 0; j < strLength; ++j) {
+                ((char*)name)[j] = globalVarDecl[j];
+            }
+
+            addPublicVariable(var, PublicVariableType::Int, (const char*)name);
+        }
+        // --
+
+        m_asScriptInitFunction = asScriptModule->GetFunctionByDecl("void init()");
         if(m_asScriptInitFunction == 0) std::cout << "ERROR no function void init()" << std::endl;
 
         asIScriptContext* ctx = m_asScriptEngine->CreateContext();

@@ -9,7 +9,7 @@ namespace glGame {
     class Script : public Component {
     public:
         Script();
-        ~Script();
+        ~Script() override;
 
         virtual std::string getName() const { return "Script"; }
 
@@ -19,9 +19,9 @@ namespace glGame {
     private:
         std::string filename;
 
-    private:
         asIScriptEngine* m_asScriptEngine;
         asIScriptFunction* m_asScriptInitFunction;
+        std::vector<std::pair<void*, void*>> m_scriptPublicVars;
     };
 
 }
