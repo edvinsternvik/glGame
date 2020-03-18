@@ -39,8 +39,7 @@ namespace glGame {
 
     Script::~Script() {
         for(auto pVar : m_scriptPublicVars) {
-            free(pVar.first);
-            free(pVar.second);
+            free(pVar);
         }
     }
 
@@ -80,15 +79,9 @@ namespace glGame {
 
             void* var = malloc(sizeof(int));
             *(int*)var = *((int*)globalVarAddr);
-            m_scriptPublicVars.push_back(std::pair<void*, void*>(var, 0));
+            m_scriptPublicVars.push_back(var);
 
-            int strLength = strlen(globalVarDecl);
-            void* name = malloc(strLength * sizeof(char));
-            for(int j = 0; j < strLength; ++j) {
-                ((char*)name)[j] = globalVarDecl[j];
-            }
-
-            addPublicVariable(var, PublicVariableType::Int, (const char*)name);
+            addPublicVariable(var, PublicVariableType::Int, std::string(globalVarDecl));
         }
         // --
 

@@ -21,7 +21,7 @@ namespace glGame {
 
         asIScriptEngine* m_asScriptEngine;
         asIScriptFunction* m_asScriptInitFunction;
-        std::vector<std::pair<void*, void*>> m_scriptPublicVars;
+        std::vector<void*> m_scriptPublicVars;
     };
 
 }

@@ -145,7 +145,7 @@ namespace glGame {
 					break;
 				}
 
-				PublicVariable* pVar = activeComponent->getPublicVariable(strings[1].c_str());
+				PublicVariable* pVar = activeComponent->getPublicVariable(strings[1]);
 				if(pVar != nullptr) {
 					parsePublicVariableString(strings[2], *pVar);
 				}

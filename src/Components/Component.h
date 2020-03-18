@@ -15,11 +15,11 @@ namespace glGame {
 	struct PublicVariable {
 		void* data;
 		PublicVariableType variableType;
-		const char* name;
+		std::string name;
 		float editor_sliderSpeed;
 
-		PublicVariable(void* data, PublicVariableType variableType, const char* name) : data(data), variableType(variableType), name(name), editor_sliderSpeed(1.0f) {}
-		PublicVariable(void* data, PublicVariableType variableType, const char* name, float sliderSpeed) : data(data), variableType(variableType), name(name), editor_sliderSpeed(sliderSpeed) {}
+		PublicVariable(void* data, PublicVariableType variableType, std::string name) : data(data), variableType(variableType), name(name), editor_sliderSpeed(1.0f) {}
+		PublicVariable(void* data, PublicVariableType variableType, std::string name, float sliderSpeed) : data(data), variableType(variableType), name(name), editor_sliderSpeed(sliderSpeed) {}
 	};
 
 	class Component {
@@ -40,16 +40,16 @@ namespace glGame {
 			return m_publicVariables[index];
 		}
 
-		inline PublicVariable* const getPublicVariable(const char* name) {
+		inline PublicVariable* const getPublicVariable(const std::string& name) {
 			for(PublicVariable& pVar : m_publicVariables) {
-				if(strcmp(name, pVar.name) == 0) return &pVar;
+				if(name == pVar.name) return &pVar;
 			}
 
 			return nullptr;
 		}
 
 	protected:
-		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name) {
+		inline void addPublicVariable(void* variable, PublicVariableType varType, std::string name) {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name));
 		}
 

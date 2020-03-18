@@ -65,26 +65,26 @@ namespace glGame {
 		switch(editorVariable->variableType) {
 
 		case PublicVariableType::Int:
-			ImGui::DragInt(editorVariable->name, (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			ImGui::DragInt(editorVariable->name.c_str(), (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
 		case PublicVariableType::Float:
-			ImGui::DragFloat(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			ImGui::DragFloat(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
 		case PublicVariableType::Double:
-			ImGui::InputDouble(editorVariable->name, (double*)editorVariable->data);
+			ImGui::InputDouble(editorVariable->name.c_str(), (double*)editorVariable->data);
 			break;
 		case PublicVariableType::Vec2:
-			ImGui::DragFloat2(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
 		case PublicVariableType::Vec3:
-			ImGui::DragFloat3(editorVariable->name, (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
 		case PublicVariableType::String: {
-			InputText(editorVariable->name, *(std::string*)editorVariable->data, 64);
+			InputText(editorVariable->name.c_str(), *(std::string*)editorVariable->data, 64);
 			break;
 		}
 		case PublicVariableType::Color:
-			ImGui::ColorPicker3(editorVariable->name, (float*)editorVariable->data);
+			ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 			break;
 		}
 	}
