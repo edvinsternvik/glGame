@@ -12,3 +12,4 @@ Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
 Component: Script
 Attribute: scriptfile testfile
+Attribute: int pVarInt 5

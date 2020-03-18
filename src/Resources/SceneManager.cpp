@@ -135,7 +135,7 @@ namespace glGame {
 				activeComponent = addComponent(strings[1], activeGameObject);
 			}
 			else if(strings[0] == "Attribute:") {
-				if(strings.size() != 3) {
+				if(strings.size() < 3) {
 					std::cout << "Error formating in file: " << fileName << " on line: " << line << std::endl;
 					break;
 				}
@@ -145,9 +145,12 @@ namespace glGame {
 					break;
 				}
 
+				std::string pVarName = strings[1]; // Combine all the strings except the last one
+				for(int i = 2; i < strings.size() - 1; ++i) pVarName += strings[i];
+
 				PublicVariable* pVar = activeComponent->getPublicVariable(strings[1]);
 				if(pVar != nullptr) {
-					parsePublicVariableString(strings[2], *pVar);
+					parsePublicVariableString(strings[strings.size() - 1], *pVar);
 				}
 			}
 		}
