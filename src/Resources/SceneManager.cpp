@@ -152,6 +152,9 @@ namespace glGame {
 				if(pVar != nullptr) {
 					parsePublicVariableString(strings[strings.size() - 1], *pVar);
 				}
+				else if(activeComponent->getName() == "Script") {
+					((Script*)activeComponent)->registerPublicScriptVariable(strings);
+				}
 			}
 		}
 

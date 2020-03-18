@@ -37,12 +37,6 @@ namespace glGame {
         addPublicVariable(&filename, PublicVariableType::String, "scriptfile");
     }
 
-    Script::~Script() {
-        for(auto pVar : m_scriptPublicVars) {
-            free(pVar);
-        }
-    }
-
     void Script::init() {
         asIScriptEngine *m_asScriptEngine = asCreateScriptEngine();
         int r = m_asScriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
@@ -77,12 +71,21 @@ namespace glGame {
             const char* globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
             void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
 
-            void* var = malloc(sizeof(int));
-            *(int*)var = *((int*)globalVarAddr);
-            m_scriptPublicVars.push_back(var);
+            for(auto& pVar : m_registeredPVars) {
+                if(pVar.second == globalVarDecl) {
+                    *(int*)globalVarAddr = std::get<int>(pVar.first);
+                    break;
+                }
+            }
 
-            addPublicVariable(var, PublicVariableType::Int, std::string(globalVarDecl));
+            m_scriptPublicVars.push_back(ScriptPublicVarType(*(int*)globalVarAddr, globalVarDecl));
+            void* var = &m_scriptPublicVars[m_scriptPublicVars.size() - 1].first;
         }
+
+        for(auto& pVar : m_scriptPublicVars) {
+            addPublicVariable(&pVar.first, PublicVariableType::Int, pVar.second);
+        }
+
         // --
 
         m_asScriptInitFunction = asScriptModule->GetFunctionByDecl("void init()");
@@ -98,6 +101,16 @@ namespace glGame {
 
     void Script::update() {
         
+    }
+
+    void Script::registerPublicScriptVariable(std::vector<std::string>& strings) {
+        if(strings.size() < 3) return;
+
+        std::string pVarName = strings[1];
+        for(int i = 2; i < strings.size() - 1; ++i) pVarName += " " + strings[i];
+        std::string pVarValueStr = strings[strings.size() - 1];
+
+        m_registeredPVars.push_back(ScriptPublicVarType(std::stoi(pVarValueStr), pVarName));
     }
 
 }
