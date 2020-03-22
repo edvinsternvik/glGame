@@ -1,3 +1,4 @@
+[public]
 int pVarInt = 5;
 
 void init() {

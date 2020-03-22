@@ -68,19 +68,32 @@ namespace glGame {
         // Showing public variables from script
         unsigned int globalVariableCount = asScriptModule->GetGlobalVarCount();
         for(unsigned int i = 0; i < globalVariableCount; ++i) {
-            std::string globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
-            std::string globalVarTypeStr = globalVarDecl.substr(0, globalVarDecl.find(' '));
-            PublicVariableType globalVarType = PublicVariable::getPublicVariableType(globalVarTypeStr);
-            void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
+            bool isPublic = false;
 
-            auto search = m_registeredPublicVars.find(globalVarDecl);
-            if(search != m_registeredPublicVars.end()) {
-                PublicVariable temp(globalVarAddr, globalVarType, "t");
-                temp.setData(search->second);
+            std::vector<std::string> metadata = scriptbuilder.GetMetadataForVar(i);
+            for(std::string& meta : metadata) {
+                if(meta == "public") {
+                    isPublic = true;
+                    break;
+                }
             }
+            
+            if(isPublic) {
+                std::string globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
+                std::string globalVarTypeStr = globalVarDecl.substr(0, globalVarDecl.find(' '));
+                PublicVariableType globalVarType = PublicVariable::getPublicVariableType(globalVarTypeStr);
+                void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
 
-            m_scriptPublicVars.push_back(PublicScriptVariable(globalVarAddr, globalVarType, globalVarDecl));
+                auto search = m_registeredPublicVars.find(globalVarDecl);
+                if(search != m_registeredPublicVars.end()) {
+                    PublicVariable temp(globalVarAddr, globalVarType, "t");
+                    temp.setData(search->second);
+                }
+
+                m_scriptPublicVars.push_back(PublicScriptVariable(globalVarAddr, globalVarType, globalVarDecl));
+            }
         }
+        m_registeredPublicVars.clear();
 
         for(auto& pVar : m_scriptPublicVars) {
             addPublicVariable(&pVar.var, pVar.type, pVar.declaration);
