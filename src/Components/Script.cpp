@@ -68,22 +68,22 @@ namespace glGame {
         // Showing public variables from script
         unsigned int globalVariableCount = asScriptModule->GetGlobalVarCount();
         for(unsigned int i = 0; i < globalVariableCount; ++i) {
-            const char* globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
+            std::string globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
+            std::string globalVarTypeStr = globalVarDecl.substr(0, globalVarDecl.find(' '));
+            PublicVariableType globalVarType = PublicVariable::getPublicVariableType(globalVarTypeStr);
             void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
 
-            for(auto& pVar : m_registeredPVars) {
-                if(pVar.second == globalVarDecl) {
-                    *(int*)globalVarAddr = std::get<int>(pVar.first);
-                    break;
-                }
+            auto search = m_registeredPublicVars.find(globalVarDecl);
+            if(search != m_registeredPublicVars.end()) {
+                PublicVariable temp(globalVarAddr, globalVarType, "t");
+                temp.setData(search->second);
             }
 
-            m_scriptPublicVars.push_back(ScriptPublicVarType(*(int*)globalVarAddr, globalVarDecl));
-            void* var = &m_scriptPublicVars[m_scriptPublicVars.size() - 1].first;
+            m_scriptPublicVars.push_back(PublicScriptVariable(globalVarAddr, globalVarType, globalVarDecl));
         }
 
         for(auto& pVar : m_scriptPublicVars) {
-            addPublicVariable(&pVar.first, PublicVariableType::Int, pVar.second);
+            addPublicVariable(&pVar.var, pVar.type, pVar.declaration);
         }
 
         // --
@@ -110,7 +110,7 @@ namespace glGame {
         for(int i = 2; i < strings.size() - 1; ++i) pVarName += " " + strings[i];
         std::string pVarValueStr = strings[strings.size() - 1];
 
-        m_registeredPVars.push_back(ScriptPublicVarType(std::stoi(pVarValueStr), pVarName));
+        m_registeredPublicVars.insert(std::pair<std::string, std::string>(pVarName, pVarValueStr));
     }
 
 }

@@ -16,54 +16,15 @@ namespace glGame {
 
     void PublicVariable::setData(std::string& str) {
         switch(variableType) {
-		case PublicVariableType::Int: {
-			*(int*)data = std::stoi(str); return;
-		}
-		case PublicVariableType::Float: {
-			*(float*)data = std::stof(str); return;
-		}
-		case PublicVariableType::Double: {
-			*(double*)data = std::stod(str); return;
-		}
-		case PublicVariableType::Char: {
-			*(char*)data = str[0]; return;
-		}
-		case PublicVariableType::String: {
-			*(std::string*)data = str;
-			return;
-		}
+		case PublicVariableType::Int: *(int*)data = std::stoi(str); return;
+		case PublicVariableType::Float: *(float*)data = std::stof(str); return;
+		case PublicVariableType::Double: *(double*)data = std::stod(str); return;
+		case PublicVariableType::Vec2: *(Vector2*)data = Vector2(str); return;
+		case PublicVariableType::Vec3:	 *(Vector3*)data = Vector3(str); return;
+		case PublicVariableType::Char: *(char*)data = str[0]; return;
+		case PublicVariableType::String: *(std::string*)data = str; return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
-		case PublicVariableType::Vec2: {
-			Vector2 tmpData(0, 0);
-
-			std::stringstream valueBuffer;
-			valueBuffer << str.substr(1, str.size() - 2);
-			std::string tmp;
-			for(int i = 0; i < 2; ++i) {
-				std::getline(valueBuffer, tmp, ',');
-				
-				((float*)&tmpData)[i] = std::stof(tmp);
-			};
-			
-			*(Vector2*)data = tmpData;
-			return;
-		}
-		case PublicVariableType::Vec3: {
-			Vector3 tmpData(0, 0, 0);
-
-			std::stringstream valueBuffer;
-			valueBuffer << str.substr(1, str.size() - 2);
-			std::string tmp;
-			for(int i = 0; i < 3; ++i) {
-				std::getline(valueBuffer, tmp, ',');
-				
-				((float*)&tmpData)[i] = std::stof(tmp);
-			};
-			
-			*(Vector3*)data = tmpData;
-			return;
-		}
 		// case PublicVariableType::Asset:
 		// case PublicVariableType::Color:
 		}

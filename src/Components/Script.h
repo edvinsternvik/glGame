@@ -1,16 +1,13 @@
 #pragma once
 #include "Component.h"
-#include "../Math/Vector.h"
-#include <variant>
-
-#define ScriptPublicVarVariant std::variant<int, float, double, char, std::string, Vector2, Vector3>
-#define ScriptPublicVarType std::pair<ScriptPublicVarVariant, std::string>
+#include "PublicScriptVariable.h"
+#include <unordered_map>
 
 class asIScriptEngine;
 class asIScriptFunction;
 
 namespace glGame {
-
+    
     class Script : public Component {
     public:
         Script();
@@ -27,8 +24,8 @@ namespace glGame {
 
         asIScriptEngine* m_asScriptEngine;
         asIScriptFunction* m_asScriptInitFunction;
-        std::vector<ScriptPublicVarType> m_scriptPublicVars;
-        std::vector<ScriptPublicVarType> m_registeredPVars;
+        std::vector<PublicScriptVariable> m_scriptPublicVars;
+        std::unordered_map<std::string, std::string> m_registeredPublicVars;
     };
 
 }
