@@ -150,7 +150,7 @@ namespace glGame {
 
 				PublicVariable* pVar = activeComponent->getPublicVariable(strings[1]);
 				if(pVar != nullptr) {
-					parsePublicVariableString(strings[strings.size() - 1], *pVar);
+					pVar->setData(strings[strings.size() - 1]);
 				}
 				else if(activeComponent->getName() == "Script") {
 					((Script*)activeComponent)->registerPublicScriptVariable(strings);
@@ -199,60 +199,5 @@ namespace glGame {
 
 
 		return nullptr;
-	}
-
-	void SceneManager::parsePublicVariableString(std::string& str, PublicVariable& pVar) {
-		switch(pVar.variableType) {
-		case PublicVariableType::Int: {
-			*(int*)pVar.data = std::stoi(str); return;
-		}
-		case PublicVariableType::Float: {
-			*(float*)pVar.data = std::stof(str); return;
-		}
-		case PublicVariableType::Double: {
-			*(double*)pVar.data = std::stod(str); return;
-		}
-		case PublicVariableType::Char: {
-			*(char*)pVar.data = str[0]; return;
-		}
-		case PublicVariableType::String: {
-			*(std::string*)pVar.data = str;
-			return;
-		}
-		// case PublicVariableType::GameObject:
-		// case PublicVariableType::Component:
-		case PublicVariableType::Vec2: {
-			Vector2 tmpData(0, 0);
-
-			std::stringstream valueBuffer;
-			valueBuffer << str.substr(1, str.size() - 2);
-			std::string tmp;
-			for(int i = 0; i < 2; ++i) {
-				std::getline(valueBuffer, tmp, ',');
-				
-				((float*)&tmpData)[i] = std::stof(tmp);
-			};
-			
-			*(Vector2*)pVar.data = tmpData;
-			return;
-		}
-		case PublicVariableType::Vec3: {
-			Vector3 tmpData(0, 0, 0);
-
-			std::stringstream valueBuffer;
-			valueBuffer << str.substr(1, str.size() - 2);
-			std::string tmp;
-			for(int i = 0; i < 3; ++i) {
-				std::getline(valueBuffer, tmp, ',');
-				
-				((float*)&tmpData)[i] = std::stof(tmp);
-			};
-			
-			*(Vector3*)pVar.data = tmpData;
-			return;
-		}
-		// case PublicVariableType::Asset:
-		// case PublicVariableType::Color:
-		}
 	}
 }

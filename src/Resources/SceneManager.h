@@ -24,7 +24,6 @@ namespace glGame {
 
 		std::string getPublicVariableString(PublicVariable& pVar);
 		Component* addComponent(std::string& component, GameObject* gameObject);
-		void parsePublicVariableString(std::string& str, PublicVariable& pVar);
 
 	private:
 		std::vector<std::unique_ptr<Scene>> m_scenes;

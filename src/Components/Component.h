@@ -1,26 +1,11 @@
 #pragma once
-#include <string>
 #include <vector>
 #include <iostream>
-#include <string.h>
+#include "PublicVariable.h"
 
 namespace glGame {
 
 	class GameObject;
-
-	enum class PublicVariableType {
-		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color
-	};
-
-	struct PublicVariable {
-		void* data;
-		PublicVariableType variableType;
-		std::string name;
-		float editor_sliderSpeed;
-
-		PublicVariable(void* data, PublicVariableType variableType, std::string name) : data(data), variableType(variableType), name(name), editor_sliderSpeed(1.0f) {}
-		PublicVariable(void* data, PublicVariableType variableType, std::string name, float sliderSpeed) : data(data), variableType(variableType), name(name), editor_sliderSpeed(sliderSpeed) {}
-	};
 
 	class Component {
 	public:
