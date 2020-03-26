@@ -1,38 +1,9 @@
 #include "Script.h"
 #include "../Math/Vector.h"
-#include <angelscript.h>
-#include <scriptbuilder/scriptbuilder.h>
-#include <scriptstdstring/scriptstdstring.h>
+#include "AngelscriptInterface.h"
 #include "../Input.h"
 
 namespace glGame {
-
-    class Test {
-    public:
-        void epic(int testVal, int t2) {
-            std::cout << "Epic" << testVal << t2 << std::endl;
-        }
-    };
-
-    void print(const std::string &in) {
-        std::cout << in;
-    }
-
-    void println(const std::string &in) { std::cout << in << std::endl; }
-    void println(const int &in) { std::cout << in << std::endl; }
-    void println(const float &in) { std::cout << in << std::endl; }
-
-    void Vector3Constructor(void* memory, float x, float y, float z) { new(memory) Vector3(x, y, z); }
-    
-
-    void MessageCallback(const asSMessageInfo *msg, void *param) {
-        const char *type = "ERR ";
-        if( msg->type == asMSGTYPE_WARNING ) 
-            type = "WARN";
-        else if( msg->type == asMSGTYPE_INFORMATION ) 
-            type = "INFO";
-        printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
-    }
 
     Script::Script() : filename("") {
         addPublicVariable(&filename, PublicVariableType::String, "scriptfile");
@@ -45,25 +16,11 @@ namespace glGame {
 
     void Script::init() {
         m_asScriptEngine = asCreateScriptEngine();
-        int r = m_asScriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
-        RegisterStdString(m_asScriptEngine);
-
-        r = m_asScriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
-        r = m_asScriptEngine->RegisterGlobalFunction("void println(const string &in)", asFUNCTIONPR(println, (const std::string&), void), asCALL_CDECL);
-        r = m_asScriptEngine->RegisterGlobalFunction("void println(const int &in)", asFUNCTIONPR(println, (const int&), void), asCALL_CDECL);
-        r = m_asScriptEngine->RegisterGlobalFunction("void println(const float &in)", asFUNCTIONPR(println, (const float&), void), asCALL_CDECL);
-        r = m_asScriptEngine->RegisterObjectType("Test", sizeof(Test), asOBJ_VALUE | asOBJ_POD);
-        r = m_asScriptEngine->RegisterObjectMethod("Test", "void epic(int a, int b)", asMETHOD(Test, Test::epic), asCALL_THISCALL);
-        r = m_asScriptEngine->RegisterObjectType("Vector3", sizeof(Vector3), asOBJ_VALUE | asOBJ_POD);
-        r = m_asScriptEngine->RegisterObjectBehaviour("Vector3", asBEHAVE_CONSTRUCT, "void Vector3(float x, float y, float z)", asFUNCTION(Vector3Constructor), asCALL_CDECL_OBJFIRST);
-        r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float x", asOFFSET(Vector3, Vector3::x));
-        r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float y", asOFFSET(Vector3, Vector3::y));
-        r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float z", asOFFSET(Vector3, Vector3::z));
-        r = m_asScriptEngine->RegisterGlobalFunction("bool getKeyDown(int keycode)", asFUNCTION(Input::getKey), asCALL_CDECL);
+        AngelscriptInterface::Register(m_asScriptEngine);
 
         CScriptBuilder scriptbuilder;
-        r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");
+        int r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");
         if(r < 0) std::cout << "ERROR when starting new module" << std::endl;
         r = scriptbuilder.AddSectionFromFile("script.as");
         if(r < 0) std::cout << "ERROR when adding script from file" << std::endl;
