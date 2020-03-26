@@ -3,6 +3,7 @@
 #include <angelscript.h>
 #include <scriptbuilder/scriptbuilder.h>
 #include <scriptstdstring/scriptstdstring.h>
+#include "../Input.h"
 
 namespace glGame {
 
@@ -37,8 +38,13 @@ namespace glGame {
         addPublicVariable(&filename, PublicVariableType::String, "scriptfile");
     }
 
+    Script::~Script() {
+        m_asScriptContext->Release();
+        m_asScriptEngine->ShutDownAndRelease();
+    }
+
     void Script::init() {
-        asIScriptEngine *m_asScriptEngine = asCreateScriptEngine();
+        m_asScriptEngine = asCreateScriptEngine();
         int r = m_asScriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
         RegisterStdString(m_asScriptEngine);
@@ -54,6 +60,7 @@ namespace glGame {
         r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float x", asOFFSET(Vector3, Vector3::x));
         r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float y", asOFFSET(Vector3, Vector3::y));
         r = m_asScriptEngine->RegisterObjectProperty("Vector3", "float z", asOFFSET(Vector3, Vector3::z));
+        r = m_asScriptEngine->RegisterGlobalFunction("bool getKeyDown(int keycode)", asFUNCTION(Input::getKey), asCALL_CDECL);
 
         CScriptBuilder scriptbuilder;
         r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");
@@ -103,17 +110,19 @@ namespace glGame {
 
         m_asScriptInitFunction = asScriptModule->GetFunctionByDecl("void init()");
         if(m_asScriptInitFunction == 0) std::cout << "ERROR no function void init()" << std::endl;
+        m_asScriptUpdateFunction = asScriptModule->GetFunctionByDecl("void update()");
+        if(m_asScriptUpdateFunction == 0) std::cout << "ERROR no function void update()" << std::endl;
 
-        asIScriptContext* ctx = m_asScriptEngine->CreateContext();
-        ctx->Prepare(m_asScriptInitFunction);
-        r = ctx->Execute();
+        m_asScriptContext = m_asScriptEngine->CreateContext();
+        m_asScriptContext->Prepare(m_asScriptInitFunction);
+        r = m_asScriptContext->Execute();
         if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
-        ctx->Release();
-        m_asScriptEngine->ShutDownAndRelease();
     }
 
     void Script::update() {
-        
+        m_asScriptContext->Prepare(m_asScriptUpdateFunction);
+        int r = m_asScriptContext->Execute();
+        if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
     }
 
     void Script::registerPublicScriptVariable(std::vector<std::string>& strings) {
