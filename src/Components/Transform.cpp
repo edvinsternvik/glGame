@@ -11,4 +11,15 @@ namespace glGame {
 	void Transform::update() {
 	}
 
+	// void Transform::move(Vector3 vector) {
+	// 	position.x = vector.x;
+	// 	position.y = vector.y;
+	// 	position.z = vector.z;
+	// }
+
+	void Transform::move(float x, float y, float z) {
+		position.x += x;
+		position.y += y;
+		position.z += z;
+	}
 }

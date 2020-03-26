@@ -5,9 +5,11 @@
 
 namespace glGame {
 
+    class Script;
+
     class AngelscriptInterface {
     public:
-        static void Register(asIScriptEngine* scriptEngine);
+        static void Register(Script* scriptComponent, asIScriptEngine* scriptEngine);
     };
 
 }

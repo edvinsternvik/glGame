@@ -33,6 +33,8 @@ namespace glGame {
 			return nullptr;
 		}
 
+		const GameObject* const getGameObject() const { return gameObject; }
+
 	protected:
 		inline void addPublicVariable(void* variable, PublicVariableType varType, std::string name) {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name));

@@ -17,7 +17,7 @@ namespace glGame {
     void Script::init() {
         m_asScriptEngine = asCreateScriptEngine();
 
-        AngelscriptInterface::Register(m_asScriptEngine);
+        AngelscriptInterface::Register(this, m_asScriptEngine);
 
         CScriptBuilder scriptbuilder;
         int r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");

@@ -12,6 +12,9 @@ namespace glGame {
 
 		virtual void update() override;
 
+		// void move(Vector3 vector);
+		void move(float x, float y, float z);
+
 	public:
 		Vector3 position, scale, rotation;
 	};

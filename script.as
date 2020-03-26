@@ -8,6 +8,7 @@ void init() {
 void update() {
     bool keyDown = getKeyDown(87);
     if(keyDown) {
-        println("Hello");
+        transform.move(0.1f, 0.0f, 0.0f);
     }
+
 }
