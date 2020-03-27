@@ -37,6 +37,10 @@ void glGame::Gui::OnGuiRender() {
 	//Menu bar
 	if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
+			if(ImGui::SmallButton("save scene")) {
+				SaveSceneEvent e;
+				m_eventFunction(e);
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Options")) {

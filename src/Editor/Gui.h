@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
+#include "../Events/EditorEvent.h"
 
 class GLFWwindow;
 
@@ -18,6 +20,7 @@ namespace glGame {
 		Gui(GLFWwindow* window);
 
 		void OnGuiRender();
+		inline void setEventFunction(std::function<void(Event&)> eventFunction) { m_eventFunction = eventFunction; }
 
 	public:
 		std::vector<std::unique_ptr<GuiWindow>> m_windows;
@@ -27,6 +30,7 @@ namespace glGame {
 
 	private:
 		ImGuiWindowFlags m_windowFlags;
+		std::function<void(Event&)> m_eventFunction;
 	};
 
 }

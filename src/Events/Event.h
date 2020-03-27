@@ -10,7 +10,8 @@ namespace glGame {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		KeyPress, KeyReleased, KeyTyped,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+		GameStart, GameEnd, SaveScene
 	};
 
 	enum class EventCategory {
@@ -19,7 +20,8 @@ namespace glGame {
 		Input = BIT(1),
 		Keyboard = BIT(2),
 		Mouse = BIT(3),
-		MouseButton = BIT(4)
+		MouseButton = BIT(4),
+		Editor = BIT(5)
 	};
 
 	class Event {
