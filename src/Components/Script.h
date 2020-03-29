@@ -19,15 +19,17 @@ namespace glGame {
         virtual void init() override;
 		virtual void update() override;
 
+        void changeScriptfile(std::string& scriptfile) { filename = scriptfile; }
+
         void registerPublicScriptVariable(std::vector<std::string>& strings);
 
     private:
         std::string filename;
 
-        asIScriptEngine* m_asScriptEngine;
+        asIScriptEngine* m_asScriptEngine = nullptr;
         asIScriptFunction* m_asScriptInitFunction;
         asIScriptFunction* m_asScriptUpdateFunction;
-        asIScriptContext* m_asScriptContext;
+        asIScriptContext* m_asScriptContext = nullptr;
         std::vector<PublicScriptVariable> m_scriptPublicVars;
         std::unordered_map<std::string, std::string> m_registeredPublicVars;
     };

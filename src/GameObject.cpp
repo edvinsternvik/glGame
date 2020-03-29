@@ -13,8 +13,8 @@ namespace glGame {
 	}
 
 	void GameObject::onInit() {
-		for(Component* c : m_components) {
-			c->init();
+		while(m_initQueue.size() > 0) {
+			getInitQueueComponent()->init();
 		}
 	}
 
@@ -46,6 +46,12 @@ namespace glGame {
 			return nullptr;
 
 		return m_components[index];
+	}
+
+	Component* GameObject::getInitQueueComponent() {
+		Component* r = m_initQueue.front();
+		m_initQueue.pop();
+		return r;
 	}
 
 	void GameObject::init() {

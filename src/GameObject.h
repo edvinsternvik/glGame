@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <queue>
 #include "Components/Component.h"
 
 namespace glGame{
@@ -22,6 +23,7 @@ namespace glGame{
 			T* newComponent = new T;
 			m_components.push_back(newComponent);
 			newComponent->setParentGameObject(this);
+			m_initQueue.push((Component*)newComponent);
 
 			return newComponent;
 		}
@@ -38,8 +40,11 @@ namespace glGame{
 
 	private:
 		void init();
+		Component* getInitQueueComponent();
+		int getinitQueueSize() const { return m_initQueue.size(); }
 
 		std::vector<Component*> m_components;
+		std::queue<Component*> m_initQueue;
 	};
 
 }

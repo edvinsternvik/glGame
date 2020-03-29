@@ -5,6 +5,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Resources/Scene.h"
+#include "../Components/Script.h"
 
 namespace glGame {
 
@@ -15,6 +16,7 @@ namespace glGame {
 	}
 
 	void PropertiesWindow::renderWindow() {
+		static std::string s_addScriptFilenameBuffer = "";
 		GameObject* selectedObj = m_scene->getSelectedGameObject();
 
 		if (!selectedObj) {
@@ -67,10 +69,29 @@ namespace glGame {
 
 		if(ImGui::BeginPopup("AddComponentPopup")) {
 			for(const char* component : m_components) {
-				if(ImGui::Selectable(component)) {
+				if(ImGui::Button(component)) {
 					std::string componentStr = std::string(component);
-					selectedObj->addComponent(componentStr);
+					if(componentStr == "Script") {
+						ImGui::OpenPopup("AddScriptPopup");
+					}
+					else {
+						selectedObj->addComponent(componentStr);
+					}
+
 				}
+			}
+			
+			if(ImGui::BeginPopup("AddScriptPopup")) {
+				InputText("filename", s_addScriptFilenameBuffer, 64);
+
+				if(ImGui::Button("Add Script")) {
+					Script* s = selectedObj->addComponent<Script>();
+					std::cout << s_addScriptFilenameBuffer << std::endl;
+					s->changeScriptfile(s_addScriptFilenameBuffer);
+					s_addScriptFilenameBuffer = "";
+				}
+
+				ImGui::EndPopup();
 			}
 
 			ImGui::EndPopup();

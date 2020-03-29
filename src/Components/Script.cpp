@@ -10,11 +10,14 @@ namespace glGame {
     }
 
     Script::~Script() {
-        m_asScriptContext->Release();
-        m_asScriptEngine->ShutDownAndRelease();
+        if(m_asScriptContext != nullptr) m_asScriptContext->Release();
+        if(m_asScriptEngine != nullptr) m_asScriptEngine->ShutDownAndRelease();
     }
 
     void Script::init() {
+        if(filename == "") {
+            return;
+        }
         m_asScriptEngine = asCreateScriptEngine();
 
         AngelscriptInterface::Register(this, m_asScriptEngine);
@@ -22,8 +25,13 @@ namespace glGame {
         CScriptBuilder scriptbuilder;
         int r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");
         if(r < 0) std::cout << "ERROR when starting new module" << std::endl;
-        r = scriptbuilder.AddSectionFromFile("script.as");
-        if(r < 0) std::cout << "ERROR when adding script from file" << std::endl;
+        r = scriptbuilder.AddSectionFromFile(filename.c_str());
+        if(r < 0) {
+            std::cout << "ERROR when adding script from file" << std::endl;
+            m_asScriptEngine->ShutDownAndRelease();
+            m_asScriptEngine = nullptr;
+            return;
+        }
         r = scriptbuilder.BuildModule();
         if(r < 0) std::cout << "ERROR when building module" << std::endl;
 

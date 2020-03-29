@@ -19,11 +19,13 @@ namespace glGame {
 	}
 
 	void Application::run() {
-		m_sceneManager->initScene();
 
 		while(m_running) {
+			m_sceneManager->initScene();
 
+			#ifndef GL_GAME_EDITOR
 			m_sceneManager->updateScene();
+			#endif
 
 			m_renderer->render(m_sceneManager->getActiveScene());
 			
