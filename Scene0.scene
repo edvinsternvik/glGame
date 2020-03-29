@@ -11,5 +11,5 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
 Component: Script
-Attribute: scriptfile testfile
+Attribute: scriptfile script.as
 Attribute: int pVarInt 5
