@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "Components/Transform.h"
+#include "Components/ComponentList.h"
 
 namespace glGame {
 	GameObject::GameObject(std::string& name) : name(name) {
@@ -27,6 +27,17 @@ namespace glGame {
 	void GameObject::onRender() {
 		for (Component* c : m_components) {
 			c->onRender();
+		}
+	}
+
+	Component* GameObject::addComponent(std::string& component) {
+		if(component == "Transform") return addComponent<Transform>();
+		else if(component == "Camera") return addComponent<Camera>();
+		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
+		else if(component == "Script") return addComponent<Script>();
+		else {
+			std::cout << "ERROR: Could not add component: " << component << " to gameobject: " << name << ". Component " << component << " was not found" << std::endl;
+			return nullptr;
 		}
 	}
 

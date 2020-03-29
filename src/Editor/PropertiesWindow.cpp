@@ -10,7 +10,8 @@ namespace glGame {
 
 	void InputText(const char* name, std::string& str, int maxSize);
 
-	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
+	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene), 
+	m_components({"MeshRenderer", "Script"}) {
 	}
 
 	void PropertiesWindow::renderWindow() {
@@ -57,6 +58,22 @@ namespace glGame {
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
+		}
+
+		ImGui::SameLine(50);
+		if(ImGui::Button("Add Component", ImVec2(-50, 25))) {
+			ImGui::OpenPopup("AddComponentPopup");
+		}
+
+		if(ImGui::BeginPopup("AddComponentPopup")) {
+			for(const char* component : m_components) {
+				if(ImGui::Selectable(component)) {
+					std::string componentStr = std::string(component);
+					selectedObj->addComponent(componentStr);
+				}
+			}
+
+			ImGui::EndPopup();
 		}
 	}
 

@@ -1,5 +1,6 @@
 #pragma
 #include <memory>
+#include <vector>
 
 namespace glGame {
 
@@ -52,6 +53,7 @@ namespace glGame {
 
 	private:
 		Scene* m_scene;
+		std::vector<const char*> m_components;
 	};
 
 }

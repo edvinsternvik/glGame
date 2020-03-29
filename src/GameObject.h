@@ -26,6 +26,8 @@ namespace glGame{
 			return newComponent;
 		}
 
+		Component* addComponent(std::string& component);
+
 		const Component* const getComponent(int index) const;
 		int getComponentSize() const { return m_components.size(); }
 
