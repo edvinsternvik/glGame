@@ -6,13 +6,13 @@
 
 #include "../Resources/Scene.h"
 #include "../Components/Script.h"
+#include "../Components/ComponentList.h"
 
 namespace glGame {
 
 	void InputText(const char* name, std::string& str, int maxSize);
 
-	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene), 
-	m_components({"MeshRenderer", "Script"}) {
+	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
 
 	void PropertiesWindow::renderWindow() {
@@ -78,7 +78,17 @@ namespace glGame {
 		}
 
 		if(ImGui::BeginPopup("AddComponentPopup")) {
-			for(const char* component : m_components) {
+			std::vector<const char*> addComponentEnabled, addComponentDisabled;
+			for(const char* component : componentList::s_components) {
+				bool disabled = false;
+				if(component == "Transform") disabled = true;
+				if(component == "MeshRenderer" && selectedObj->meshRenderer != nullptr) disabled = true;
+
+				if(disabled) addComponentDisabled.push_back(component);
+				else addComponentEnabled.push_back(component);
+			}
+
+			for(const char* component : addComponentEnabled) {
 				if(ImGui::Button(component)) {
 					std::string componentStr = std::string(component);
 					if(componentStr == "Script") {
@@ -88,8 +98,13 @@ namespace glGame {
 					else {
 						selectedObj->addComponent(componentStr);
 					}
-
 				}
+			}
+
+			for(const char* component : addComponentDisabled) {
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.25);
+				ImGui::Button(component);
+				ImGui::PopStyleVar();
 			}
 			
 			if(ImGui::BeginPopup("AddScriptPopup")) {

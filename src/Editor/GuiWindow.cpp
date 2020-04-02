@@ -6,7 +6,6 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Resources/Scene.h"
-#include "../Components/ComponentList.h"
 
 namespace glGame {
 

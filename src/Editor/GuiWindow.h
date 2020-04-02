@@ -53,7 +53,6 @@ namespace glGame {
 
 	private:
 		Scene* m_scene;
-		std::vector<const char*> m_components;
 	};
 
 }
