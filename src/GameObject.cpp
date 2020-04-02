@@ -7,9 +7,6 @@ namespace glGame {
 	}
 
 	GameObject::~GameObject() {
-		for(Component* cmp : m_components) {
-			delete cmp;
-		}
 	}
 
 	void GameObject::onInit() {
@@ -19,15 +16,26 @@ namespace glGame {
 	}
 
 	void GameObject::onUpdate() {
-		for(Component* c : m_components) {
+		for(auto& c : m_components) {
 			c->update();
 		}
 	}
 
 	void GameObject::onRender() {
-		for (Component* c : m_components) {
+		for(auto& c : m_components) {
 			c->onRender();
 		}
+	}
+
+	template<class T>
+	T* GameObject::addComponent() {
+		std::unique_ptr<T> newComponent = std::make_unique<T>();
+		newComponent->setParentGameObject(this);
+		m_initQueue.push((Component*)newComponent.get());
+		T* newComponentPtr = newComponent.get();
+		m_components.push_back(std::move(newComponent));
+
+		return newComponentPtr;
 	}
 
 	Component* GameObject::addComponent(std::string& component) {
@@ -41,11 +49,21 @@ namespace glGame {
 		}
 	}
 
+	void GameObject::removeComponent(int index) {
+		if(index < 1 || index > getComponentSize()) // index < 1 because it should not remove Transform
+			return;
+
+		if(m_components[index]->getName() == "MeshRenderer")
+			meshRenderer = nullptr;
+
+		m_components.erase(m_components.begin() + index);
+	}
+
 	const Component* const GameObject::getComponent(int index) const {
 		if(index < 0 || index > getComponentSize())
 			return nullptr;
 
-		return m_components[index];
+		return m_components[index].get();
 	}
 
 	Component* GameObject::getInitQueueComponent() {
@@ -57,5 +75,4 @@ namespace glGame {
 	void GameObject::init() {
 		transform = addComponent<Transform>();
 	}
-
 }

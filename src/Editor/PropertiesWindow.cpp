@@ -39,10 +39,20 @@ namespace glGame {
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		int componentSize = selectedObj->getComponentSize(), componentVariableIndex = 0;
-		for(int i = 0; i < componentSize; ++i) {
+		int componentVariableIndex = 0;
+		for(int i = 0; i < selectedObj->getComponentSize(); ++i) {
 			const Component* selectedComponent = selectedObj->getComponent(i);
 			ImGui::Text(selectedComponent->getName().c_str());
+			if(selectedComponent->getName() != "Transform") {
+				ImGui::SameLine();
+				ImGui::PushID(i);
+				if(ImGui::SmallButton("X##ID")) {
+					selectedObj->removeComponent(i);
+					ImGui::PopID();
+					continue;
+				}
+				ImGui::PopID();
+			}
 
 			ImGui::Spacing();
 
@@ -73,6 +83,7 @@ namespace glGame {
 					std::string componentStr = std::string(component);
 					if(componentStr == "Script") {
 						ImGui::OpenPopup("AddScriptPopup");
+						s_addScriptFilenameBuffer = "";
 					}
 					else {
 						selectedObj->addComponent(componentStr);
@@ -88,7 +99,6 @@ namespace glGame {
 					Script* s = selectedObj->addComponent<Script>();
 					std::cout << s_addScriptFilenameBuffer << std::endl;
 					s->changeScriptfile(s_addScriptFilenameBuffer);
-					s_addScriptFilenameBuffer = "";
 				}
 
 				ImGui::EndPopup();

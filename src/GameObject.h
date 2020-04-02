@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <memory>
 #include "Components/Component.h"
 
 namespace glGame{
@@ -19,16 +20,10 @@ namespace glGame{
 		void onRender();
 
 		template<class T>
-		T* addComponent() {
-			T* newComponent = new T;
-			m_components.push_back(newComponent);
-			newComponent->setParentGameObject(this);
-			m_initQueue.push((Component*)newComponent);
-
-			return newComponent;
-		}
+		T* addComponent();
 
 		Component* addComponent(std::string& component);
+		void removeComponent(int index);
 
 		const Component* const getComponent(int index) const;
 		int getComponentSize() const { return m_components.size(); }
@@ -43,7 +38,7 @@ namespace glGame{
 		Component* getInitQueueComponent();
 		int getinitQueueSize() const { return m_initQueue.size(); }
 
-		std::vector<Component*> m_components;
+		std::vector<std::unique_ptr<Component>> m_components;
 		std::queue<Component*> m_initQueue;
 	};
 
