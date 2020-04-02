@@ -27,28 +27,11 @@ namespace glGame {
 		}
 	}
 
-	template<class T>
-	T* GameObject::addComponent() {
-		return addComponentImpl<T>();
-	}
-
-	template<>
-	MeshRenderer* GameObject::addComponent<MeshRenderer>() {
+	MeshRenderer* GameObject::addComponentOverload(componentType<MeshRenderer>) {
 		if(meshRenderer) return meshRenderer;
 		
 		meshRenderer = addComponentImpl<MeshRenderer>();
 		return meshRenderer;
-	}
-
-	template<class T>
-	T* GameObject::addComponentImpl() {
-		std::unique_ptr<T> newComponent = std::make_unique<T>();
-		newComponent->setParentGameObject(this);
-		m_initQueue.push((Component*)newComponent.get());
-		T* newComponentPtr = newComponent.get();
-		m_components.push_back(std::move(newComponent));
-
-		return newComponentPtr;
 	}
 
 	Component* GameObject::addComponent(std::string& component) {
