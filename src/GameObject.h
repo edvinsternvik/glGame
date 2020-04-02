@@ -38,6 +38,9 @@ namespace glGame{
 		Component* getInitQueueComponent();
 		int getinitQueueSize() const { return m_initQueue.size(); }
 
+		template<class T>
+		T* addComponentImpl();
+
 		std::vector<std::unique_ptr<Component>> m_components;
 		std::queue<Component*> m_initQueue;
 	};
