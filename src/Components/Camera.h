@@ -13,11 +13,11 @@ namespace glGame {
 		virtual void update() override;
 
 		inline const glm::mat4& getProjectionMatrix() const { return m_projectionMatrix; }
-		inline const glm::mat4& getViewMatrix() const { return m_viewMatrix; }
+		glm::mat4 getViewMatrix();
 
 	private:
 		float m_fov, m_nearPlane, m_farPlane;
-		glm::mat4 m_projectionMatrix, m_viewMatrix;
+		glm::mat4 m_projectionMatrix;
 	};
 
 }
