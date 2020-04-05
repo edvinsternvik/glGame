@@ -2,7 +2,7 @@
 #include "Components/ComponentList.h"
 
 namespace glGame {
-	GameObject::GameObject(std::string& name) : name(name) {
+	GameObject::GameObject(const std::string& name) : name(name) {
 		init();
 	}
 

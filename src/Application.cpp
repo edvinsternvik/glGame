@@ -19,12 +19,17 @@ namespace glGame {
 	}
 
 	void Application::run() {
+		#ifdef GL_GAME_EDITOR
+		m_sceneManager->getActiveScene()->activeCamera = (Camera*)m_sceneManager->getActiveScene()->editorCameraObject->getComponent(1);
+		#endif
 
 		while(m_running) {
 			m_sceneManager->initScene();
 
 			#ifndef GL_GAME_EDITOR
 			m_sceneManager->updateScene();
+			#else
+			m_sceneManager->getActiveScene()->editorCameraObject->onUpdate();
 			#endif
 
 			m_renderer->render(m_sceneManager->getActiveScene());

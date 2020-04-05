@@ -3,9 +3,18 @@
 #include "../Components/Camera.h"
 #include "../Components/Transform.h"
 
+#ifdef GL_GAME_EDITOR
+#include "../Components/EditorController.h"
+#endif
+
 namespace glGame {
 
 	Scene::Scene() {
+		#ifdef GL_GAME_EDITOR
+		editorCameraObject = std::make_unique<GameObject>("EditorCameraGameObject");
+		activeCamera = editorCameraObject->addComponent<Camera>();
+		editorCameraObject->addComponent<EditorController>();
+		#endif
 	}
 
 	Scene::~Scene() {

@@ -27,6 +27,10 @@ namespace glGame {
 	public:
 		Camera* activeCamera = nullptr;
 
+		#ifdef GL_GAME_EDITOR
+		std::unique_ptr<GameObject> editorCameraObject;
+		#endif
+
 	private:
 		std::vector<GameObject*> m_gameObjects;
 		GameObject* m_selectedGameObject = nullptr; //Holds a reference to the selected gameobject in the editor
