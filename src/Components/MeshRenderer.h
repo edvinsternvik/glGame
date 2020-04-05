@@ -16,6 +16,8 @@ namespace glGame {
 		virtual void update() override;
 		virtual void onRender() override;
 
+		void changeModelFile(std::string str) { m_modelFilePath = str; }
+
 	public:
 		std::unique_ptr<Model> model;
 		glm::mat4 modelMatrix;

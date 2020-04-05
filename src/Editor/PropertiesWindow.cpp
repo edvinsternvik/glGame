@@ -16,7 +16,7 @@ namespace glGame {
 	}
 
 	void PropertiesWindow::renderWindow() {
-		static std::string s_addScriptFilenameBuffer = "";
+		static std::string s_stringBuffer = "";
 		GameObject* selectedObj = m_scene->getSelectedGameObject();
 
 		if (!selectedObj) {
@@ -96,12 +96,16 @@ namespace glGame {
 			for(const char* component : addComponentEnabled) {
 				if(ImGui::Button(component)) {
 					std::string componentStr = std::string(component);
+					s_stringBuffer = "";
 					if(componentStr == "Script") {
 						ImGui::OpenPopup("AddScriptPopup");
-						s_addScriptFilenameBuffer = "";
+					}
+					else if(componentStr == "MeshRenderer") {
+						ImGui::OpenPopup("AddMeshRendererPopup");
 					}
 					else {
 						selectedObj->addComponent(componentStr);
+						ImGui::CloseCurrentPopup();
 					}
 				}
 			}
@@ -113,14 +117,22 @@ namespace glGame {
 			}
 			
 			if(ImGui::BeginPopup("AddScriptPopup")) {
-				InputText("filename", s_addScriptFilenameBuffer, 64);
-
+				InputText("filename", s_stringBuffer, 64);
 				if(ImGui::Button("Add Script")) {
 					Script* s = selectedObj->addComponent<Script>();
-					std::cout << s_addScriptFilenameBuffer << std::endl;
-					s->changeScriptfile(s_addScriptFilenameBuffer);
+					s->changeScriptfile(s_stringBuffer);
+					ImGui::CloseCurrentPopup();
 				}
+				ImGui::EndPopup();
+			}
 
+			if(ImGui::BeginPopup("AddMeshRendererPopup")) {
+				InputText("filename", s_stringBuffer, 64);
+				if(ImGui::Button("Add MeshRenderer")) {
+					MeshRenderer* m = selectedObj->addComponent<MeshRenderer>();
+					m->changeModelFile(s_stringBuffer);
+					ImGui::CloseCurrentPopup();
+				}
 				ImGui::EndPopup();
 			}
 
