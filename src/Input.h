@@ -17,8 +17,11 @@ namespace glGame {
 		static bool getMouseKeyDown(int keycode);
 		static bool getMouseKey(int keycode);
 		static std::pair<float, float> getMousePosition();
+		static std::pair<float, float> getMouseDelta();
 		static float getMouseX();
 		static float getMouseY();
+		static float getMouseDeltaX();
+		static float getMouseDeltaY();
 
 		static const void handleEvent(Event* e);
 		static void update();
@@ -33,5 +36,6 @@ namespace glGame {
 		static bool m_keys[KEY_LAST + 1];
 		static bool m_keysPrevious[KEY_LAST + 1];
 		static double m_xpos, m_ypos;
+		static double m_prevXpos, m_prevYpos;
 	};
 }

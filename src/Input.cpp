@@ -8,7 +8,7 @@
 namespace glGame {
 	bool Input::m_keys[KEY_LAST + 1] = { false };
 	bool Input::m_keysPrevious[KEY_LAST + 1] = { false };
-	double Input::m_xpos = 0.0, Input::m_ypos = 0.0;
+	double Input::m_xpos = 0.0, Input::m_ypos = 0.0, Input::m_prevXpos = 0.0, Input::m_prevYpos = 0.0;
 
 	Input* Input::s_instance = new Input();
 
@@ -45,7 +45,11 @@ namespace glGame {
 	}
 
 	std::pair<float, float> Input::getMousePosition() {
-		return std::pair<float, float>(1.0, 1.0);
+		return std::pair<float, float>(m_xpos, m_ypos);
+	}
+
+	std::pair<float, float> Input::getMouseDelta() {
+		return std::pair<float, float>(m_xpos - m_prevXpos, m_ypos - m_prevYpos);
 	}
 
 	float Input::getMouseX() {
@@ -54,6 +58,14 @@ namespace glGame {
 
 	float Input::getMouseY() {
 		return m_ypos;
+	}
+
+	float Input::getMouseDeltaX() {
+		return m_xpos - m_prevXpos;
+	}
+
+	float Input::getMouseDeltaY() {
+		return m_ypos - m_prevYpos;
 	}
 
 	const void Input::handleEvent(Event* e) {
@@ -81,6 +93,9 @@ namespace glGame {
 
 	void Input::update() {
 		std::memcpy(m_keysPrevious, m_keys, KEY_LAST);
+
+		m_prevXpos = m_xpos;
+		m_prevYpos = m_ypos;
 	}
 
 }
