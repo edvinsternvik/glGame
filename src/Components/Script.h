@@ -24,6 +24,9 @@ namespace glGame {
         void registerPublicScriptVariable(std::vector<std::string>& strings);
 
     private:
+        void cleanupScriptEngine();
+
+    private:
         std::string filename;
 
         asIScriptEngine* m_asScriptEngine = nullptr;

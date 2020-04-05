@@ -40,6 +40,8 @@ namespace glGame {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name));
 		}
 
+		inline void clearPublicVariables() { m_publicVariables.clear(); }
+
 		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name, float sliderSpeed) {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name, sliderSpeed));
 		}

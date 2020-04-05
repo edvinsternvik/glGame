@@ -10,11 +10,12 @@ namespace glGame {
     }
 
     Script::~Script() {
-        if(m_asScriptContext != nullptr) m_asScriptContext->Release();
-        if(m_asScriptEngine != nullptr) m_asScriptEngine->ShutDownAndRelease();
+        cleanupScriptEngine();
     }
 
     void Script::init() {
+        cleanupScriptEngine();
+
         if(filename == "") {
             return;
         }
@@ -28,8 +29,7 @@ namespace glGame {
         r = scriptbuilder.AddSectionFromFile(filename.c_str());
         if(r < 0) {
             std::cout << "ERROR when adding script from file" << std::endl;
-            m_asScriptEngine->ShutDownAndRelease();
-            m_asScriptEngine = nullptr;
+            cleanupScriptEngine();
             return;
         }
         r = scriptbuilder.BuildModule();
@@ -65,7 +65,6 @@ namespace glGame {
                 m_scriptPublicVars.push_back(PublicScriptVariable(globalVarAddr, globalVarType, globalVarDecl));
             }
         }
-        m_registeredPublicVars.clear();
 
         for(auto& pVar : m_scriptPublicVars) {
             addPublicVariable(&pVar.var, pVar.type, pVar.declaration);
@@ -79,15 +78,19 @@ namespace glGame {
         if(m_asScriptUpdateFunction == 0) std::cout << "ERROR no function void update()" << std::endl;
 
         m_asScriptContext = m_asScriptEngine->CreateContext();
-        m_asScriptContext->Prepare(m_asScriptInitFunction);
-        r = m_asScriptContext->Execute();
-        if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
+        if(m_asScriptInitFunction) {
+            m_asScriptContext->Prepare(m_asScriptInitFunction);
+            r = m_asScriptContext->Execute();
+            if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
+        }
     }
 
     void Script::update() {
-        m_asScriptContext->Prepare(m_asScriptUpdateFunction);
-        int r = m_asScriptContext->Execute();
-        if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
+        if(m_asScriptUpdateFunction != nullptr) {
+            m_asScriptContext->Prepare(m_asScriptUpdateFunction);
+            int r = m_asScriptContext->Execute();
+            if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
+        }
     }
 
     void Script::registerPublicScriptVariable(std::vector<std::string>& strings) {
@@ -98,6 +101,18 @@ namespace glGame {
         std::string pVarValueStr = strings[strings.size() - 1];
 
         m_registeredPublicVars.insert(std::pair<std::string, std::string>(pVarName, pVarValueStr));
+    }
+
+    void Script::cleanupScriptEngine() {
+        if(m_asScriptContext != nullptr) m_asScriptContext->Release();
+        if(m_asScriptEngine != nullptr) m_asScriptEngine->ShutDownAndRelease();
+
+        m_asScriptContext = nullptr;
+        m_asScriptEngine = nullptr;
+        m_asScriptInitFunction = nullptr;
+        m_asScriptUpdateFunction = nullptr;
+        m_scriptPublicVars.clear();
+        clearPublicVariables();
     }
 
 }
