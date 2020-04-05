@@ -25,6 +25,7 @@ namespace glGame{
 		}
 
 		Component* addComponent(std::string& component);
+		void addComponentToInitQueue(int index);
 		void removeComponent(int index);
 
 		const Component* const getComponent(int index) const;

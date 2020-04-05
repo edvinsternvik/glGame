@@ -51,6 +51,11 @@ namespace glGame {
 					ImGui::PopID();
 					continue;
 				}
+
+				ImGui::SameLine();
+				if(ImGui::SmallButton("Refresh##ID")) {
+					selectedObj->addComponentToInitQueue(i);
+				}
 				ImGui::PopID();
 			}
 

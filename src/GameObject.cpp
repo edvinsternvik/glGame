@@ -45,6 +45,12 @@ namespace glGame {
 		}
 	}
 
+	void GameObject::addComponentToInitQueue(int index) {
+		Component* c = (Component*)getComponent(index);
+
+		m_initQueue.push(c);
+	}
+
 	void GameObject::removeComponent(int index) {
 		if(index < 1 || index > getComponentSize()) // index < 1 because it should not remove Transform
 			return;

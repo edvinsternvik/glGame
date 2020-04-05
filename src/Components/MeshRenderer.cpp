@@ -6,7 +6,11 @@
 namespace glGame {
 
 	MeshRenderer::MeshRenderer() {
-		model = std::make_unique<Model>("epicMonkey.obj");
+		addPublicVariable(&m_modelFilePath, PublicVariableType::String, "Modelfile");
+	}
+
+	void MeshRenderer::init() {
+		model = std::make_unique<Model>(m_modelFilePath.c_str());
 	}
 
 	void MeshRenderer::update() {

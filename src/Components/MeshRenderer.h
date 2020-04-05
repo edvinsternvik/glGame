@@ -12,6 +12,7 @@ namespace glGame {
 
 		virtual std::string getName() const { return "MeshRenderer"; }
 
+		virtual void init() override;
 		virtual void update() override;
 		virtual void onRender() override;
 
@@ -26,7 +27,7 @@ namespace glGame {
 
 	private:
 		void updateModelMatrix();
-
+		std::string m_modelFilePath;
 	};
 
 }
