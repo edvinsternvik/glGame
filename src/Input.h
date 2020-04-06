@@ -37,5 +37,7 @@ namespace glGame {
 		static bool m_keysPrevious[KEY_LAST + 1];
 		static double m_xpos, m_ypos;
 		static double m_prevXpos, m_prevYpos;
+		static bool m_mouseKeys[MOUSE_BUTTON_LAST + 1];
+		static bool m_mouseKeysPrevious[MOUSE_BUTTON_LAST + 1];
 	};
 }

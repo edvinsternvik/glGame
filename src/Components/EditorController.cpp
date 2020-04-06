@@ -12,7 +12,9 @@ namespace glGame {
     }
 
     void EditorController::update() {
-        gameObject->transform->rotation.y += Input::getMouseDeltaX() * 0.1;
+        if(Input::getMouseKeyDown(MOUSE_BUTTON_LEFT)) {
+            gameObject->transform->rotation.y += Input::getMouseDeltaX() * 0.1;
+        }
 
         float movementSpeed = 0.01;
         Vector3 movement(0.0, 0.0, 0.0);

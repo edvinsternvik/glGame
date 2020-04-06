@@ -3,7 +3,7 @@
 
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyboardEvent.h"
-#include "Events/MouseMoveEvent.h"
+#include "Events/MouseEvent.h"
 
 namespace glGame {
 
@@ -78,6 +78,19 @@ namespace glGame {
 
 			MouseMoved e(xpos, ypos);
 			data.eventFunction(e);
+		});
+
+		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+			windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
+
+			if(action == GLFW_PRESS) {
+				MouseButtonPressed e(button, mods);
+				data.eventFunction(e);
+			}
+			else if(action == GLFW_RELEASE) {
+				MouseButtonReleased e(button, mods);
+				data.eventFunction(e);
+			}
 		});
 	}
 }
