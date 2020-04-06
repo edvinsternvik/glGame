@@ -26,11 +26,13 @@ namespace glGame {
 		while(m_running) {
 			m_sceneManager->initScene();
 
-			#ifndef GL_GAME_EDITOR
-			m_sceneManager->updateScene();
-			#else
-			m_sceneManager->getActiveScene()->editorCameraObject->onUpdate();
-			#endif
+			if(m_focused) {
+				#ifndef GL_GAME_EDITOR
+				m_sceneManager->updateScene();
+				#else
+				m_sceneManager->getActiveScene()->editorCameraObject->onUpdate();
+				#endif
+			}
 
 			m_renderer->render(m_sceneManager->getActiveScene());
 			
@@ -49,16 +51,22 @@ namespace glGame {
 			Input::handleEvent(&e);
 		}
 
-		if(e.isInCategory(EventCategory::Application)) {
+		else if(e.isInCategory(EventCategory::Application)) {
 			if(e.getEventType() == EventType::WindowClose) {
 				m_running = false;
 			}
 		}
 
-		if(e.isInCategory(EventCategory::Editor)) {
+		else if(e.isInCategory(EventCategory::Editor)) {
 			if(e.getEventType() == EventType::SaveScene) {
 				std::cout << "Scene saved" << std::endl;
 				m_sceneManager->saveActiveScene();
+			}
+			else if(e.getEventType() == EventType::GameFocused) {
+				m_focused = true;
+			}
+			else if(e.getEventType() == EventType::GameUnfocused) {
+				m_focused = false;
 			}
 		}
 	}
@@ -66,10 +74,11 @@ namespace glGame {
 	#ifdef GL_GAME_EDITOR
 	void Application::setUpEditor() {
 		m_editorGui = std::make_unique<Gui>(m_window->getWindow());
-		m_editorGui->m_windows.push_back(std::make_unique<ViewportWindow>(m_renderer->getEditorFrameTexture(), m_viewportAspectRatio));
-		m_editorGui->m_windows.push_back(std::make_unique<SceneWindow>(m_sceneManager->getActiveScene()));
-		m_editorGui->m_windows.push_back(std::make_unique<PropertiesWindow>(m_sceneManager->getActiveScene()));
+		m_editorGui->addWindow(std::make_unique<ViewportWindow>(m_renderer->getEditorFrameTexture(), m_viewportAspectRatio));
+		m_editorGui->addWindow(std::make_unique<SceneWindow>(m_sceneManager->getActiveScene()));
+		m_editorGui->addWindow(std::make_unique<PropertiesWindow>(m_sceneManager->getActiveScene()));
 		m_editorGui->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
+		m_focused = false;
 	}
 	#else
 	void Application::setUpEditor() {

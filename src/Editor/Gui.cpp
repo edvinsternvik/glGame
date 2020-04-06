@@ -84,6 +84,11 @@ void glGame::Gui::OnGuiRender() {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void glGame::Gui::addWindow(std::unique_ptr<GuiWindow> window) {
+	window->setEventFunction(m_eventFunction);
+	m_windows.push_back(std::move(window));
+}
+
 void glGame::Gui::init(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

@@ -11,7 +11,7 @@ namespace glGame {
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		KeyPress, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
-		GameStart, GameEnd, SaveScene
+		GameStart, GameEnd, SaveScene, GameFocused, GameUnfocused
 	};
 
 	enum class EventCategory {

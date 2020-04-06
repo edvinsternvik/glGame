@@ -14,6 +14,21 @@ namespace glGame {
 	}
 
 	void ViewportWindow::renderWindow() {
+		if(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow)) {
+			if(!m_focused) {
+				GameFocused e;
+				if(m_eventFunction) (*m_eventFunction)(e);
+				m_focused = true;
+			}
+		}
+		else {
+			if(m_focused) {
+				GameUnfocused e;
+				if(m_eventFunction) (*m_eventFunction)(e);
+				m_focused = false;
+			}
+		}
+
 		float width = ImGui::GetContentRegionAvail().x;
 		float height = width / m_aspectRatio;
 		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));

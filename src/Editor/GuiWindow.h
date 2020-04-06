@@ -1,6 +1,8 @@
 #pragma
 #include <memory>
 #include <vector>
+#include <functional>
+#include "../Events/EditorEvent.h"
 
 namespace glGame {
 
@@ -14,8 +16,11 @@ namespace glGame {
 		virtual const char* getWindowName() = 0;
 		virtual void renderWindow() = 0;
 
+		inline void setEventFunction(std::function<void(Event&)>& eventFunction) { m_eventFunction = &eventFunction; }
+
 	public:
 		bool isOpen = true;
+		std::function<void(Event&)>* m_eventFunction = nullptr;
 	};
 
 	class ViewportWindow : public GuiWindow {
@@ -28,6 +33,7 @@ namespace glGame {
 	private:
 		unsigned int m_texture;
 		float m_aspectRatio;
+		bool m_focused;
 	};
 
 	class SceneWindow : public GuiWindow {

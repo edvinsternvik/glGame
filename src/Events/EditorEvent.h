@@ -20,4 +20,16 @@ namespace glGame {
 		virtual std::string getName() const override { return "SaveScene"; }
 		virtual int getCategoryFlags() const override { return (int)EventCategory::Editor; }
 	};
+
+	class GameFocused : public Event {
+		virtual EventType getEventType() const override { return EventType::GameFocused; }
+		virtual std::string getName() const override { return "GameFocused"; }
+		virtual int getCategoryFlags() const override { return (int)EventCategory::Editor; }
+	};
+
+	class GameUnfocused : public Event {
+		virtual EventType getEventType() const override { return EventType::GameUnfocused; }
+		virtual std::string getName() const override { return "GameUnfocused"; }
+		virtual int getCategoryFlags() const override { return (int)EventCategory::Editor; }
+	};
 }

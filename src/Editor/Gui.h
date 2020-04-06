@@ -21,12 +21,11 @@ namespace glGame {
 
 		void OnGuiRender();
 		inline void setEventFunction(std::function<void(Event&)> eventFunction) { m_eventFunction = eventFunction; }
-
-	public:
-		std::vector<std::unique_ptr<GuiWindow>> m_windows;
+		void addWindow(std::unique_ptr<GuiWindow> window);
 
 	private:
 		void init(GLFWwindow* window);
+		std::vector<std::unique_ptr<GuiWindow>> m_windows;
 
 	private:
 		ImGuiWindowFlags m_windowFlags;
