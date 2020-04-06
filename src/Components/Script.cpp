@@ -112,7 +112,9 @@ namespace glGame {
         m_asScriptInitFunction = nullptr;
         m_asScriptUpdateFunction = nullptr;
         m_scriptPublicVars.clear();
-        clearPublicVariables();
+        for(int i = getPublicVariableCount() - 1; i > 0 ; --i) {
+            removePublicVariable(i);
+        }
     }
 
 }

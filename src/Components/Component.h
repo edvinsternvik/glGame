@@ -41,6 +41,9 @@ namespace glGame {
 		}
 
 		inline void clearPublicVariables() { m_publicVariables.clear(); }
+		void removePublicVariable(int index) {
+			if(index >= 0 && index < m_publicVariables.size()) m_publicVariables.erase(m_publicVariables.begin() + index);
+		}
 
 		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name, float sliderSpeed) {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name, sliderSpeed));
