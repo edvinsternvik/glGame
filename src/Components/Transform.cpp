@@ -8,11 +8,11 @@ namespace glGame {
 		addPublicVariable(&rotation, PublicVariableType::Vec3, "rotation", 10.0);
 	}
 
-	// void Transform::move(Vector3 vector) {
-	// 	position.x = vector.x;
-	// 	position.y = vector.y;
-	// 	position.z = vector.z;
-	// }
+	void Transform::move(Vector3 vector) {
+		position.x += vector.x;
+		position.y += vector.y;
+		position.z += vector.z;
+	}
 
 	void Transform::move(float x, float y, float z) {
 		position.x += x;

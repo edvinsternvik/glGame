@@ -8,7 +8,7 @@ void init() {
 void update(float deltatime) {
     bool keyDown = getKeyDown(87);
     if(keyDown) {
-        transform.move(0.1f, 0.0f, 0.0f);
+        transform.move(deltatime, 0.0, 0.0);
     }
 
 }

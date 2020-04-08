@@ -52,12 +52,12 @@ namespace glGame {
 		return m_mouseKeys[keycode] && !m_mouseKeysPrevious[keycode];
 	}
 
-	std::pair<float, float> Input::getMousePosition() {
-		return std::pair<float, float>(m_xpos, m_ypos);
+	Vector2 Input::getMousePosition() {
+		return Vector2(m_xpos, m_ypos);
 	}
 
-	std::pair<float, float> Input::getMouseDelta() {
-		return std::pair<float, float>(m_xpos - m_prevXpos, m_ypos - m_prevYpos);
+	Vector2 Input::getMouseDelta() {
+		return Vector2(m_xpos - m_prevXpos, m_ypos - m_prevYpos);
 	}
 
 	float Input::getMouseX() {

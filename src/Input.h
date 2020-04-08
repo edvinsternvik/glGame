@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Math/Vector.h"
 #include "Keycodes.h"
 
 namespace glGame {
@@ -16,8 +17,8 @@ namespace glGame {
 
 		static bool getMouseKeyDown(int keycode);
 		static bool getMouseKey(int keycode);
-		static std::pair<float, float> getMousePosition();
-		static std::pair<float, float> getMouseDelta();
+		static Vector2 getMousePosition();
+		static Vector2 getMouseDelta();
 		static float getMouseX();
 		static float getMouseY();
 		static float getMouseDeltaX();
