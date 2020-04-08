@@ -87,8 +87,8 @@ namespace glGame {
 
     void Script::update(float deltatime) {
         if(m_asScriptUpdateFunction != nullptr) {
-            m_asScriptContext->SetArgFloat(0, deltatime);
             m_asScriptContext->Prepare(m_asScriptUpdateFunction);
+            m_asScriptContext->SetArgFloat(0, deltatime);
             int r = m_asScriptContext->Execute();
             if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
         }
