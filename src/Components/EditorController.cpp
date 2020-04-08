@@ -11,7 +11,7 @@ namespace glGame {
         
     }
 
-    void EditorController::update() {
+    void EditorController::update(float deltatime) {
         if(Input::getMouseKeyDown(MOUSE_BUTTON_LEFT)) {
             gameObject->transform->rotation.y += Input::getMouseDeltaX() * 0.1;
         }

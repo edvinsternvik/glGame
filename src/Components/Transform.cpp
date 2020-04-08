@@ -8,9 +8,6 @@ namespace glGame {
 		addPublicVariable(&rotation, PublicVariableType::Vec3, "rotation", 10.0);
 	}
 
-	void Transform::update() {
-	}
-
 	// void Transform::move(Vector3 vector) {
 	// 	position.x = vector.x;
 	// 	position.y = vector.y;

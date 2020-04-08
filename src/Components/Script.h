@@ -17,7 +17,7 @@ namespace glGame {
         virtual std::string getName() const { return "Script"; }
 
         virtual void init() override;
-		virtual void update() override;
+		virtual void update(float deltatime) override;
 
         void changeScriptfile(std::string& scriptfile) { filename = scriptfile; }
 

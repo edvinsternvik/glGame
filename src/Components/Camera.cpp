@@ -9,9 +9,6 @@ namespace glGame {
 		m_projectionMatrix(glm::perspective(m_fov, 1920.0f / 1080.0f, m_nearPlane, m_farPlane)) {
 	}
 
-	void Camera::update() {
-	}
-
 	glm::mat4 Camera::getViewMatrix() {
 		Vector3 position = gameObject->transform->position;
 		Vector3 rotation = gameObject->transform->rotation;

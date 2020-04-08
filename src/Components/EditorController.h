@@ -9,7 +9,7 @@ namespace glGame {
 
 		virtual std::string getName() const { return "EditorController"; }
 
-		virtual void update() override;
+		virtual void update(float deltatime) override;
 	};
 
 }

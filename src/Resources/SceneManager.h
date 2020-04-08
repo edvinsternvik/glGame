@@ -11,7 +11,7 @@ namespace glGame {
 		SceneManager();
 
 		void initScene();
-		void updateScene();
+		void updateScene(float deltatime);
 		void addScene();
 		void setActiveScene(int index);
 		Scene* getActiveScene() const { return m_activeScene; };

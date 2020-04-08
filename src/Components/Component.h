@@ -14,7 +14,7 @@ namespace glGame {
 
 		virtual std::string getName() const = 0;
 		virtual void init() {}
-		virtual void update() = 0;
+		virtual void update(float deltatime) {}
 		virtual void onRender() {}
 
 		inline const int getPublicVariableCount() const {

@@ -15,9 +15,9 @@ namespace glGame {
 		}
 	}
 
-	void GameObject::onUpdate() {
+	void GameObject::onUpdate(float deltatime) {
 		for(auto& c : m_components) {
-			c->update();
+			c->update(deltatime);
 		}
 	}
 

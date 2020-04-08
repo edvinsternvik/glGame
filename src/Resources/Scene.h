@@ -21,7 +21,7 @@ namespace glGame {
 		inline int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void init();
-		void update();
+		void update(float deltatime);
 		void onRender();
 
 	public:

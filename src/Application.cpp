@@ -27,10 +27,11 @@ namespace glGame {
 			m_sceneManager->initScene();
 
 			if(m_focused) {
+				float deltatime = m_time.getDeltatime();
 				#ifndef GL_GAME_EDITOR
-				m_sceneManager->updateScene();
+				m_sceneManager->updateScene(deltatime);
 				#else
-				m_sceneManager->getActiveScene()->editorCameraObject->onUpdate();
+				m_sceneManager->getActiveScene()->editorCameraObject->onUpdate(deltatime);
 				#endif
 			}
 

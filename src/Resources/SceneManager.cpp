@@ -18,8 +18,8 @@ namespace glGame {
 		m_activeScene->init();
 	}
 
-	void SceneManager::updateScene() {
-		m_activeScene->update();
+	void SceneManager::updateScene(float deltatime) {
+		m_activeScene->update(deltatime);
 	}
 
 	void SceneManager::addScene() {

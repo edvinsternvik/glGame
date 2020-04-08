@@ -10,8 +10,6 @@ namespace glGame {
 
 		virtual std::string getName() const { return "Transform"; }
 
-		virtual void update() override;
-
 		// void move(Vector3 vector);
 		void move(float x, float y, float z);
 

@@ -74,8 +74,8 @@ namespace glGame {
 
         m_asScriptInitFunction = asScriptModule->GetFunctionByDecl("void init()");
         if(m_asScriptInitFunction == 0) std::cout << "ERROR no function void init()" << std::endl;
-        m_asScriptUpdateFunction = asScriptModule->GetFunctionByDecl("void update()");
-        if(m_asScriptUpdateFunction == 0) std::cout << "ERROR no function void update()" << std::endl;
+        m_asScriptUpdateFunction = asScriptModule->GetFunctionByDecl("void update(float)");
+        if(m_asScriptUpdateFunction == 0) std::cout << "ERROR no function void update(float)" << std::endl;
 
         m_asScriptContext = m_asScriptEngine->CreateContext();
         if(m_asScriptInitFunction) {
@@ -85,8 +85,9 @@ namespace glGame {
         }
     }
 
-    void Script::update() {
+    void Script::update(float deltatime) {
         if(m_asScriptUpdateFunction != nullptr) {
+            m_asScriptContext->SetArgFloat(0, deltatime);
             m_asScriptContext->Prepare(m_asScriptUpdateFunction);
             int r = m_asScriptContext->Execute();
             if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;

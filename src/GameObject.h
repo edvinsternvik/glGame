@@ -16,7 +16,7 @@ namespace glGame{
 		~GameObject();
 
 		void onInit();
-		void onUpdate();
+		void onUpdate(float deltatime);
 		void onRender();
 
 		template<class T>

@@ -47,9 +47,9 @@ namespace glGame {
 		}
 	}
 
-	void Scene::update() {
+	void Scene::update(float deltatime) {
 		for (auto& go : m_gameObjects) {
-			go->onUpdate();
+			go->onUpdate(deltatime);
 		}
 	}
 

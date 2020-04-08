@@ -13,10 +13,6 @@ namespace glGame {
 		model = std::make_unique<Model>(m_modelFilePath.c_str());
 	}
 
-	void MeshRenderer::update() {
-
-	}
-
 	void MeshRenderer::onRender() {
 		updateModelMatrix();
 	}
