@@ -5,6 +5,7 @@
 #include "Script.h"
 #include "Transform.h"
 #include "../GameObject.h"
+#include "../Keycodes.h"
 
 namespace glGame {
 
@@ -92,6 +93,23 @@ namespace glGame {
         r = scriptEngine->RegisterGlobalFunction("Vector2 getMousePosition()", asFUNCTION(Input::getMousePosition), asCALL_CDECL);
         r = scriptEngine->RegisterGlobalFunction("float getMouseX()", asFUNCTION(Input::getMouseX), asCALL_CDECL);
         r = scriptEngine->RegisterGlobalFunction("float getMouseY()", asFUNCTION(Input::getMouseY), asCALL_CDECL);
+
+        const char* dNamespace = scriptEngine->GetDefaultNamespace();
+        r = scriptEngine->SetDefaultNamespace("KEY");
+
+        const char* keycodeNames[121] = {"const int UNKNOWN", "const int SPACE", "const int APOSTROPHE", "const int COMMA", "const int MINUS", "const int PERIOD", "const int SLASH", "const int NUMBER_0", "const int NUMBER_1", "const int NUMBER_2", "const int NUMBER_3", "const int NUMBER_4", "const int NUMBER_5", "const int NUMBER_6", "const int NUMBER_7", "const int NUMBER_8", "const int NUMBER_9", "const int SEMICOLON", "const int EQUAL", "const int A", "const int B", "const int C", "const int D", "const int E", "const int F", "const int G", "const int H", "const int I", "const int J", "const int K", "const int L", "const int M", "const int N", "const int O", "const int P", "const int Q", "const int R", "const int S", "const int T", "const int U", "const int V", "const int W", "const int X", "const int Y", "const int Z", "const int LEFT_BRACKET", "const int BACKSLASH", "const int RIGHT_BRACKET", "const int GRAVE_ACCENT", "const int WORLD_1", "const int WORLD_2", "const int ESCAPE", "const int ENTER", "const int TAB", "const int BACKSPACE", "const int INSERT", "const int DELETE", "const int RIGHT", "const int LEFT", "const int DOWN", "const int UP", "const int PAGE_UP", "const int PAGE_DOWN", "const int HOME", "const int END", "const int CAPS_LOCK", "const int SCROLL_LOCK", "const int NUM_LOCK", "const int PRINT_SCREEN", "const int PAUSE", "const int F1", "const int F2", "const int F3", "const int F4", "const int F5", "const int F6", "const int F7", "const int F8", "const int F9", "const int F10", "const int F11", "const int F12", "const int F13", "const int F14", "const int F15", "const int F16", "const int F17", "const int F18", "const int F19", "const int F20", "const int F21", "const int F22", "const int F23", "const int F24", "const int F25", "const int KP_0", "const int KP_1", "const int KP_2", "const int KP_3", "const int KP_4", "const int KP_5", "const int KP_6", "const int KP_7", "const int KP_8", "const int KP_9", "const int KP_DECIMAL", "const int KP_DIVIDE", "const int KP_MULTIPLY", "const int KP_SUBTRACT", "const int KP_ADD", "const int KP_ENTER", "const int KP_EQUAL", "const int LEFT_SHIFT", "const int LEFT_CONTROL", "const int LEFT_ALT", "const int LEFT_SUPER", "const int RIGHT_SHIFT", "const int RIGHT_CONTROL", "const int RIGHT_ALT", "const int RIGHT_SUPER", "const int MENU"};
+        const char* mousekeycodenames[8] = {"const int MOUSE_BUTTON_1", "const int MOUSE_BUTTON_2", "const int MOUSE_BUTTON_3", "const int MOUSE_BUTTON_4", "const int MOUSE_BUTTON_5", "const int MOUSE_BUTTON_6", "const int MOUSE_BUTTON_7", "const int MOUSE_BUTTON_8"};
+        for(int i = 1; i < 121; ++i) {
+            r = scriptEngine->RegisterGlobalProperty(keycodeNames[i], (void*)&keycodes[i]);
+        }
+        for(int i = 0; i < 8; ++i) {
+            r = scriptEngine->RegisterGlobalProperty(mousekeycodenames[i], (void*)&mousekeycodes[i]);
+        }
+        r = scriptEngine->SetDefaultNamespace(dNamespace);
     }
+
+    const int AngelscriptInterface::keycodes[121] = { KEY_UNKNOWN, KEY_SPACE, KEY_APOSTROPHE, KEY_COMMA, KEY_MINUS, KEY_PERIOD, KEY_SLASH, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_SEMICOLON, KEY_EQUAL, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z, KEY_LEFT_BRACKET, KEY_BACKSLASH, KEY_RIGHT_BRACKET, KEY_GRAVE_ACCENT, KEY_WORLD_1, KEY_WORLD_2, KEY_ESCAPE, KEY_ENTER, KEY_TAB, KEY_BACKSPACE, KEY_INSERT, KEY_DELETE, KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_PAGE_UP, KEY_PAGE_DOWN, KEY_HOME, KEY_END, KEY_CAPS_LOCK, KEY_SCROLL_LOCK, KEY_NUM_LOCK, KEY_PRINT_SCREEN, KEY_PAUSE, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20, KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_KP_0, KEY_KP_1, KEY_KP_2, KEY_KP_3, KEY_KP_4, KEY_KP_5, KEY_KP_6, KEY_KP_7, KEY_KP_8, KEY_KP_9, KEY_KP_DECIMAL, KEY_KP_DIVIDE, KEY_KP_MULTIPLY, KEY_KP_SUBTRACT, KEY_KP_ADD, KEY_KP_ENTER, KEY_KP_EQUAL, KEY_LEFT_SHIFT, KEY_LEFT_CONTROL, KEY_LEFT_ALT, KEY_LEFT_SUPER, KEY_RIGHT_SHIFT, KEY_RIGHT_CONTROL, KEY_RIGHT_ALT, KEY_RIGHT_SUPER, KEY_MENU};
+    const int AngelscriptInterface::mousekeycodes[8] = { MOUSE_BUTTON_1, MOUSE_BUTTON_2, MOUSE_BUTTON_3, MOUSE_BUTTON_4, MOUSE_BUTTON_5, MOUSE_BUTTON_6, MOUSE_BUTTON_7, MOUSE_BUTTON_8};
+
 
 }

@@ -6,7 +6,7 @@ void init() {
 }
 
 void update(float deltatime) {
-    bool keyDown = getKeyDown(87);
+    bool keyDown = getKeyDown(KEY::W);
     if(keyDown) {
         transform.move(deltatime, 0.0, 0.0);
     }
