@@ -8,7 +8,9 @@
 namespace glGame{
 
 	class Transform;
+	class RendererComponent;
 	class MeshRenderer;
+	class LineRenderer;
 
 	class GameObject {
 	public:
@@ -34,7 +36,7 @@ namespace glGame{
 	public:
 		std::string name;
 		Transform* transform = nullptr;
-		MeshRenderer* meshRenderer = nullptr;
+		std::vector<RendererComponent*> rendererComponents;
 
 	private:
 		void init();
@@ -55,6 +57,7 @@ namespace glGame{
 		}
 
 		MeshRenderer* addComponentOverload(componentType<MeshRenderer>);
+		LineRenderer* addComponentOverload(componentType<LineRenderer>);
 		template<class T>
 		T* addComponentOverload(componentType<T>) {
 			return addComponentImpl<T>();

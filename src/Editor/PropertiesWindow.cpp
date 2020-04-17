@@ -87,7 +87,6 @@ namespace glGame {
 			for(const char* component : componentList::s_components) {
 				bool disabled = false;
 				if(component == "Transform") disabled = true;
-				if(component == "MeshRenderer" && selectedObj->meshRenderer != nullptr) disabled = true;
 
 				if(disabled) addComponentDisabled.push_back(component);
 				else addComponentEnabled.push_back(component);

@@ -27,17 +27,21 @@ namespace glGame {
 		}
 	}
 
-	MeshRenderer* GameObject::addComponentOverload(componentType<MeshRenderer>) {
-		if(meshRenderer) return meshRenderer;
-		
-		meshRenderer = addComponentImpl<MeshRenderer>();
-		return meshRenderer;
+	MeshRenderer* GameObject::addComponentOverload(componentType<MeshRenderer>) {		
+		rendererComponents.push_back(addComponentImpl<MeshRenderer>());
+		return (MeshRenderer*)rendererComponents[rendererComponents.size() - 1];
+	}
+
+	LineRenderer* GameObject::addComponentOverload(componentType<LineRenderer>) {		
+		rendererComponents.push_back(addComponentImpl<LineRenderer>());
+		return (LineRenderer*)rendererComponents[rendererComponents.size() - 1];
 	}
 
 	Component* GameObject::addComponent(std::string& component) {
 		if(component == "Transform") return addComponent<Transform>();
 		else if(component == "Camera") return addComponent<Camera>();
 		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
+		else if(component == "LineRenderer") return addComponent<LineRenderer>();
 		else if(component == "Script") return addComponent<Script>();
 		else {
 			std::cout << "ERROR: Could not add component: " << component << " to gameobject: " << name << ". Component " << component << " was not found" << std::endl;
@@ -55,8 +59,13 @@ namespace glGame {
 		if(index < 1 || index > getComponentSize()) // index < 1 because it should not remove Transform
 			return;
 
-		if(m_components[index]->getName() == "MeshRenderer")
-			meshRenderer = nullptr;
+		for(int i = 0; i < rendererComponents.size(); ++i) {
+			RendererComponent* rC = rendererComponents[i];
+			if(rC == m_components[index].get()) {
+				rendererComponents.erase(rendererComponents.begin() + i);
+				break;
+			}
+		}
 
 		m_components.erase(m_components.begin() + index);
 	}

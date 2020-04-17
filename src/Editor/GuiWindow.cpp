@@ -40,7 +40,6 @@ namespace glGame {
 	void SceneWindow::renderWindow() {
 		if (ImGui::Button("Create GameObject", ImVec2(0, 0))) {
 			GameObject* newGameObject = m_scene->createGameObject("New GameObject");
-			newGameObject->meshRenderer = newGameObject->addComponent<MeshRenderer>();
 		}
 		ImGui::Separator();
 

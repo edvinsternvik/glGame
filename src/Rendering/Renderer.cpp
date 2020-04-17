@@ -43,15 +43,10 @@ namespace glGame {
 		//Render GameObjects
 		int gameObjectCount = scene->getGameObjectCount();
 		for(int i = 0; i < gameObjectCount; ++i) {
-			MeshRenderer* meshRenderer = scene->getGameObject(i)->meshRenderer;
-			Transform* transform = scene->getGameObject(i)->transform;
-			if(meshRenderer) {
-				
-				//Render object
-				meshRenderer->model->bind();
-				m_shader->setUniformMat4("u_model", &(meshRenderer->modelMatrix[0][0]));
-				glDrawArrays(GL_TRIANGLES, 0, meshRenderer->model->getVerticiesCount());
-
+			for(RendererComponent* rendererComponent : scene->getGameObject(i)->rendererComponents) {
+				if(rendererComponent) {
+					rendererComponent->renderComponent(m_shader.get());
+				}
 			}
 		}
 		//----------------------
@@ -75,5 +70,5 @@ namespace glGame {
 	void Renderer::clearScreen() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-
+	
 }
