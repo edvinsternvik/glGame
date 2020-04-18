@@ -19,14 +19,16 @@ namespace glGame {
 		virtual void init() override;
 		virtual void onRender() override;
 
+	public:
+        Vector3 lineLength;
+        float lineWidth = 5.0;
+
 	private:
 		virtual void renderComponent(Shader* shader);
 
     private:
         std::unique_ptr<VertexArray> m_vao;
         std::unique_ptr<VertexBuffer> m_vbo;
-        Vector3 m_lineLength;
-        float m_lineWidth = 1.0;
 	};
 
 }

@@ -37,10 +37,16 @@ namespace glGame {
 				#endif
 			}
 
+			m_renderer->beginRender();
 			m_renderer->render(m_sceneManager->getActiveScene());
 			
 			#ifdef GL_GAME_EDITOR
-			m_editor->render();
+			m_renderer->renderGizmos(m_editor->getGizmoObjects());
+			#endif
+			m_renderer->endRender();
+
+			#ifdef GL_GAME_EDITOR
+			m_editor->renderEditor();
 			#endif
 
 			Input::update();

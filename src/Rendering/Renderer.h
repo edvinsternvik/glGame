@@ -4,17 +4,23 @@
 #include "Shader.h"
 #include "../Resources/Model.h"
 #include <memory>
+#include <vector>
 
 namespace glGame {
 
 	class Scene;
+	class GameObject;
 
 	class Renderer {
 	public:
 		Renderer();
 
 		void initGLEW();
+
+		void beginRender();
 		void render(Scene* scene);
+		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
+		void endRender();
 
 		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
 

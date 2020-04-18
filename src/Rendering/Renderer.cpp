@@ -21,7 +21,7 @@ namespace glGame {
 
 	}
 
-	void Renderer::render(Scene* scene) {
+	void Renderer::beginRender() {
 		clearScreen();
 
 		#ifdef GL_GAME_EDITOR
@@ -30,7 +30,9 @@ namespace glGame {
 		#endif
 
 		clearScreen();
+	}
 
+	void Renderer::render(Scene* scene) {
 		//Render scene
 		scene->onRender();
 		m_shader->useShader();
@@ -50,7 +52,18 @@ namespace glGame {
 			}
 		}
 		//----------------------
+	}
 
+	void Renderer::renderGizmos(const std::vector<GameObject*>& gizmoObjects) {
+		glClear(GL_DEPTH_BUFFER_BIT);
+		for(GameObject* go : gizmoObjects) {
+			for(RendererComponent* rc : go->rendererComponents) {
+				rc->renderComponent(m_shader.get());
+			}
+		}
+	}
+
+	void Renderer::endRender() {
 		#ifdef GL_GAME_EDITOR
 		m_editorFramebuffer->unbind();
 		#endif
