@@ -19,10 +19,12 @@ void glGame::VertexBuffer::unbindBuffer() {
 }
 
 void glGame::VertexBuffer::updateData(float* data) {
+	bindBuffer();
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_dataSize, data);
 }
 
 void glGame::VertexBuffer::setData(float* data, int size) {
+	bindBuffer();
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	m_dataSize = size;
 }
