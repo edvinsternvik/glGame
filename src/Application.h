@@ -6,7 +6,7 @@
 #include "Time.h"
 
 #ifdef GL_GAME_EDITOR
-#include "Editor/Gui.h"
+#include "Editor/Editor.h"
 #endif
 
 #include <memory>
@@ -21,7 +21,6 @@ namespace glGame {
 
 	private:
 		void onEvent(Event& e);
-		void setUpEditor();
 
 	private:
 		bool m_running = true, m_focused = true;
@@ -29,9 +28,8 @@ namespace glGame {
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<SceneManager> m_sceneManager;
 		Time m_time;
-		
 		#ifdef GL_GAME_EDITOR
-		std::unique_ptr<Gui> m_editorGui;
+		std::unique_ptr<Editor> m_editor;
 		#endif
 
 		float m_viewportAspectRatio;

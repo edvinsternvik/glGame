@@ -37,7 +37,12 @@ namespace glGame {
 	SceneWindow::SceneWindow(Scene* scene) : m_scene(scene) {
 	}
 
+	SceneWindow::SceneWindow() : m_scene(nullptr) {
+	}
+
 	void SceneWindow::renderWindow() {
+		if(m_scene == nullptr) return;
+
 		if (ImGui::Button("Create GameObject", ImVec2(0, 0))) {
 			GameObject* newGameObject = m_scene->createGameObject("New GameObject");
 		}

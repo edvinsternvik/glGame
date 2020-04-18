@@ -15,30 +15,32 @@ namespace glGame {
 		m_sceneManager = std::make_unique<SceneManager>();
 		m_sceneManager->initializeScene();
 
-		setUpEditor();
+		#ifdef GL_GAME_EDITOR
+		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), m_renderer->getEditorFrameTexture(), m_viewportAspectRatio);
+		#endif
 	}
 
 	void Application::run() {
 		#ifdef GL_GAME_EDITOR
-		m_sceneManager->getActiveScene()->activeCamera = (Camera*)m_sceneManager->getActiveScene()->editorCameraObject->getComponent(1);
+		m_editor->setActiveScene(m_sceneManager->getActiveScene());
 		#endif
 
 		while(m_running) {
 			m_sceneManager->initScene();
 
+			float deltatime = m_time.getDeltatime();
 			if(m_focused) {
-				float deltatime = m_time.getDeltatime();
 				#ifndef GL_GAME_EDITOR
 				m_sceneManager->updateScene(deltatime);
 				#else
-				m_sceneManager->getActiveScene()->editorCameraObject->onUpdate(deltatime);
+				m_editor->update(deltatime);
 				#endif
 			}
 
 			m_renderer->render(m_sceneManager->getActiveScene());
 			
 			#ifdef GL_GAME_EDITOR
-			m_editorGui->OnGuiRender();
+			m_editor->render();
 			#endif
 
 			Input::update();
@@ -71,19 +73,4 @@ namespace glGame {
 			}
 		}
 	}
-
-	#ifdef GL_GAME_EDITOR
-	void Application::setUpEditor() {
-		m_editorGui = std::make_unique<Gui>(m_window->getWindow());
-		m_editorGui->addWindow(std::make_unique<ViewportWindow>(m_renderer->getEditorFrameTexture(), m_viewportAspectRatio));
-		m_editorGui->addWindow(std::make_unique<SceneWindow>(m_sceneManager->getActiveScene()));
-		m_editorGui->addWindow(std::make_unique<PropertiesWindow>(m_sceneManager->getActiveScene()));
-		m_editorGui->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
-		m_focused = false;
-	}
-	#else
-	void Application::setUpEditor() {
-		
-	}
-	#endif
 }

@@ -39,6 +39,9 @@ namespace glGame {
 	class SceneWindow : public GuiWindow {
 	public:
 		SceneWindow(Scene* scene);
+		SceneWindow();
+
+		inline void setScene(Scene* scene) { m_scene = scene; }
 
 		inline virtual const char* getWindowName() { return "Scene"; }
 		virtual void renderWindow() override;
@@ -50,6 +53,9 @@ namespace glGame {
 	class PropertiesWindow : public GuiWindow {
 	public:
 		PropertiesWindow(Scene* scene);
+		PropertiesWindow();
+
+		void setScene(Scene* scene);
 
 		inline virtual const char* getWindowName() { return "Properties"; }
 		virtual void renderWindow() override;

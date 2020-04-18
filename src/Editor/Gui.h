@@ -9,6 +9,7 @@
 #include <memory>
 #include <functional>
 #include "../Events/EditorEvent.h"
+#include <iostream>
 
 class GLFWwindow;
 
@@ -21,7 +22,17 @@ namespace glGame {
 
 		void OnGuiRender();
 		inline void setEventFunction(std::function<void(Event&)> eventFunction) { m_eventFunction = eventFunction; }
-		void addWindow(std::unique_ptr<GuiWindow> window);
+		template<class T>
+		T* addWindow(std::unique_ptr<T> window) {
+			if(!m_eventFunction) {
+				std::cout << "Event function not set : Could not add window" << std::endl;
+				return nullptr;
+			}
+			window->setEventFunction(m_eventFunction);
+			T* ret = window.get();
+			m_windows.push_back(std::move(window));
+			return ret;
+		}
 
 	private:
 		void init(GLFWwindow* window);

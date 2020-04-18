@@ -15,7 +15,15 @@ namespace glGame {
 	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
 
+	void PropertiesWindow::setScene(Scene* scene) {
+		m_scene = scene;
+	}
+
+	PropertiesWindow::PropertiesWindow() : m_scene(nullptr) {}
+
 	void PropertiesWindow::renderWindow() {
+		if(m_scene == nullptr) return;
+
 		static std::string s_stringBuffer = "";
 		GameObject* selectedObj = m_scene->getSelectedGameObject();
 

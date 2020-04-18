@@ -39,7 +39,7 @@ void glGame::Gui::OnGuiRender() {
         if (ImGui::BeginMenu("File")) {
 			if(ImGui::SmallButton("save scene")) {
 				SaveSceneEvent e;
-				m_eventFunction(e);
+				if(m_eventFunction) m_eventFunction(e);
 			}
 			ImGui::EndMenu();
 		}
@@ -82,11 +82,6 @@ void glGame::Gui::OnGuiRender() {
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void glGame::Gui::addWindow(std::unique_ptr<GuiWindow> window) {
-	window->setEventFunction(m_eventFunction);
-	m_windows.push_back(std::move(window));
 }
 
 void glGame::Gui::init(GLFWwindow* window) {
