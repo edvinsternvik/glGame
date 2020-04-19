@@ -1,4 +1,5 @@
 #pragma once
+#include "Asset.h"
 #include "../Rendering/VertexArray.h"
 #include "../Rendering/VertexBuffer.h"
 
@@ -6,9 +7,12 @@
 
 namespace glGame {
 
-	class Model {
+	class Model : public Asset {
 	public:
 		Model(const char* fileName);
+
+		virtual const char* getName() { return "Model"; }
+        virtual AssetType getAssetType() { return AssetType::Model; }
 
 		void bind();
 		void unbind();
