@@ -8,15 +8,22 @@
 namespace glGame {
 
     AssetManager::AssetManager() {
+        initFromFile();
 
+        m_highestId = 0;
+        for(const auto& asset : m_assets) {
+            if(asset.first > m_highestId) m_highestId = asset.first;
+        }
+
+        updateAssets();
     }
 
     AssetManager::~AssetManager() {
 
     }
 
-    Asset* AssetManager::getAsset(const char* name, AssetType type) {
-        auto search = m_assets.find(name);
+    Asset* AssetManager::getAsset(unsigned int id, AssetType type) {
+        auto search = m_assets.find(id);
         if(search == m_assets.end()) {
             return nullptr;
         }
@@ -25,7 +32,7 @@ namespace glGame {
     }
 
     void AssetManager::updateAssets() {
-        m_assets.clear();
+        m_assets.clear(); // Temporary
 
         std::filesystem::path assetsPath("./Assets");
         if(std::filesystem::exists(assetsPath) && std::filesystem::is_directory(assetsPath)) {
@@ -34,7 +41,7 @@ namespace glGame {
                     std::string extension = entry.path().extension(), filename = entry.path().filename(), pathStr = entry.path().string();
                     
                     if(extension == ".obj")
-                        insertAsset(filename, std::make_unique<Model>(pathStr.c_str()));
+                        insertAsset(std::make_unique<Model>(pathStr.c_str()));
                     // else if(extension == ".script")
                         // insertAsset(filename, std::make_unique<ScriptAsset>(pathStr.c_str()))
                     // else if(extension == ".png" || extension == ".jpg")
@@ -45,9 +52,12 @@ namespace glGame {
         
     }
 
-    void AssetManager::insertAsset(const std::string& name, std::unique_ptr<Asset> asset) {
-        if(m_assets.find(name.c_str()) == m_assets.end())
-            m_assets.insert(std::pair<std::string, std::unique_ptr<Asset>>((std::string)name, std::move(asset)));
+    void AssetManager::initFromFile() {
+
+    }
+
+    void AssetManager::insertAsset(std::unique_ptr<Asset> asset) {
+        m_assets.insert(std::pair<unsigned int, std::unique_ptr<Asset>>(++m_highestId, std::move(asset)));
     }
 
 }

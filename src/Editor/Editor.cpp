@@ -14,6 +14,7 @@ namespace glGame {
 		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(editorFrameTexture, aspectRatio)); // m_renderer->getEditorFrameTexture()
 		m_sceneWindow = m_editorGui->addWindow(std::make_unique<SceneWindow>());
 		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>());
+        m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>());
 
         m_editorCameraGameObject = std::make_unique<GameObject>("EditorCameraGameObject");
         m_camera = m_editorCameraGameObject->addComponent<Camera>();
@@ -51,6 +52,10 @@ namespace glGame {
         scene->activeCamera = m_camera;
         m_editorCameraGameObject->onInit();
         m_selectedObjectGizmoObject->onInit();
+    }
+
+    void Editor::setAssetManager(AssetManager* assetManager) {
+        m_assetWindow->setAssetManger(assetManager);
     }
 
 }

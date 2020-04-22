@@ -12,6 +12,8 @@ namespace glGame {
 
 		m_renderer = std::make_unique<Renderer>(); // Initializes glew, has to be called before any opengl code
 
+		m_assetManager = std::make_unique<AssetManager>();
+
 		m_sceneManager = std::make_unique<SceneManager>();
 		m_sceneManager->initializeScene();
 
@@ -23,6 +25,7 @@ namespace glGame {
 	void Application::run() {
 		#ifdef GL_GAME_EDITOR
 		m_editor->setActiveScene(m_sceneManager->getActiveScene());
+		m_editor->setAssetManager(m_assetManager.get());
 		#endif
 
 		while(m_running) {

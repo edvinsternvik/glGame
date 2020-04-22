@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Resources/SceneManager.h"
 #include "Time.h"
+#include "Resources/AssetManager.h"
 
 #ifdef GL_GAME_EDITOR
 #include "Editor/Editor.h"
@@ -27,6 +28,7 @@ namespace glGame {
 		std::unique_ptr<Window> m_window;
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<SceneManager> m_sceneManager;
+		std::unique_ptr<AssetManager> m_assetManager;
 		Time m_time;
 		#ifdef GL_GAME_EDITOR
 		std::unique_ptr<Editor> m_editor;

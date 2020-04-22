@@ -8,6 +8,7 @@ namespace glGame {
 
 	class Scene;
 	class PublicVariable;
+	class AssetManager;
 
 	class GuiWindow {
 	public:
@@ -65,6 +66,20 @@ namespace glGame {
 
 	private:
 		Scene* m_scene;
+	};
+
+	class AssetWindow : public GuiWindow {
+	public:
+		AssetWindow(AssetManager* assetManger);
+		AssetWindow();
+
+		inline void setAssetManger(AssetManager* assetManger) { m_assetManager = assetManger; }
+
+		inline virtual const char* getWindowName() { return "Assets"; }
+		virtual void renderWindow() override;
+
+	private:
+		AssetManager* m_assetManager;
 	};
 
 }

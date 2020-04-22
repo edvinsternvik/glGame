@@ -11,7 +11,7 @@ namespace glGame {
 	public:
 		Model(const char* fileName);
 
-		virtual const char* getName() { return "Model"; }
+		virtual const char* getAssetTypeString() { return "Model"; }
         virtual AssetType getAssetType() { return AssetType::Model; }
 
 		void bind();

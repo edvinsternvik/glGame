@@ -10,15 +10,19 @@ namespace glGame {
         AssetManager();
         ~AssetManager();
 
-        Asset* getAsset(const char* name, AssetType type);
+        Asset* getAsset(unsigned int id, AssetType type);
         void updateAssets();
+        inline int assetCount() const { return m_assets.size(); }
+        inline auto getAssetsBegin() const { return m_assets.begin(); };
+        inline auto getAssetsEnd() const { return m_assets.end(); };
 
     private:
-        void insertAsset(const std::string& name, std::unique_ptr<Asset> asset);
+        void initFromFile();
+        void insertAsset(std::unique_ptr<Asset> asset);
     
     private:
-        std::unordered_map<std::string, std::unique_ptr<Asset>> m_assets;
-
+        std::unordered_map<unsigned int, std::unique_ptr<Asset>> m_assets;
+        unsigned int m_highestId;
     };
 
 }

@@ -8,3 +8,4 @@ Makefile
 *.make
 .vscode/
 imgui.ini
+Assets/

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace glGame {
 
@@ -8,8 +9,13 @@ namespace glGame {
 
     class Asset {
     public:
-        virtual const char* getName() = 0;
+        Asset(const char* name) : name(name) {}
+
+        virtual const char* getAssetTypeString() = 0;
         virtual AssetType getAssetType() = 0;
+
+    public:
+        std::string name;
     };
 
 }

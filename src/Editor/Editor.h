@@ -19,6 +19,7 @@ namespace glGame {
         void renderEditor();
         std::vector<GameObject*> getGizmoObjects() const;
         void setActiveScene(Scene* scene);
+        void setAssetManager(AssetManager* assetManager);
 
     private:
         std::unique_ptr<Gui> m_editorGui;
@@ -27,6 +28,7 @@ namespace glGame {
         ViewportWindow* m_viewportWindow;
         SceneWindow* m_sceneWindow;
         PropertiesWindow* m_propertiesWindow;
+        AssetWindow* m_assetWindow;
         Camera* m_camera;
         Scene* m_scene;
     };
