@@ -161,12 +161,12 @@ namespace glGame {
 			ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 			break;
 		case PublicVariableType::Model: {
-			ImGui::Text(std::to_string(*(unsigned int*)editorVariable->data).c_str());
+			ImGui::Text(("ModelID: " + std::to_string(*(unsigned int*)editorVariable->data)).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					assert(payload->DataSize == sizeof(unsigned int));
-					int payloadData = *(const unsigned int*)payload->Data;
-					std::cout << payloadData << std::endl;
+					unsigned int payloadData = *(const unsigned int*)payload->Data;
+					*(unsigned int*)editorVariable->data = payloadData;
 				}
 
 				ImGui::EndDragDropTarget();
