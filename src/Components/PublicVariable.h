@@ -4,7 +4,8 @@
 namespace glGame {
 
     enum class PublicVariableType {
-		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Asset, Color,
+		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Color,
+		Model, // Script, Texture etc
 		None
 	};
 

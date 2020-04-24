@@ -15,20 +15,12 @@ namespace glGame {
 		virtual void init() override;
 		virtual void onRender() override;
 
-		void changeModelFile(std::string str) { m_modelFilePath = str; }
-
 	public:
-		std::unique_ptr<Model> model;
+		unsigned int modelId = 0;
 
 	private:
-		float m_tempTriangleVerticies[6] = {
-			-0.5, -0.5, 0.5, -0.5, 0.0, 0.5
-		};
 
 		virtual void renderComponent(Shader* shader);
-
-	private:
-		std::string m_modelFilePath;
 	};
 
 }

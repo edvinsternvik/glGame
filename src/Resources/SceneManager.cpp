@@ -179,8 +179,8 @@ namespace glGame {
 			Vector3 vec3 = *((Vector3*)pVar.data);
 			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
 		}
-		case PublicVariableType::Asset: return "";
 		case PublicVariableType::Color: return "";
+		case PublicVariableType::Model: return std::to_string(*(unsigned int*)pVar.data);
 		}
 		return "";
 	}

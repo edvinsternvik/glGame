@@ -25,8 +25,8 @@ namespace glGame {
 		case PublicVariableType::String: *(std::string*)data = str; return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
-		// case PublicVariableType::Asset:
 		// case PublicVariableType::Color:
+        case PublicVariableType::Model: *(unsigned int*)data = (unsigned int)std::stoi(str); return;
 		}
         
     }
@@ -41,8 +41,8 @@ namespace glGame {
         else if(str == "string") return PublicVariableType::String;
         else if(str == "GameObject") return PublicVariableType::GameObject;
         else if(str == "Component") return PublicVariableType::Component;
-        else if(str == "Asset") return PublicVariableType::Asset;
         else if(str == "Color") return PublicVariableType::Color;
+        else if(str == "Model") return PublicVariableType::Model;
 
         return PublicVariableType::None;
     }

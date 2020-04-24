@@ -7,8 +7,11 @@
 
 namespace glGame {
 
+    AssetManager* AssetManager::s_instance = nullptr;
+
     AssetManager::AssetManager() {
         initFromFile();
+        s_instance = this;
 
         m_highestId = 0;
         for(const auto& asset : m_assets) {

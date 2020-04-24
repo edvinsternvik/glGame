@@ -16,6 +16,8 @@ namespace glGame {
         inline auto getAssetsBegin() const { return m_assets.begin(); };
         inline auto getAssetsEnd() const { return m_assets.end(); };
 
+        static AssetManager& Get() { return *s_instance; }
+
     private:
         void initFromFile();
         void insertAsset(std::unique_ptr<Asset> asset);
@@ -23,6 +25,9 @@ namespace glGame {
     private:
         std::unordered_map<unsigned int, std::unique_ptr<Asset>> m_assets;
         unsigned int m_highestId;
+
+    private:
+        static AssetManager* s_instance;
     };
 
 }

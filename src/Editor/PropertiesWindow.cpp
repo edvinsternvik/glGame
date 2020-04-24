@@ -107,9 +107,6 @@ namespace glGame {
 					if(componentStr == "Script") {
 						ImGui::OpenPopup("AddScriptPopup");
 					}
-					else if(componentStr == "MeshRenderer") {
-						ImGui::OpenPopup("AddMeshRendererPopup");
-					}
 					else {
 						selectedObj->addComponent(componentStr);
 						ImGui::CloseCurrentPopup();
@@ -128,16 +125,6 @@ namespace glGame {
 				if(ImGui::Button("Add Script")) {
 					Script* s = selectedObj->addComponent<Script>();
 					s->changeScriptfile(s_stringBuffer);
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
-
-			if(ImGui::BeginPopup("AddMeshRendererPopup")) {
-				InputText("filename", s_stringBuffer, 64);
-				if(ImGui::Button("Add MeshRenderer")) {
-					MeshRenderer* m = selectedObj->addComponent<MeshRenderer>();
-					m->changeModelFile(s_stringBuffer);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
@@ -173,6 +160,18 @@ namespace glGame {
 		case PublicVariableType::Color:
 			ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 			break;
+		case PublicVariableType::Model: {
+			ImGui::Text(std::to_string(*(unsigned int*)editorVariable->data).c_str());
+			if(ImGui::BeginDragDropTarget()) {
+				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
+					assert(payload->DataSize == sizeof(unsigned int));
+					int payloadData = *(const unsigned int*)payload->Data;
+					std::cout << payloadData << std::endl;
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+		}
 		}
 	}
 
