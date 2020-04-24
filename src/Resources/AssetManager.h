@@ -1,6 +1,7 @@
 #pragma once
 #include "Asset.h"
 #include <unordered_map>
+#include <vector>
 #include <memory>
 
 namespace glGame {
@@ -20,10 +21,13 @@ namespace glGame {
 
     private:
         void initFromFile();
+        void saveToFile();
+        void addAsset(std::string& filepath, std::string& exension);
         void insertAsset(std::unique_ptr<Asset> asset);
     
     private:
         std::unordered_map<unsigned int, std::unique_ptr<Asset>> m_assets;
+        std::vector<std::pair<unsigned int, std::string>> m_deletedAssets;
         unsigned int m_highestId;
 
     private:
