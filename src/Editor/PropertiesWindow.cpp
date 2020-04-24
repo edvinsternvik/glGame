@@ -7,6 +7,7 @@
 #include "../Resources/Scene.h"
 #include "../Components/Script.h"
 #include "../Components/ComponentList.h"
+#include "../Resources/AssetManager.h"
 
 namespace glGame {
 
@@ -161,7 +162,7 @@ namespace glGame {
 			ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 			break;
 		case PublicVariableType::Model: {
-			ImGui::Text(("ModelID: " + std::to_string(*(unsigned int*)editorVariable->data)).c_str());
+			ImGui::Text(("Model: " + AssetManager::Get().getAsset(*(unsigned int*)editorVariable->data, AssetType::Model)->name).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					assert(payload->DataSize == sizeof(unsigned int));
