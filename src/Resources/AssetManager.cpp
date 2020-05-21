@@ -40,7 +40,7 @@ namespace glGame {
         if(std::filesystem::exists(assetsPath) && std::filesystem::is_directory(assetsPath)) {
             for(const auto& entry : std::filesystem::recursive_directory_iterator(assetsPath)) {
                 if(std::filesystem::is_regular_file(entry.status())) {
-                    std::string extension = entry.path().extension(), filename = entry.path().filename(), pathStr = entry.path().string();
+                    std::string extension = entry.path().extension().u8string(), filename = entry.path().filename().u8string(), pathStr = entry.path().u8string();
                     
                     bool exist = false;
                     for(auto& it : m_assets) {
