@@ -1,0 +1,3 @@
+[submodule "vendor/RedPhysics3d/RedPhysics3d"]
+	path = vendor/RedPhysics3d/RedPhysics3d
+	url = https://github.com/RedE01/RedPhysics3d.git

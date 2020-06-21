@@ -9,6 +9,7 @@ include "vendor/GLFW"
 include "vendor/imgui"
 include "vendor/lua"
 include "vendor/angelscript"
+include "vendor/RedPhysics3d"
 
 project "glGame"
 	kind "ConsoleApp"
@@ -30,7 +31,8 @@ project "glGame"
 		"vendor/glm/include",
 		"vendor",
 		"vendor/angelscript/include",
-		"vendor/angelscript/add_on"
+		"vendor/angelscript/add_on",
+		"vendor/RedPhysics3d"
 	}
 
 	links {
@@ -38,7 +40,8 @@ project "glGame"
 		"GLFW",
 		"ImGui",
 		"lua",
-		"angelscript"
+		"angelscript",
+		"RedPhysics3d"
 	}
 
 	defines "GLEW_STATIC"
