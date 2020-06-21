@@ -14,13 +14,19 @@ namespace glGame {
 
     void Physics3d::stepSimulation(float deltaTime) {
         for(auto& b : m_rigidBodies) {
-            b.second->addForce(redPhysics3d::Vector3(0.0, -1.0, 0.0));
+            Vector3& position = b.first->getGameObject()->transform->position;
+            Vector3& rot = b.first->getGameObject()->transform->rotation;
+
+            b.second->position = redPhysics3d::Vector3(position.x, position.y, position.z);
+            b.second->orientation = redPhysics3d::Quaternion(rot.x, rot.y, rot.z);
         }
 
         m_physicsWorld.stepSimulation(deltaTime);
 
         for(auto& b : m_rigidBodies) {
+            auto rot = b.second->orientation.toEuler();
             b.first->getGameObject()->transform->position = Vector3(b.second->position.x, b.second->position.y, b.second->position.z);
+            b.first->getGameObject()->transform->rotation = Vector3(rot.x, rot.y, rot.z);
         }
     }
 
@@ -30,6 +36,7 @@ namespace glGame {
         if(search != m_rigidBodies.end()) return;
 
         redPhysics3d::RigidBody* newRigidBody = m_physicsWorld.addRigidBody();
+        newRigidBody->addCollisionShape<redPhysics3d::CollisionBox>();
         m_rigidBodies.insert(std::pair<RigidBody*, redPhysics3d::RigidBody*>(rigidbody, newRigidBody));
 
         Vector3& position = rigidbody->getGameObject()->transform->position;
