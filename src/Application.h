@@ -5,6 +5,7 @@
 #include "Resources/SceneManager.h"
 #include "Time.h"
 #include "Resources/AssetManager.h"
+#include "Physics/Physics3d.h"
 
 #ifdef GL_GAME_EDITOR
 #include "Editor/Editor.h"
@@ -20,8 +21,13 @@ namespace glGame {
 
 		void run();
 
+		static Application& Get()  { return *s_Instance; }
+
 	private:
 		void onEvent(Event& e);
+
+	public:
+		Physics3d physics;
 
 	private:
 		bool m_running = true, m_focused = true;
@@ -35,5 +41,8 @@ namespace glGame {
 		#endif
 
 		float m_viewportAspectRatio;
+
+	private:
+		static Application* s_Instance;
 	};
 }

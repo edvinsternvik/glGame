@@ -3,7 +3,11 @@
 
 namespace glGame {
 
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application() {
+		s_Instance = this;
+
 		std::string title = "glGame";
 		int width = 1280, height = 720;
 		m_viewportAspectRatio = width / (float)height;
@@ -32,13 +36,15 @@ namespace glGame {
 			m_sceneManager->initScene();
 
 			float deltatime = m_time.getDeltatime();
-			if(m_focused) {
-				#ifndef GL_GAME_EDITOR
+			#ifndef GL_GAME_EDITOR
 				m_sceneManager->updateScene(deltatime);
-				#else
-				m_editor->update(deltatime);
-				#endif
-			}
+				physics.stepSimulation(deltatime);
+			#else
+				if(m_focused) {
+					m_editor->update(deltatime);
+				}
+			#endif
+
 
 			m_renderer->beginRender();
 			m_renderer->render(m_sceneManager->getActiveScene());

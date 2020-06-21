@@ -193,7 +193,7 @@ namespace glGame {
 		}
 		else if(component == "MeshRenderer") return (Component*)gameObject->addComponent<MeshRenderer>();
 		else if(component == "Script") return (Component*)gameObject->addComponent<Script>();
-
+		else if(component == "RigidBody") return (Component*)gameObject->addComponent<RigidBody>();
 
 		return nullptr;
 	}

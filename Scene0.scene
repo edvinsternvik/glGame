@@ -6,7 +6,7 @@ Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
 GameObject: New GameObject
 Component: Transform
-Attribute: position {0.000000,0.000000,-2.850000}
+Attribute: position {-2.130000,1.760000,-4.910000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
@@ -14,3 +14,12 @@ Attribute: Model 1
 Component: Script
 Attribute: scriptfile script.as
 Attribute: int pVarInt 5
+Component: RigidBody
+GameObject: New GameObject
+Component: Transform
+Attribute: position {2.080000,0.000000,-4.650000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {0.000000,0.000000,0.000000}
+Component: MeshRenderer
+Attribute: Model 1
+Component: RigidBody

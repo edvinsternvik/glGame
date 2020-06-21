@@ -43,6 +43,7 @@ namespace glGame {
 		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
 		else if(component == "LineRenderer") return addComponent<LineRenderer>();
 		else if(component == "Script") return addComponent<Script>();
+		else if(component == "RigidBody") return addComponent<RigidBody>();
 		else {
 			std::cout << "ERROR: Could not add component: " << component << " to gameobject: " << name << ". Component " << component << " was not found" << std::endl;
 			return nullptr;
