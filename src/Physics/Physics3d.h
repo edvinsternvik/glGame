@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_map> 
+#include <unordered_set> 
 
 #include <memory>
 
@@ -22,7 +22,7 @@ namespace glGame {
 
     private:
         redPhysics3d::PhysicsWorld m_physicsWorld;
-        std::unordered_map<RigidBody*, redPhysics3d::RigidBody*> m_rigidBodies;
+        std::unordered_set<RigidBody*> m_rigidBodies;
     };
 
 }

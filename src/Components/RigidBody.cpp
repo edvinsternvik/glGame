@@ -6,6 +6,10 @@
 
 namespace glGame {
 
+    RigidBody::RigidBody() {
+        addPublicVariable(&gravityScale, PublicVariableType::Float, "gravityScale");
+    }
+
     RigidBody::~RigidBody() {
         Application::Get().physics.removeRigidBody(this);
     }
@@ -15,6 +19,8 @@ namespace glGame {
     }
 
     void RigidBody::update(float deltatime) {
+        if(!m_rigidBody) return;
+        m_rigidBody->gravityScale = gravityScale;
     }
 
 }
