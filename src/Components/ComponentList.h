@@ -6,9 +6,10 @@
 #include "LineRenderer.h"
 #include "Script.h"
 #include "RigidBody.h"
+#include "BoxCollider.h"
 
 namespace glGame {
     namespace componentList {
-        static const char* s_components[6] = { "Transform", "Camera", "MeshRenderer", "LineRenderer", "Script", "RigidBody" };
+        static const char* s_components[7] = { "Transform", "Camera", "MeshRenderer", "LineRenderer", "Script", "RigidBody", "BoxCollider" };
     }
 }

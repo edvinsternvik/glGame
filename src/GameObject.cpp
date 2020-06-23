@@ -44,6 +44,7 @@ namespace glGame {
 		else if(component == "LineRenderer") return addComponent<LineRenderer>();
 		else if(component == "Script") return addComponent<Script>();
 		else if(component == "RigidBody") return addComponent<RigidBody>();
+		else if(component == "BoxCollider") return addComponent<BoxCollider>();
 		else {
 			std::cout << "ERROR: Could not add component: " << component << " to gameobject: " << name << ". Component " << component << " was not found" << std::endl;
 			return nullptr;
@@ -76,6 +77,13 @@ namespace glGame {
 			return nullptr;
 
 		return m_components[index].get();
+	}
+
+	const Component* const GameObject::getComponent(const std::string& componentName) const {
+		for(int i = 0; i < getComponentSize(); ++i) {
+			if(m_components[i] && m_components[i]->getName() == componentName) return m_components[i].get();
+		}
+		return nullptr;
 	}
 
 	Component* GameObject::getInitQueueComponent() {

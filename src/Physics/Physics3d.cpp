@@ -39,7 +39,6 @@ namespace glGame {
 
         m_rigidBodies.insert(rigidbody);
         redPhysics3d::RigidBody* newRigidBody = m_physicsWorld.addRigidBody();
-        newRigidBody->addCollisionShape<redPhysics3d::CollisionBox>();
         rigidbody->m_rigidBody = newRigidBody;
 
         Vector3& position = rigidbody->getGameObject()->transform->position;

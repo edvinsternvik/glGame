@@ -1,9 +1,10 @@
 #pragma once
 #include "Component.h"
 
-namespace redPhysics3d { class RigidBody; }
+namespace redPhysics3d { class RigidBody; class CollisionBox; }
 
 namespace glGame {
+    class BoxCollider;
 
     class RigidBody : public Component {
     public:
@@ -14,6 +15,9 @@ namespace glGame {
 
         virtual void init() override;
         virtual void update(float deltatime) override;
+
+        redPhysics3d::CollisionBox* addBoxCollider();
+        void removeBoxCollider(BoxCollider* boxCollider);
 
     public:
         float gravityScale = 1.0;

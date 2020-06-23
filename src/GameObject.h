@@ -31,6 +31,7 @@ namespace glGame{
 		void removeComponent(int index);
 
 		const Component* const getComponent(int index) const;
+		const Component* const getComponent(const std::string& componentName) const;
 		int getComponentSize() const { return m_components.size(); }
 
 	public:

@@ -14,6 +14,10 @@ Attribute: Model 1
 Component: Script
 Attribute: scriptfile script.as
 Attribute: int pVarInt 5
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 GameObject: New GameObject
@@ -23,5 +27,9 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
 Attribute: Model 1
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 0.000000
