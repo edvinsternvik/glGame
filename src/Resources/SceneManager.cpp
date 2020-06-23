@@ -191,10 +191,8 @@ namespace glGame {
 			m_activeScene->activeCamera = gameObject->addComponent<Camera>();
 			return (Component*)m_activeScene->activeCamera;
 		}
-		else if(component == "MeshRenderer") return (Component*)gameObject->addComponent<MeshRenderer>();
-		else if(component == "Script") return (Component*)gameObject->addComponent<Script>();
-		else if(component == "RigidBody") return (Component*)gameObject->addComponent<RigidBody>();
 
-		return nullptr;
+
+		return gameObject->addComponent(component);
 	}
 }
