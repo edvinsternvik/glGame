@@ -20,7 +20,7 @@ namespace glGame {
         void removeBoxCollider(BoxCollider* boxCollider);
 
     public:
-        float gravityScale = 1.0;
+        float gravityScale = 1.0, mass = 1.0;
 
     private:
         redPhysics3d::RigidBody* m_rigidBody = nullptr;

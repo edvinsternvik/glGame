@@ -9,6 +9,7 @@ namespace glGame {
 
     RigidBody::RigidBody() {
         addPublicVariable(&gravityScale, PublicVariableType::Float, "gravityScale");
+        addPublicVariable(&mass, PublicVariableType::Float, "mass");
     }
 
     RigidBody::~RigidBody() {
@@ -30,6 +31,7 @@ namespace glGame {
     void RigidBody::update(float deltatime) {
         if(!m_rigidBody) return;
         m_rigidBody->gravityScale = gravityScale;
+        if(m_rigidBody->getMass() != mass) m_rigidBody->setMass(mass);
     }
 
     redPhysics3d::CollisionBox* RigidBody::addBoxCollider() {

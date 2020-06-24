@@ -2,7 +2,7 @@
 #include "../GameObject.h"
 #include "RigidBody.h"
 
-#include <iostream>
+#include <RedPhysics3d/include/redPhysicsEngine3d.h>
 
 namespace glGame {
 
@@ -33,7 +33,11 @@ namespace glGame {
     }
 
     void BoxCollider::update(float deltaTime) {
-
+        if(m_collisionBox) {
+            m_collisionBox->localPosition = redPhysics3d::Vector3(localPosition.x, localPosition.y, localPosition.z);
+            m_collisionBox->size = redPhysics3d::Vector3(scale.x, scale.y, scale.z);
+            m_collisionBox->localOrientation = redPhysics3d::Quaternion(localRotation.x, localRotation.y, localRotation.z);
+        }
     }
 
 }
