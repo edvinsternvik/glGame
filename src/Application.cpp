@@ -36,8 +36,8 @@ namespace glGame {
 			m_sceneManager->initScene();
 
 			float deltatime = m_time.getDeltatime();
+			m_sceneManager->updateScene(deltatime);
 			#ifndef GL_GAME_EDITOR
-				m_sceneManager->updateScene(deltatime);
 				physics.stepSimulation(deltatime);
 			#else
 				if(m_focused) {
