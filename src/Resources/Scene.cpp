@@ -7,16 +7,10 @@ namespace glGame {
 	Scene::Scene() {
 	}
 
-	Scene::~Scene() {
-		for (GameObject* go : m_gameObjects) {
-			delete go;
-		}
-	}
-
 	GameObject* Scene::createGameObject(std::string name) {
-		GameObject* newGameObject = new GameObject(name);
+		std::shared_ptr<GameObject> newGameObject = GameObject::Create(name);
 		m_gameObjects.push_back(newGameObject);
-		return newGameObject;
+		return newGameObject.get();
 	}
 
 	GameObject* Scene::getGameObject(int index) {
@@ -24,11 +18,15 @@ namespace glGame {
 			return nullptr;
 		}
 
-		return m_gameObjects[index];
+		return m_gameObjects[index].get();
 	}
 
 	void Scene::selectGameObject(int index) {
-		m_selectedGameObject = getGameObject(index);
+		if (index < 0 || index > m_gameObjects.size()) {
+			return;
+		}
+
+		m_selectedGameObject = m_gameObjects[index];
 	}
 
 	void Scene::init() {

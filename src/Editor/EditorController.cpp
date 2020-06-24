@@ -13,7 +13,7 @@ namespace glGame {
 
     void EditorController::update(float deltatime) {
         if(Input::getMouseKeyDown(MOUSE_BUTTON_LEFT)) {
-            gameObject->transform->rotation.y += Input::getMouseDeltaX() * 0.1;
+            getGameObject()->transform->rotation.y += Input::getMouseDeltaX() * 0.1;
         }
 
         float movementSpeed = deltatime;
@@ -25,11 +25,11 @@ namespace glGame {
 
         Vector3 worldMovement(0.0, 0.0, 0.0);
 
-        float rotationY = glm::radians(-gameObject->transform->rotation.y); 
+        float rotationY = glm::radians(-getGameObject()->transform->rotation.y); 
         worldMovement.z = std::cos(rotationY) * movement.z - std::sin(rotationY) * movement.x;
         worldMovement.x = std::cos(rotationY) * movement.x + std::sin(rotationY) * movement.z;
 
-        gameObject->transform->move(worldMovement.x, worldMovement.y, worldMovement.z);
+        getGameObject()->transform->move(worldMovement.x, worldMovement.y, worldMovement.z);
     }
 
 }

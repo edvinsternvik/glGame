@@ -13,8 +13,11 @@ namespace glGame{
 	class LineRenderer;
 
 	class GameObject {
-	public:
+	private:
 		GameObject(const std::string& name);
+
+	public:
+		static std::shared_ptr<GameObject> Create(const std::string& name);
 		~GameObject();
 
 		void onInit();
@@ -48,11 +51,11 @@ namespace glGame{
 
 		template<class T>
 		T* addComponentImpl() {
-			std::unique_ptr<T> newComponent = std::make_unique<T>();
-			newComponent->setParentGameObject(this);
+			std::shared_ptr<T> newComponent = std::make_shared<T>();
+			newComponent->setParentGameObject(m_this);
 			m_initQueue.push((Component*)newComponent.get());
 			T* newComponentPtr = newComponent.get();
-			m_components.push_back(std::move(newComponent));
+			m_components.push_back(newComponent);
 
 			return newComponentPtr;
 		}
@@ -64,8 +67,9 @@ namespace glGame{
 			return addComponentImpl<T>();
 		}
 
-		std::vector<std::unique_ptr<Component>> m_components;
+		std::vector<std::shared_ptr<Component>> m_components;
 		std::queue<Component*> m_initQueue;
+		std::weak_ptr<GameObject> m_this;
 	};
 
 }

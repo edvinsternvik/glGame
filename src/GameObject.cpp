@@ -2,8 +2,19 @@
 #include "Components/ComponentList.h"
 
 namespace glGame {
+
 	GameObject::GameObject(const std::string& name) : name(name) {
 		init();
+	}
+
+	std::shared_ptr<GameObject> GameObject::Create(const std::string& name) {
+		struct MakeSharedEnabler : public GameObject { // This is needed to use make_shared, as GameObject has a private constructor
+			MakeSharedEnabler(const std::string& name) : GameObject(name) {}
+		};
+
+		std::shared_ptr<GameObject> newGameObject = std::make_shared<MakeSharedEnabler>(name);
+		newGameObject->m_this = newGameObject;
+		return newGameObject;
 	}
 
 	GameObject::~GameObject() {

@@ -16,11 +16,11 @@ namespace glGame {
 		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>());
         m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>());
 
-        m_editorCameraGameObject = std::make_unique<GameObject>("EditorCameraGameObject");
+        m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject");
         m_camera = m_editorCameraGameObject->addComponent<Camera>();
         m_editorCameraGameObject->addComponent<EditorController>();
 
-        m_selectedObjectGizmoObject = std::make_unique<GameObject>("SelectedObjectGizmoObject");
+        m_selectedObjectGizmoObject = GameObject::Create("SelectedObjectGizmoObject");
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(1.0, 0.0, 0.0);
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 1.0, 0.0);
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 0.0, 1.0);

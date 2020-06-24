@@ -7,9 +7,9 @@
 namespace glGame {
 
     void RendererComponent::updateModelMatrix() {
-		Vector3& position = gameObject->transform->position;
-		Vector3& scale = gameObject->transform->scale;
-		Vector3& rotation = gameObject->transform->rotation;
+		Vector3& position = getGameObject()->transform->position;
+		Vector3& scale = getGameObject()->transform->scale;
+		Vector3& rotation = getGameObject()->transform->rotation;
 
 		modelMatrix = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, position.z));
 

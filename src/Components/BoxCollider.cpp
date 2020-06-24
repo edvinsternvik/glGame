@@ -13,20 +13,19 @@ namespace glGame {
     }
 
     BoxCollider::~BoxCollider() {
-        // if(m_collisionBox) {
-        //     if(gameObject) {
-        //         RigidBody* rb = (RigidBody*)gameObject->getComponent("RigidBody");
-        //         if(rb) {
-        //             rb->removeBoxCollider(this);
-        //         }
-        //     }
-        // }
+        const GameObject* gameObject = getGameObject();
+        if(m_collisionBox && gameObject) {
+            RigidBody* rb = (RigidBody*)gameObject->getComponent("RigidBody");
+            if(rb) {
+                rb->removeBoxCollider(this);
+            }
+        }
     }
 
 
     void BoxCollider::init() {
-        if(!m_collisionBox && gameObject) {
-            RigidBody* rb = (RigidBody*)gameObject->getComponent("RigidBody");
+        if(!m_collisionBox && getGameObject()) {
+            RigidBody* rb = (RigidBody*)getGameObject()->getComponent("RigidBody");
             if(rb) {
                 m_collisionBox = rb->addBoxCollider();
             }

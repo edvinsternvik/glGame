@@ -11,14 +11,13 @@ namespace glGame {
 	class Scene {
 	public:
 		Scene();
-		~Scene();
 
 		GameObject* createGameObject(std::string name);
 		GameObject* getGameObject(int index);
 		void selectGameObject(int index);
-		inline void deselectGameObject() { m_selectedGameObject = nullptr; }
-		inline GameObject* getSelectedGameObject() const { return m_selectedGameObject; }
-		inline int getGameObjectCount() { return m_gameObjects.size(); }
+		void deselectGameObject() { m_selectedGameObject = std::weak_ptr<GameObject>(); }
+		GameObject* getSelectedGameObject() const { return m_selectedGameObject.lock().get(); }
+		int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void init();
 		void update(float deltatime);
@@ -28,8 +27,8 @@ namespace glGame {
 		Camera* activeCamera = nullptr;
 		
 	private:
-		std::vector<GameObject*> m_gameObjects;
-		GameObject* m_selectedGameObject = nullptr; //Holds a reference to the selected gameobject in the editor
+		std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+		std::weak_ptr<GameObject> m_selectedGameObject = std::weak_ptr<GameObject>(); //Holds a reference to the selected gameobject in the editor
 	};
 
 }

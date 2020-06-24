@@ -18,9 +18,9 @@ namespace glGame {
     void RigidBody::init() {
         Application::Get().physics.addRigidBody(this);
 
-        int numberOfComponents = gameObject->getComponentSize();
+        int numberOfComponents = getGameObject()->getComponentSize();
         for(int i = 0; i < numberOfComponents; ++i) {
-            const Component* component = gameObject->getComponent(i);
+            const Component* component = getGameObject()->getComponent(i);
             if(component->getName() == "BoxCollider") {
                 ((BoxCollider*)component)->m_collisionBox = addBoxCollider();
             }

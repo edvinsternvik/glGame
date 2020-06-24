@@ -23,8 +23,8 @@ namespace glGame {
 
     private:
         std::unique_ptr<Gui> m_editorGui;
-        std::unique_ptr<GameObject> m_editorCameraGameObject;
-        std::unique_ptr<GameObject> m_selectedObjectGizmoObject;
+        std::shared_ptr<GameObject> m_editorCameraGameObject;
+        std::shared_ptr<GameObject> m_selectedObjectGizmoObject;
         ViewportWindow* m_viewportWindow;
         SceneWindow* m_sceneWindow;
         PropertiesWindow* m_propertiesWindow;

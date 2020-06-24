@@ -10,8 +10,8 @@ namespace glGame {
 	}
 
 	glm::mat4 Camera::getViewMatrix() {
-		Vector3 position = gameObject->transform->position;
-		Vector3 rotation = gameObject->transform->rotation;
+		Vector3 position = getGameObject()->transform->position;
+		Vector3 rotation = getGameObject()->transform->rotation;
 		glm::mat4 viewMatrix = glm::rotate(glm::mat4(1.0), glm::radians(rotation.x), glm::vec3(1, 0, 0));
 		viewMatrix *= glm::rotate(glm::mat4(1.0), glm::radians(rotation.y), glm::vec3(0, 1, 0));
 		viewMatrix *= glm::rotate(glm::mat4(1.0), glm::radians(rotation.z), glm::vec3(0, 0, 1));

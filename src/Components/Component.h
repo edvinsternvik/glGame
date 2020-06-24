@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <iostream>
+#include <memory>
 #include "PublicVariable.h"
 
 namespace glGame {
@@ -33,7 +33,7 @@ namespace glGame {
 			return nullptr;
 		}
 
-		const GameObject* const getGameObject() const { return gameObject; }
+		const GameObject* const getGameObject() const { return gameObject.lock().get(); }
 
 	protected:
 		inline void addPublicVariable(void* variable, PublicVariableType varType, std::string name) {
@@ -49,17 +49,15 @@ namespace glGame {
 			m_publicVariables.push_back(PublicVariable(variable, varType, name, sliderSpeed));
 		}
 
-		GameObject* gameObject = nullptr;
-
 	private:
-		inline void setParentGameObject(GameObject* parent) {
+		inline void setParentGameObject(std::weak_ptr<GameObject> parent) {
 			gameObject = parent;
 		}
 		friend class GameObject;
 
 	private:
+		std::weak_ptr<GameObject> gameObject;
 		std::vector<PublicVariable> m_publicVariables;
-		
 	};
 
 }
