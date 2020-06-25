@@ -3,6 +3,7 @@
 #include "RigidBody.h"
 
 #include <RedPhysics3d/include/redPhysicsEngine3d.h>
+#define DEGTORAD 0.008726646259722222
 
 namespace glGame {
 
@@ -36,7 +37,7 @@ namespace glGame {
         if(m_collisionBox) {
             m_collisionBox->localPosition = redPhysics3d::Vector3(localPosition.x, localPosition.y, localPosition.z);
             m_collisionBox->size = redPhysics3d::Vector3(scale.x, scale.y, scale.z);
-            m_collisionBox->localOrientation = redPhysics3d::Quaternion(localRotation.x, localRotation.y, localRotation.z);
+            m_collisionBox->localOrientation = redPhysics3d::Quaternion(localRotation.x * DEGTORAD, localRotation.y * DEGTORAD, localRotation.z * DEGTORAD);
         }
     }
 
