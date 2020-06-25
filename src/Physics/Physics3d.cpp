@@ -42,7 +42,10 @@ namespace glGame {
         rigidbody->m_rigidBody = newRigidBody;
 
         Vector3& position = rigidbody->getGameObject()->transform->position;
+        Vector3& rot = rigidbody->getGameObject()->transform->rotation;
+
         newRigidBody->position = redPhysics3d::Vector3(position.x, position.y, position.z);
+        newRigidBody->orientation = redPhysics3d::Quaternion(glm::radians(rot.x), glm::radians(rot.y), glm::radians(rot.z));
     }
 
     void Physics3d::removeRigidBody(RigidBody* rigidbody) {

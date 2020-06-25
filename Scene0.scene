@@ -4,11 +4,11 @@ Attribute: position {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
-GameObject: New GameObject
+GameObject: Object1
 Component: Transform
-Attribute: position {0.170000,2.590000,-4.910000}
+Attribute: position {0.000000,3.240000,-9.740000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Attribute: rotation {31.900000,-14.100000,40.900002}
+Attribute: rotation {30.100000,-29.100000,4.400000}
 Component: MeshRenderer
 Attribute: Model 1
 Component: Script
@@ -20,11 +20,40 @@ Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
-GameObject: New GameObject
+Attribute: mass 1.000000
+GameObject: Object2
 Component: Transform
-Attribute: position {0.040000,-2.020000,-4.650000}
+Attribute: position {2.100000,1.130000,-10.310000}
 Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {-123.747581,15.936102,152.155975}
+Component: MeshRenderer
+Attribute: Model 1
+Component: RigidBody
+Attribute: gravityScale 1.000000
+Attribute: mass 1.000000
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
+GameObject: Ground
+Component: Transform
+Attribute: position {0.000000,-12.774000,-14.320000}
+Attribute: scale {10.000000,10.000000,10.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
+Component: MeshRenderer
+Attribute: Model 1
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {10.000000,10.000000,10.000000}
+Component: RigidBody
+Attribute: gravityScale 0.000000
+Attribute: mass 100000.000000
+GameObject: Object3
+Component: Transform
+Attribute: position {-1.000000,6.870000,-9.430000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {-39.799999,39.299999,24.000000}
 Component: MeshRenderer
 Attribute: Model 1
 Component: BoxCollider
@@ -32,4 +61,5 @@ Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
-Attribute: gravityScale 0.000000
+Attribute: gravityScale 1.000000
+Attribute: mass 1.000000
