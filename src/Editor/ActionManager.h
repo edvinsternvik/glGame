@@ -9,7 +9,7 @@ namespace glGame {
         std::unique_ptr<Action> action;
 
         ActionNode* previous;
-        std::shared_ptr<ActionNode> next;
+        std::unique_ptr<ActionNode> next;
     };
 
     class ActionManager {
@@ -19,7 +19,7 @@ namespace glGame {
 
         template<typename T>
         void beginChangePublicVariableAction(T* publicVariable, T before) {
-            m_currentNode->next = std::make_shared<ActionNode>();
+            m_currentNode->next = std::make_unique<ActionNode>();
             m_currentNode->next->action = std::make_unique<ChangePublicVariableAction<T>>(publicVariable, before);
             m_currentNode->next->previous = m_currentNode;
         }
@@ -34,6 +34,12 @@ namespace glGame {
                 }
             }
         }
+
+        void addCreateGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
+        void addDeleteGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
+
+    private:
+        void addAction(std::unique_ptr<Action> action);
 
     private:
         ActionNode m_startNode;

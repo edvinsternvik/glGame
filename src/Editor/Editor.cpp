@@ -34,21 +34,21 @@ namespace glGame {
             m_selectedObjectGizmoObject->onUpdate(deltatime);
         }
 
-        if(Input::getKey(KEY_Z)) actionManager.undo();
-        if(Input::getKey(KEY_Y)) actionManager.redo();
+        if(Input::getKeyDown(KEY_LEFT_CONTROL) && Input::getKey(KEY_Z)) actionManager.undo();
+        if(Input::getKeyDown(KEY_LEFT_CONTROL) && Input::getKey(KEY_Y)) actionManager.redo();
     }
 
     void Editor::renderEditor() {
-        if(m_scene->getSelectedGameObject()) {
-            m_selectedObjectGizmoObject->transform->position = m_scene->getSelectedGameObject()->transform->position;
-            m_selectedObjectGizmoObject->transform->rotation = m_scene->getSelectedGameObject()->transform->rotation;
+        if(m_scene->getSelectedGameObject().get()) {
+            m_selectedObjectGizmoObject->transform->position = m_scene->getSelectedGameObject().get()->transform->position;
+            m_selectedObjectGizmoObject->transform->rotation = m_scene->getSelectedGameObject().get()->transform->rotation;
             m_selectedObjectGizmoObject->onRender();
         }
         m_editorGui->OnGuiRender();
     }
 
     std::vector<GameObject*> Editor::getGizmoObjects() const {
-        if(m_scene->getSelectedGameObject()) return {m_selectedObjectGizmoObject.get()};
+        if(m_scene->getSelectedGameObject().get()) return {m_selectedObjectGizmoObject.get()};
         else return {};
     }
 

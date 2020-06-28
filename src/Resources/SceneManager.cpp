@@ -46,7 +46,7 @@ namespace glGame {
 		}
 		else {
 			if(m_activeScene->activeCamera == nullptr) {
-				GameObject* cameraObject = m_activeScene->createGameObject("Camera");
+				std::shared_ptr<GameObject> cameraObject = m_activeScene->createGameObject("Camera");
 				Camera* cameraComponent = cameraObject->addComponent<Camera>();
 
 				m_activeScene->activeCamera = cameraComponent;
@@ -119,7 +119,7 @@ namespace glGame {
 				std::string gameObjectName = strings[1];
 				for(int i = 2; i < strings.size(); ++i) gameObjectName += " " + strings[i];
 
-				activeGameObject = m_activeScene->createGameObject(gameObjectName);
+				activeGameObject = m_activeScene->createGameObject(gameObjectName).get();
 			}
 			else if(strings[0] == "Component:") {
 				if(strings.size() != 2) {

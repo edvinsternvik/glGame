@@ -6,6 +6,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Resources/Scene.h"
+#include "Editor.h"
 
 namespace glGame {
 
@@ -44,11 +45,12 @@ namespace glGame {
 		if(m_scene == nullptr) return;
 
 		if (ImGui::Button("Create GameObject", ImVec2(0, 0))) {
-			GameObject* newGameObject = m_scene->createGameObject("New GameObject");
+			std::shared_ptr<GameObject> newGameObject = m_scene->createGameObject("New GameObject");
+			m_editor->actionManager.addCreateGameObjectAction(newGameObject, m_scene);
 		}
 		ImGui::Separator();
 
-		GameObject* current = m_scene->getSelectedGameObject();
+		GameObject* current = m_scene->getSelectedGameObject().get();
 		
 		int gameObjects = m_scene->getGameObjectCount();
 		for (int i = 0; i < gameObjects; ++i) {

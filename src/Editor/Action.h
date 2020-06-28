@@ -1,9 +1,13 @@
 #pragma once
+#include <memory>
 
 namespace glGame {
 
+    class GameObject;
+    class Scene;
+
     enum class ActionType {
-        ChangePublicVariableActionType
+        ChangePublicVariableActionType, CreateGameObjectActionType, DeleteGameActionObject
     };
 
     class Action {
@@ -38,6 +42,30 @@ namespace glGame {
         T* publicVariable;
         T before;
         T after;
+    };
+
+    class CreateGameObjectAction : public Action {
+    public:
+        CreateGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
+        virtual ActionType getActionType() const override { return ActionType::CreateGameObjectActionType; }
+        virtual void execute() override;
+        virtual void unexecute() override;
+
+    public:
+        std::shared_ptr<GameObject> gameObject;
+        Scene* scene;
+    };
+
+    class DeleteGameObjectAction : public Action {
+    public:
+        DeleteGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
+        virtual ActionType getActionType() const override { return ActionType::CreateGameObjectActionType; }
+        virtual void execute() override;
+        virtual void unexecute() override;
+
+    public:
+        std::shared_ptr<GameObject> gameObject;
+        Scene* scene;
     };
 
 }

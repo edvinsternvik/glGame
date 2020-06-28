@@ -31,9 +31,9 @@ namespace glGame {
 		if(m_scene == nullptr) return;
 
 		static std::string s_stringBuffer = "";
-		GameObject* selectedObj = m_scene->getSelectedGameObject();
+		std::shared_ptr<GameObject> selectedObj = m_scene->getSelectedGameObject();
 
-		if (!selectedObj) {
+		if (!selectedObj.get()) {
 			return;
 		}
 
@@ -43,7 +43,8 @@ namespace glGame {
 		registerChangePublicVariableAction<std::string>(&selectedObj->name, &m_editor->actionManager);
 		ImGui::SameLine();
 		if(ImGui::Button("Delete")) {
-			m_scene->deleteGameObject(selectedObj);
+			m_scene->deleteGameObject(selectedObj.get());
+			m_editor->actionManager.addDeleteGameObjectAction(selectedObj, m_scene);
 			return;
 		}
 

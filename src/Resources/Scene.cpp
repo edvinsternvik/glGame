@@ -7,15 +7,27 @@ namespace glGame {
 	Scene::Scene() {
 	}
 
-	GameObject* Scene::createGameObject(std::string name) {
+	std::shared_ptr<GameObject> Scene::createGameObject(std::string name) {
 		std::shared_ptr<GameObject> newGameObject = GameObject::Create(name);
 		m_gameObjects.push_back(newGameObject);
-		return newGameObject.get();
+		return newGameObject;
+	}
+
+	std::shared_ptr<GameObject> Scene::createGameObject(std::shared_ptr<GameObject> gameObject) {
+		if(gameObject.get() == nullptr) return std::shared_ptr<GameObject>();
+		for(int i = 0; i < m_gameObjects.size(); ++i) {
+			if(m_gameObjects[i].get() == gameObject.get()) {
+				return m_gameObjects[i];
+			}
+		}
+		m_gameObjects.push_back(gameObject);
+		return gameObject;
 	}
 
 	void Scene::deleteGameObject(GameObject* gameObject) {
 		for(int i = 0; i < m_gameObjects.size(); ++i) {
 			if(m_gameObjects[i].get() == gameObject) {
+				if(m_selectedGameObject.lock().get() == gameObject) m_selectedGameObject = std::weak_ptr<GameObject>();
 				m_gameObjects.erase(m_gameObjects.begin() + i);
 				return;
 			}

@@ -16,5 +16,21 @@ namespace glGame {
         m_currentNode->action->execute();
     }
 
+    void ActionManager::addCreateGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene) {
+        addAction(std::make_unique<CreateGameObjectAction>(gameObject, scene));
+    }
+
+    void ActionManager::addDeleteGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene) {
+        addAction(std::make_unique<DeleteGameObjectAction>(gameObject, scene));
+    }
+
+    void ActionManager::addAction(std::unique_ptr<Action> action) {
+        m_currentNode->next = std::make_unique<ActionNode>();
+        m_currentNode->next->action = std::move(action);
+        m_currentNode->next->previous = m_currentNode;
+        m_currentNode = m_currentNode->next.get();
+    }
+
+
 
 }
