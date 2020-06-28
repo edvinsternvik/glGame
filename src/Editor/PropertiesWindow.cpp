@@ -15,6 +15,9 @@ namespace glGame {
 
 	void InputText(const char* name, std::string& str, int maxSize);
 
+	template<typename T>
+	void registerChangePublicVariableAction(T* data, ActionManager* actionManager);
+
 	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
 
@@ -37,6 +40,7 @@ namespace glGame {
 		ImGui::Spacing();
 
 		InputText("###NAME", selectedObj->name, 64);
+		registerChangePublicVariableAction<std::string>(&selectedObj->name, &m_editor->actionManager);
 
 		ImGui::Spacing();
 		ImGui::Spacing();
@@ -143,26 +147,27 @@ namespace glGame {
 
 		case PublicVariableType::Int:
 			ImGui::DragInt(editorVariable->name.c_str(), (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<int>((int*)editorVariable->data, &m_editor->actionManager);
 			break;
-		case PublicVariableType::Float: {
+		case PublicVariableType::Float:
 			ImGui::DragFloat(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
-			if(ImGui::IsItemActivated())
-				m_editor->actionManager.beginChangePublicVariableAction<float>((float*)editorVariable->data, *(float*)editorVariable->data);
-			if(ImGui::IsItemDeactivatedAfterEdit())
-				m_editor->actionManager.endChangePublicVariableAction<float>((float*)editorVariable->data, *(float*)editorVariable->data);
+			registerChangePublicVariableAction<float>((float*)editorVariable->data, &m_editor->actionManager);
 			break;
-		}
 		case PublicVariableType::Double:
 			ImGui::InputDouble(editorVariable->name.c_str(), (double*)editorVariable->data);
+			registerChangePublicVariableAction<double>((double*)editorVariable->data, &m_editor->actionManager);
 			break;
 		case PublicVariableType::Vec2:
 			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector2>((Vector2*)editorVariable->data, &m_editor->actionManager);
 			break;
 		case PublicVariableType::Vec3:
 			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector3>((Vector3*)editorVariable->data, &m_editor->actionManager);
 			break;
 		case PublicVariableType::String: {
 			InputText(editorVariable->name.c_str(), *(std::string*)editorVariable->data, 64);
+			registerChangePublicVariableAction<std::string>((std::string*)editorVariable->data, &m_editor->actionManager);
 			break;
 		}
 		case PublicVariableType::Color:
@@ -176,7 +181,9 @@ namespace glGame {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					assert(payload->DataSize == sizeof(unsigned int));
 					unsigned int payloadData = *(const unsigned int*)payload->Data;
+					m_editor->actionManager.beginChangePublicVariableAction<unsigned int>((unsigned int*)editorVariable->data, *(unsigned int*)editorVariable->data);
 					*(unsigned int*)editorVariable->data = payloadData;
+					m_editor->actionManager.endChangePublicVariableAction<unsigned int>((unsigned int*)editorVariable->data, *(unsigned int*)editorVariable->data);
 				}
 
 				ImGui::EndDragDropTarget();
@@ -194,6 +201,12 @@ namespace glGame {
 				str.assign(charBuffer.data());
 			}
 		}
+	}
+
+	template<typename T>
+	void registerChangePublicVariableAction(T* data, ActionManager* actionManager) {
+		if(ImGui::IsItemActivated()) actionManager->beginChangePublicVariableAction<T>(data, *data);
+		if(ImGui::IsItemDeactivatedAfterEdit()) actionManager->endChangePublicVariableAction<T>(data, *data);
 	}
 
 }
