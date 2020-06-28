@@ -35,7 +35,7 @@ namespace glGame {
         SceneWindow* m_sceneWindow;
         PropertiesWindow* m_propertiesWindow;
         AssetWindow* m_assetWindow;
-        Camera* m_camera;
+        std::weak_ptr<Camera> m_camera;
         Scene* m_scene;
     };
 

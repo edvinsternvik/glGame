@@ -36,7 +36,7 @@ namespace glGame {
 		//Render scene
 		scene->onRender();
 		m_shader->useShader();
-		Camera* camera = scene->activeCamera;
+		Camera* camera = scene->activeCamera.lock().get();
 		if(camera != nullptr) {
 			m_shader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
 			m_shader->setUniformMat4("u_view", &(camera->getViewMatrix()[0][0]));

@@ -25,11 +25,11 @@ namespace glGame{
 		void onRender();
 
 		template<class T>
-		T* addComponent() {
+		std::shared_ptr<T> addComponent() {
 			return addComponentOverload(componentType<T>());
 		}
 
-		Component* addComponent(std::string& component);
+		std::shared_ptr<Component> addComponent(std::string& component);
 		void addComponentToInitQueue(int index);
 		void removeComponent(int index);
 
@@ -50,20 +50,19 @@ namespace glGame{
 		template<class T> struct componentType {};
 
 		template<class T>
-		T* addComponentImpl() {
+		std::shared_ptr<T> addComponentImpl() {
 			std::shared_ptr<T> newComponent = std::make_shared<T>();
 			newComponent->setParentGameObject(m_this);
 			m_initQueue.push((Component*)newComponent.get());
-			T* newComponentPtr = newComponent.get();
 			m_components.push_back(newComponent);
 
-			return newComponentPtr;
+			return newComponent;
 		}
 
-		MeshRenderer* addComponentOverload(componentType<MeshRenderer>);
-		LineRenderer* addComponentOverload(componentType<LineRenderer>);
+		std::shared_ptr<MeshRenderer> addComponentOverload(componentType<MeshRenderer>);
+		std::shared_ptr<LineRenderer> addComponentOverload(componentType<LineRenderer>);
 		template<class T>
-		T* addComponentOverload(componentType<T>) {
+		std::shared_ptr<T> addComponentOverload(componentType<T>) {
 			return addComponentImpl<T>();
 		}
 

@@ -45,11 +45,9 @@ namespace glGame {
 			loadScene(fileName);
 		}
 		else {
-			if(m_activeScene->activeCamera == nullptr) {
+			if(!m_activeScene->activeCamera.expired()) {
 				std::shared_ptr<GameObject> cameraObject = m_activeScene->createGameObject("Camera");
-				Camera* cameraComponent = cameraObject->addComponent<Camera>();
-
-				m_activeScene->activeCamera = cameraComponent;
+				m_activeScene->activeCamera = cameraObject->addComponent<Camera>();
 			}	
 		}
 	}
@@ -189,10 +187,10 @@ namespace glGame {
 		if(component == "Transform") return gameObject->transform;
 		else if(component == "Camera") {
 			m_activeScene->activeCamera = gameObject->addComponent<Camera>();
-			return (Component*)m_activeScene->activeCamera;
+			return (Component*)m_activeScene->activeCamera.lock().get();
 		}
 
 
-		return gameObject->addComponent(component);
+		return gameObject->addComponent(component).get();
 	}
 }

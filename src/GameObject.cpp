@@ -38,17 +38,19 @@ namespace glGame {
 		}
 	}
 
-	MeshRenderer* GameObject::addComponentOverload(componentType<MeshRenderer>) {		
-		rendererComponents.push_back(addComponentImpl<MeshRenderer>());
-		return (MeshRenderer*)rendererComponents[rendererComponents.size() - 1];
+	std::shared_ptr<MeshRenderer> GameObject::addComponentOverload(componentType<MeshRenderer>) {
+		auto newComponent = addComponentImpl<MeshRenderer>();
+		rendererComponents.push_back(newComponent.get());
+		return newComponent;
 	}
 
-	LineRenderer* GameObject::addComponentOverload(componentType<LineRenderer>) {		
-		rendererComponents.push_back(addComponentImpl<LineRenderer>());
-		return (LineRenderer*)rendererComponents[rendererComponents.size() - 1];
+	std::shared_ptr<LineRenderer> GameObject::addComponentOverload(componentType<LineRenderer>) {		
+		auto newComponent = addComponentImpl<LineRenderer>();
+		rendererComponents.push_back(newComponent.get());
+		return newComponent;
 	}
 
-	Component* GameObject::addComponent(std::string& component) {
+	std::shared_ptr<Component> GameObject::addComponent(std::string& component) {
 		if(component == "Transform") return addComponent<Transform>();
 		else if(component == "Camera") return addComponent<Camera>();
 		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
@@ -104,6 +106,6 @@ namespace glGame {
 	}
 
 	void GameObject::init() {
-		transform = addComponent<Transform>();
+		transform = addComponent<Transform>().get();
 	}
 }

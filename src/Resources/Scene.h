@@ -26,7 +26,7 @@ namespace glGame {
 		void onRender();
 
 	public:
-		Camera* activeCamera = nullptr;
+		std::weak_ptr<Camera> activeCamera;
 		
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;

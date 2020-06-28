@@ -136,8 +136,8 @@ namespace glGame {
 			if(ImGui::BeginPopup("AddScriptPopup")) {
 				InputText("filename", s_stringBuffer, 64);
 				if(ImGui::Button("Add Script")) {
-					Script* s = selectedObj->addComponent<Script>();
-					s->changeScriptfile(s_stringBuffer);
+					std::weak_ptr<Script> s = selectedObj->addComponent<Script>();
+					s.lock()->changeScriptfile(s_stringBuffer);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
