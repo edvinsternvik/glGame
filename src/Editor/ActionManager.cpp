@@ -24,6 +24,15 @@ namespace glGame {
         addAction(std::make_unique<DeleteGameObjectAction>(gameObject, scene));
     }
 
+    void ActionManager::addCreateComponentAction(std::shared_ptr<Component> component) {
+        addAction(std::make_unique<CreateComponentAction>(component));
+    }
+
+    void ActionManager::addDeleteComponentAction(std::shared_ptr<Component> component) {
+        addAction(std::make_unique<DeleteComponentAction>(component));
+    }
+
+
     void ActionManager::addAction(std::unique_ptr<Action> action) {
         m_currentNode->next = std::make_unique<ActionNode>();
         m_currentNode->next->action = std::move(action);

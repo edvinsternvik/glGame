@@ -6,9 +6,9 @@ Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
 GameObject: Object1
 Component: Transform
-Attribute: position {0.000000,3.240000,-9.740000}
+Attribute: position {0.820000,1.060000,-10.400000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Attribute: rotation {30.100000,-29.100000,4.400000}
+Attribute: rotation {17.100000,24.299999,18.700001}
 Component: MeshRenderer
 Attribute: Model 1
 Component: Script
@@ -23,9 +23,9 @@ Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 GameObject: Object2
 Component: Transform
-Attribute: position {2.100000,1.130000,-10.310000}
+Attribute: position {-2.810000,5.190000,-9.780000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Attribute: rotation {-123.747581,15.936102,152.155975}
+Attribute: rotation {37.900002,24.600000,23.000000}
 Component: MeshRenderer
 Attribute: Model 1
 Component: RigidBody
@@ -51,9 +51,9 @@ Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
 GameObject: Object3
 Component: Transform
-Attribute: position {-1.000000,6.870000,-9.430000}
+Attribute: position {2.510000,5.130000,-11.320000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Attribute: rotation {-39.799999,39.299999,24.000000}
+Attribute: rotation {9.000000,20.200001,22.500000}
 Component: MeshRenderer
 Attribute: Model 1
 Component: BoxCollider
@@ -63,3 +63,17 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+GameObject: New GameObject
+Component: Transform
+Attribute: position {-1.810000,-0.790000,-9.820000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {-27.600000,-13.800000,4.300000}
+Component: MeshRenderer
+Attribute: Model 1
+Component: RigidBody
+Attribute: gravityScale 1.000000
+Attribute: mass 1.000000
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {1.000000,1.000000,1.000000}

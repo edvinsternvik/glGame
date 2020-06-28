@@ -69,6 +69,7 @@ namespace glGame {
 				ImGui::PushID(i);
 				if(ImGui::SmallButton("X##ID")) {
 					selectedObj->removeComponent(i);
+					m_editor->actionManager.addDeleteComponentAction(selectedComponent);
 					ImGui::PopID();
 					continue;
 				}
@@ -121,7 +122,8 @@ namespace glGame {
 						ImGui::OpenPopup("AddScriptPopup");
 					}
 					else {
-						selectedObj->addComponent(componentStr);
+						std::shared_ptr<Component> newComponent = selectedObj->addComponent(componentStr);
+						m_editor->actionManager.addCreateComponentAction(newComponent);
 						ImGui::CloseCurrentPopup();
 					}
 				}
@@ -138,6 +140,7 @@ namespace glGame {
 				if(ImGui::Button("Add Script")) {
 					std::shared_ptr<Script> s = selectedObj->addComponent<Script>();
 					s->changeScriptfile(s_stringBuffer);
+					m_editor->actionManager.addCreateComponentAction(s);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();

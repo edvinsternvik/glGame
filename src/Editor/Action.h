@@ -5,9 +5,10 @@ namespace glGame {
 
     class GameObject;
     class Scene;
+    class Component;
 
     enum class ActionType {
-        ChangePublicVariableActionType, CreateGameObjectActionType, DeleteGameActionObject
+        ChangePublicVariableActionType, CreateGameObjectActionType, DeleteGameActionObject, CreateComponentActionType, DeleteComponentActionType
     };
 
     class Action {
@@ -66,6 +67,28 @@ namespace glGame {
     public:
         std::shared_ptr<GameObject> gameObject;
         Scene* scene;
+    };
+
+    class CreateComponentAction : public Action {
+    public:
+        CreateComponentAction(std::shared_ptr<Component> component);
+        virtual ActionType getActionType() const override { return ActionType::CreateComponentActionType; }
+        virtual void execute() override;
+        virtual void unexecute() override;
+
+    public:
+        std::shared_ptr<Component> component;
+    };
+
+    class DeleteComponentAction : public Action {
+    public:
+        DeleteComponentAction(std::shared_ptr<Component> component);
+        virtual ActionType getActionType() const override { return ActionType::DeleteComponentActionType; }
+        virtual void execute() override;
+        virtual void unexecute() override;
+
+    public:
+        std::shared_ptr<Component> component;
     };
 
 }

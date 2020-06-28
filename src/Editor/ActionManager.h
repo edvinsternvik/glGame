@@ -37,6 +37,8 @@ namespace glGame {
 
         void addCreateGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
         void addDeleteGameObjectAction(std::shared_ptr<GameObject> gameObject, Scene* scene);
+        void addCreateComponentAction(std::shared_ptr<Component> component);
+        void addDeleteComponentAction(std::shared_ptr<Component> component);
 
     private:
         void addAction(std::unique_ptr<Action> action);
