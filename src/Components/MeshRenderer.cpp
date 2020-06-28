@@ -12,6 +12,7 @@ namespace glGame {
 	}
 
 	void MeshRenderer::init() {
+		RendererComponent::init();
 	}
 
 	void MeshRenderer::onRender() {

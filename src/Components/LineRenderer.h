@@ -1,14 +1,12 @@
 #pragma once
-#include <memory>
 #include "RendererComponent.h"
 #include <glm/glm.hpp>
 #include <memory>
 #include "../Math/Vector.h"
+#include "../Rendering/VertexArray.h"
+#include "../Rendering/VertexBuffer.h"
 
 namespace glGame {
-
-    class VertexArray;
-    class VertexBuffer;
 	
 	class LineRenderer : public RendererComponent {
 	public:

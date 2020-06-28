@@ -4,8 +4,6 @@
 #include "Transform.h"
 #include "../Rendering/Shader.h"
 #include <GL/glew.h>
-#include "../Rendering/VertexArray.h"
-#include "../Rendering/VertexBuffer.h"
 
 namespace glGame {
 
@@ -15,6 +13,7 @@ namespace glGame {
 	}
 
 	void LineRenderer::init() {
+		RendererComponent::init();
         m_vao = std::make_unique<VertexArray>();
         m_vao->bind();
         m_vbo = std::make_unique<VertexBuffer>(&lineLength.x, 3);

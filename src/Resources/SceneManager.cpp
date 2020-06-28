@@ -70,7 +70,7 @@ namespace glGame {
 
 			int components = gameObject->getComponentSize();
 			for(int j = 0; j < components; ++j) {
-				const Component* component = gameObject->getComponent(j);
+				const Component* component = gameObject->getComponent(j).get();
 
 				file << "Component: " << component->getName() << "\n";
 

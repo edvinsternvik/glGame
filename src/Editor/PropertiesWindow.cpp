@@ -62,7 +62,7 @@ namespace glGame {
 
 		int componentVariableIndex = 0;
 		for(int i = 0; i < selectedObj->getComponentSize(); ++i) {
-			const Component* selectedComponent = selectedObj->getComponent(i);
+			const std::shared_ptr<Component> selectedComponent = selectedObj->getComponent(i);
 			ImGui::Text(selectedComponent->getName().c_str());
 			if(selectedComponent->getName() != "Transform") {
 				ImGui::SameLine();
@@ -136,8 +136,8 @@ namespace glGame {
 			if(ImGui::BeginPopup("AddScriptPopup")) {
 				InputText("filename", s_stringBuffer, 64);
 				if(ImGui::Button("Add Script")) {
-					std::weak_ptr<Script> s = selectedObj->addComponent<Script>();
-					s.lock()->changeScriptfile(s_stringBuffer);
+					std::shared_ptr<Script> s = selectedObj->addComponent<Script>();
+					s->changeScriptfile(s_stringBuffer);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();

@@ -21,7 +21,7 @@ namespace glGame {
 
         int numberOfComponents = getGameObject()->getComponentSize();
         for(int i = 0; i < numberOfComponents; ++i) {
-            const Component* component = getGameObject()->getComponent(i);
+            const Component* component = getGameObject()->getComponent(i).get();
             if(component->getName() == "BoxCollider") {
                 ((BoxCollider*)component)->m_collisionBox = addBoxCollider();
             }

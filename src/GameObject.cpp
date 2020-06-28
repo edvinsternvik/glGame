@@ -38,16 +38,14 @@ namespace glGame {
 		}
 	}
 
-	std::shared_ptr<MeshRenderer> GameObject::addComponentOverload(componentType<MeshRenderer>) {
-		auto newComponent = addComponentImpl<MeshRenderer>();
-		rendererComponents.push_back(newComponent.get());
-		return newComponent;
-	}
+	std::shared_ptr<Component> GameObject::addComponent(std::shared_ptr<Component> component) {
+		for(int i = 0; i < m_components.size(); ++i) {
+			if(m_components[i].get() == component.get()) return m_components[i];
+		}
 
-	std::shared_ptr<LineRenderer> GameObject::addComponentOverload(componentType<LineRenderer>) {		
-		auto newComponent = addComponentImpl<LineRenderer>();
-		rendererComponents.push_back(newComponent.get());
-		return newComponent;
+		m_components.push_back(component);
+		addComponentToInitQueue(component.get());
+		return component;
 	}
 
 	std::shared_ptr<Component> GameObject::addComponent(std::string& component) {
@@ -65,9 +63,13 @@ namespace glGame {
 	}
 
 	void GameObject::addComponentToInitQueue(int index) {
-		Component* c = (Component*)getComponent(index);
+		Component* c = (Component*)getComponent(index).get();
 
 		m_initQueue.push(c);
+	}
+
+	void GameObject::addComponentToInitQueue(Component* component) {
+		m_initQueue.push(component);
 	}
 
 	void GameObject::removeComponent(int index) {
@@ -85,11 +87,20 @@ namespace glGame {
 		m_components.erase(m_components.begin() + index);
 	}
 
-	const Component* const GameObject::getComponent(int index) const {
+	void GameObject::removeComponent(Component* component) {
+		for(int i = 0; i < m_components.size(); ++i) {
+			if(m_components[i].get() == component) {
+				removeComponent(i);
+				return;
+			}
+		}
+	}
+
+	const std::shared_ptr<Component> GameObject::getComponent(int index) const {
 		if(index < 0 || index > getComponentSize())
 			return nullptr;
 
-		return m_components[index].get();
+		return m_components[index];
 	}
 
 	const Component* const GameObject::getComponent(const std::string& componentName) const {

@@ -9,6 +9,8 @@ namespace glGame {
     public:
         virtual std::string getName() const = 0;
 
+        virtual void init() override;
+
     protected:
         void updateModelMatrix();
         glm::mat4 modelMatrix;

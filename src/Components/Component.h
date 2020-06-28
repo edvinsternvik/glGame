@@ -33,7 +33,7 @@ namespace glGame {
 			return nullptr;
 		}
 
-		const GameObject* const getGameObject() const { return gameObject.lock().get(); }
+		GameObject* const getGameObject() const { return gameObject.lock().get(); }
 
 	protected:
 		inline void addPublicVariable(void* variable, PublicVariableType varType, std::string name) {
