@@ -40,9 +40,7 @@ namespace glGame {
 			#ifndef GL_GAME_EDITOR
 				physics.stepSimulation(deltatime);
 			#else
-				if(m_focused) {
-					m_editor->update(deltatime);
-				}
+				m_editor->update(deltatime, m_focused);
 			#endif
 
 

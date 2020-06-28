@@ -6,15 +6,17 @@
 #include "../Components/LineRenderer.h"
 #include "../Components/Transform.h"
 
+#include "../Input.h"
+
 namespace glGame {
 
     Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, unsigned int editorFrameTexture, float aspectRatio) {
         m_editorGui = std::make_unique<Gui>(window->getWindow());
         m_editorGui->setEventFunction(eventFunction);
-		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(editorFrameTexture, aspectRatio)); // m_renderer->getEditorFrameTexture()
-		m_sceneWindow = m_editorGui->addWindow(std::make_unique<SceneWindow>());
-		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>());
-        m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>());
+		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(editorFrameTexture, aspectRatio), this); // m_renderer->getEditorFrameTexture()
+		m_sceneWindow = m_editorGui->addWindow(std::make_unique<SceneWindow>(), this);
+		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>(), this);
+        m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>(), this);
 
         m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject");
         m_camera = m_editorCameraGameObject->addComponent<Camera>();
@@ -26,9 +28,14 @@ namespace glGame {
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 0.0, 1.0);
     }
 
-    void Editor::update(float deltatime) {
-        m_editorCameraGameObject->onUpdate(deltatime);
-        m_selectedObjectGizmoObject->onUpdate(deltatime);
+    void Editor::update(const float& deltatime, const bool& viewportFocused) {
+        if(viewportFocused) {
+            m_editorCameraGameObject->onUpdate(deltatime);
+            m_selectedObjectGizmoObject->onUpdate(deltatime);
+        }
+
+        if(Input::getKey(KEY_Z)) actionManager.undo();
+        if(Input::getKey(KEY_Y)) actionManager.redo();
     }
 
     void Editor::renderEditor() {

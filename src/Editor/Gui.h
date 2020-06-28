@@ -23,12 +23,13 @@ namespace glGame {
 		void OnGuiRender();
 		inline void setEventFunction(std::function<void(Event&)> eventFunction) { m_eventFunction = eventFunction; }
 		template<class T>
-		T* addWindow(std::unique_ptr<T> window) {
+		T* addWindow(std::unique_ptr<T> window, Editor* editor) {
 			if(!m_eventFunction) {
 				std::cout << "Event function not set : Could not add window" << std::endl;
 				return nullptr;
 			}
 			window->setEventFunction(m_eventFunction);
+			window->setEditor(editor);
 			T* ret = window.get();
 			m_windows.push_back(std::move(window));
 			return ret;

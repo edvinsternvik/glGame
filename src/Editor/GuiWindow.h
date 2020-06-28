@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include <memory>
 #include <vector>
 #include <functional>
@@ -9,6 +9,7 @@ namespace glGame {
 	class Scene;
 	class PublicVariable;
 	class AssetManager;
+	class Editor;
 
 	class GuiWindow {
 	public:
@@ -18,10 +19,14 @@ namespace glGame {
 		virtual void renderWindow() = 0;
 
 		inline void setEventFunction(std::function<void(Event&)>& eventFunction) { m_eventFunction = &eventFunction; }
+		void setEditor(Editor* editor) { m_editor = editor; }
 
 	public:
 		bool isOpen = true;
 		std::function<void(Event&)>* m_eventFunction = nullptr;
+
+	protected:
+		Editor* m_editor;
 	};
 
 	class ViewportWindow : public GuiWindow {

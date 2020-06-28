@@ -9,6 +9,8 @@
 #include "../Components/ComponentList.h"
 #include "../Resources/AssetManager.h"
 
+#include "Editor.h"
+
 namespace glGame {
 
 	void InputText(const char* name, std::string& str, int maxSize);
@@ -142,9 +144,14 @@ namespace glGame {
 		case PublicVariableType::Int:
 			ImGui::DragInt(editorVariable->name.c_str(), (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
 			break;
-		case PublicVariableType::Float:
+		case PublicVariableType::Float: {
 			ImGui::DragFloat(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
+			if(ImGui::IsItemActivated())
+				m_editor->actionManager.beginChangePublicVariableAction<float>((float*)editorVariable->data, *(float*)editorVariable->data);
+			if(ImGui::IsItemDeactivatedAfterEdit())
+				m_editor->actionManager.endChangePublicVariableAction<float>((float*)editorVariable->data, *(float*)editorVariable->data);
 			break;
+		}
 		case PublicVariableType::Double:
 			ImGui::InputDouble(editorVariable->name.c_str(), (double*)editorVariable->data);
 			break;
