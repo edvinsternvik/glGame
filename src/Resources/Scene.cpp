@@ -13,6 +13,15 @@ namespace glGame {
 		return newGameObject.get();
 	}
 
+	void Scene::deleteGameObject(GameObject* gameObject) {
+		for(int i = 0; i < m_gameObjects.size(); ++i) {
+			if(m_gameObjects[i].get() == gameObject) {
+				m_gameObjects.erase(m_gameObjects.begin() + i);
+				return;
+			}
+		}
+	}
+
 	GameObject* Scene::getGameObject(int index) {
 		if (index < 0 || index > m_gameObjects.size()) {
 			return nullptr;

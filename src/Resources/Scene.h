@@ -13,6 +13,7 @@ namespace glGame {
 		Scene();
 
 		GameObject* createGameObject(std::string name);
+		void deleteGameObject(GameObject* gameObject);
 		GameObject* getGameObject(int index);
 		void selectGameObject(int index);
 		void deselectGameObject() { m_selectedGameObject = std::weak_ptr<GameObject>(); }

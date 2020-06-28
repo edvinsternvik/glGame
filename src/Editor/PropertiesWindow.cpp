@@ -41,6 +41,11 @@ namespace glGame {
 
 		InputText("###NAME", selectedObj->name, 64);
 		registerChangePublicVariableAction<std::string>(&selectedObj->name, &m_editor->actionManager);
+		ImGui::SameLine();
+		if(ImGui::Button("Delete")) {
+			m_scene->deleteGameObject(selectedObj);
+			return;
+		}
 
 		ImGui::Spacing();
 		ImGui::Spacing();
