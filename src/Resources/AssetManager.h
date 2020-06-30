@@ -6,12 +6,32 @@
 
 namespace glGame {
 
+    class AssetData {
+    public:
+        AssetData() {}
+        AssetData(const AssetType& assetType, const std::string& assetTypeString) : assetType(assetType), assetTypeString(assetTypeString) {}
+        std::weak_ptr<Asset> asset;
+        AssetType assetType;
+        std::string assetTypeString;
+    };
+
     class AssetManager {
     public:
         AssetManager();
-        ~AssetManager();
 
-        Asset* getAsset(unsigned int id, AssetType type);
+        template<class T>
+        std::shared_ptr<T> getAsset(const std::string& assetName) {
+            auto search = m_assets.find(assetName);
+            if(search == m_assets.end() || search->second.assetType != T::getAssetType()) return std::shared_ptr<T>();
+            if(search->second.asset.expired()) {
+                std::shared_ptr<T> newAsset = std::make_shared<T>(assetName.c_str());
+                search->second.asset = newAsset;
+
+                return newAsset;
+            }
+
+            return std::dynamic_pointer_cast<T>(search->second.asset.lock());
+        }
         void updateAssets();
         inline int assetCount() const { return m_assets.size(); }
         inline auto getAssetsBegin() const { return m_assets.begin(); };
@@ -20,15 +40,10 @@ namespace glGame {
         static AssetManager& Get() { return *s_instance; }
 
     private:
-        void initFromFile();
-        void saveToFile();
-        void addAsset(std::string& filepath, std::string& exension);
-        void insertAsset(std::unique_ptr<Asset> asset);
-    
+        void makeEmptyAssetData(const std::string& assetName, const std::string& extension);
+
     private:
-        std::unordered_map<unsigned int, std::unique_ptr<Asset>> m_assets;
-        std::vector<std::pair<unsigned int, std::string>> m_deletedAssets;
-        unsigned int m_highestId;
+        std::unordered_map<std::string, AssetData> m_assets;
 
     private:
         static AssetManager* s_instance;

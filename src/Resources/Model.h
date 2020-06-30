@@ -12,7 +12,7 @@ namespace glGame {
 		Model(const char* fileName);
 
 		virtual const char* getAssetTypeString() { return "Model"; }
-        virtual AssetType getAssetType() { return AssetType::Model; }
+        static AssetType getAssetType() { return AssetType::Model; }
 
 		void bind();
 		void unbind();
@@ -25,5 +25,7 @@ namespace glGame {
 
 		int m_verticies;
 	};
+
+	using ModelAsset = std::shared_ptr<Model>;
 
 }

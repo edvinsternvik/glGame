@@ -25,7 +25,7 @@ namespace glGame {
         int number = 0, totalAssetCount = m_assetManager->assetCount();
         float currentLineX = 0.0;
         for(auto it = m_assetManager->getAssetsBegin(); it != m_assetManager->getAssetsEnd(); ++it, ++number) {
-            ImVec2 buttonSize = ImGui::CalcTextSize(it->second->name.c_str());
+            ImVec2 buttonSize = ImGui::CalcTextSize(it->first.c_str());
             buttonSize = ImVec2(buttonSize.x + 25, 50);
 
             currentLineX += buttonSize.x + style.ItemSpacing.x;
@@ -33,13 +33,12 @@ namespace glGame {
             else currentLineX = 0.0;
 
             ImGui::PushID(number);
-            ImGui::Button(it->second->name.c_str(), buttonSize);
+            ImGui::Button(it->first.c_str(), buttonSize);
             ImGui::PopID();
 
-            unsigned int data = it->first;
             if(ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                ImGui::SetDragDropPayload(it->second->getAssetTypeString(), &data, sizeof(unsigned int));
-                ImGui::Text(it->second->getAssetTypeString());
+                ImGui::SetDragDropPayload(it->second.assetTypeString.c_str(), &it->first, sizeof(it->first));
+                ImGui::Text(it->first.c_str());
                 ImGui::EndDragDropSource();
             }
         }

@@ -1,7 +1,8 @@
 #pragma once
+#include "../Math/Vector.h"
 #include <string>
 #include <variant>
-#include "../Math/Vector.h"
+#include <memory>
 
 namespace glGame {
 	
@@ -9,8 +10,9 @@ namespace glGame {
 	class Component;
 	class Color;
 	class Model;
+	using ModelAsset = std::shared_ptr<Model>;
 
-	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, unsigned int*>
+	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, ModelAsset*>
 
     enum class PublicVariableType {
 		Int=0, Float, Double, Char, String, Vec2, Vec3, 

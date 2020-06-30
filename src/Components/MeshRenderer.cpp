@@ -8,7 +8,7 @@
 namespace glGame {
 
 	MeshRenderer::MeshRenderer() {
-		addPublicVariable(&modelId, "Model");
+		addPublicVariable(&model, "Model");
 	}
 
 	void MeshRenderer::init() {
@@ -20,8 +20,7 @@ namespace glGame {
 	}
 
 	void MeshRenderer::renderComponent(Shader* shader) {
-		Model* model = (Model*)AssetManager::Get().getAsset(modelId, AssetType::Model);
-		if(model == nullptr) {
+		if(model.get() == nullptr) {
 			return;
 		}
 		model->bind();

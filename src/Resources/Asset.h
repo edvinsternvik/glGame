@@ -12,7 +12,6 @@ namespace glGame {
         Asset(const char* name) : name(name) {}
 
         virtual const char* getAssetTypeString() = 0;
-        virtual AssetType getAssetType() = 0;
 
     public:
         std::string name;

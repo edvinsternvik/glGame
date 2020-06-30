@@ -16,7 +16,7 @@ namespace glGame {
 		virtual void onRender() override;
 
 	public:
-		unsigned int modelId = 0;
+		ModelAsset model;
 
 	private:
 

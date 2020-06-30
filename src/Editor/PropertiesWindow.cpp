@@ -182,16 +182,15 @@ namespace glGame {
 		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 		// 	break;
 		case toInt(PublicVariableType::Model): {
-			auto* model = AssetManager::Get().getAsset(*std::get<unsigned int*>(editorVariable->data), AssetType::Model);
-			std::string modelName = model ? model->name : "";
+			ModelAsset model = *std::get<ModelAsset*>(editorVariable->data);
+			std::string modelName = model.get() != nullptr ? model->name : "";
 			ImGui::Text(("Model: " + modelName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
-					assert(payload->DataSize == sizeof(unsigned int));
-					unsigned int payloadData = *(const unsigned int*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<unsigned int>(std::get<unsigned int*>(editorVariable->data), *std::get<unsigned int*>(editorVariable->data));
-					*std::get<unsigned int*>(editorVariable->data) = payloadData;
-					m_editor->actionManager.endChangePublicVariableAction<unsigned int>(std::get<unsigned int*>(editorVariable->data), *std::get<unsigned int*>(editorVariable->data));
+					std::string payloadData = *(std::string*)payload->Data;
+					m_editor->actionManager.beginChangePublicVariableAction<ModelAsset>(std::get<ModelAsset*>(editorVariable->data), *std::get<ModelAsset*>(editorVariable->data));
+					*std::get<ModelAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Model>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<ModelAsset>(std::get<ModelAsset*>(editorVariable->data), *std::get<ModelAsset*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();

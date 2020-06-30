@@ -10,7 +10,7 @@ Attribute: position {0.820000,1.060000,-10.400000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {17.100000,24.299999,18.700001}
 Component: MeshRenderer
-Attribute: Model 1
+Attribute: Model ./Assets/cube.obj
 Component: Script
 Attribute: scriptfile script.as
 Attribute: int pVarInt 5
@@ -27,7 +27,7 @@ Attribute: position {-2.810000,5.190000,-9.780000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {37.900002,24.600000,23.000000}
 Component: MeshRenderer
-Attribute: Model 1
+Attribute: Model ./Assets/cube.obj
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
@@ -41,7 +41,7 @@ Attribute: position {0.000000,-12.774000,-14.320000}
 Attribute: scale {10.000000,10.000000,10.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
-Attribute: Model 1
+Attribute: Model ./Assets/cube.obj
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -55,7 +55,7 @@ Attribute: position {2.510000,5.130000,-11.320000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {9.000000,20.200001,22.500000}
 Component: MeshRenderer
-Attribute: Model 1
+Attribute: Model ./Assets/cube.obj
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -69,7 +69,7 @@ Attribute: position {-1.810000,-0.790000,-9.820000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {-27.600000,-13.800000,4.300000}
 Component: MeshRenderer
-Attribute: Model 1
+Attribute: Model ./Assets/cube.obj
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000

@@ -1,5 +1,7 @@
 #include "PublicVariable.h"
 #include "../Math/Vector.h"
+#include "../Resources/AssetManager.h"
+#include "../Resources/Model.h"
 #include <sstream>
 
 namespace glGame {
@@ -26,7 +28,7 @@ namespace glGame {
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
-        case toInt(PublicVariableType::Model): *std::get<unsigned int*>(data) = (unsigned int)std::stoi(str); return;
+        case toInt(PublicVariableType::Model): *std::get<ModelAsset*>(data) = AssetManager::Get().getAsset<Model>(str); return;
 		}
         
     }
