@@ -8,7 +8,7 @@
 namespace glGame {
 
 	MeshRenderer::MeshRenderer() {
-		addPublicVariable(&modelId, PublicVariableType::Model, "Model");
+		addPublicVariable(&modelId, "Model");
 	}
 
 	void MeshRenderer::init() {

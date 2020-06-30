@@ -36,18 +36,15 @@ namespace glGame {
 		GameObject* const getGameObject() const { return gameObject.lock().get(); }
 
 	protected:
-		inline void addPublicVariable(void* variable, PublicVariableType varType, std::string name) {
-			m_publicVariables.push_back(PublicVariable(variable, varType, name));
-		}
+		void addPublicVariable(PublicVarVariant data, std::string name) { m_publicVariables.push_back(PublicVariable(data, name)); }
+		void addPublicVariable(PublicVarVariant data, std::string name, const float& sliderSpeed) { m_publicVariables.push_back(PublicVariable(data, name, sliderSpeed)); }
+		void addPublicVariable(PublicVariable publicVariable) { m_publicVariables.push_back(publicVariable); }
 
 		inline void clearPublicVariables() { m_publicVariables.clear(); }
 		void removePublicVariable(int index) {
 			if(index >= 0 && index < m_publicVariables.size()) m_publicVariables.erase(m_publicVariables.begin() + index);
 		}
 
-		inline void addPublicVariable(void* variable, PublicVariableType varType, const char* name, float sliderSpeed) {
-			m_publicVariables.push_back(PublicVariable(variable, varType, name, sliderSpeed));
-		}
 
 	private:
 		inline void setParentGameObject(std::weak_ptr<GameObject> parent) {

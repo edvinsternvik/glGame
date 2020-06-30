@@ -161,24 +161,24 @@ namespace glGame {
 	}
 
 	std::string SceneManager::getPublicVariableString(PublicVariable& pVar) {
-		switch(pVar.variableType) {
-		case PublicVariableType::Int: return std::to_string(*((int*)pVar.data));
-		case PublicVariableType::Float: return std::to_string(*((float*)pVar.data));
-		case PublicVariableType::Double: return std::to_string(*((double*)pVar.data));
-		case PublicVariableType::Char: return std::to_string(*((char*)pVar.data));
-		case PublicVariableType::String: return *(std::string*)pVar.data;
-		case PublicVariableType::GameObject: return "";
-		case PublicVariableType::Component: return "";
-		case PublicVariableType::Vec2: {
-			Vector2 vec2 = *((Vector2*)pVar.data);
+		switch(pVar.data.index()) {
+		case toInt(PublicVariableType::Int): return std::to_string(*(std::get<int*>(pVar.data)));
+		case toInt(PublicVariableType::Float): return std::to_string(*(std::get<float*>(pVar.data)));
+		case toInt(PublicVariableType::Double): return std::to_string(*(std::get<double*>(pVar.data)));
+		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(pVar.data)));
+		case toInt(PublicVariableType::String): return *(std::get<std::string*>(pVar.data));
+		case toInt(PublicVariableType::Vec2): {
+			Vector2 vec2 = *(std::get<Vector2*>(pVar.data));
 			return "{" + std::to_string(vec2.x) + "," + std::to_string(vec2.y) + "}";
 		}
-		case PublicVariableType::Vec3: {
-			Vector3 vec3 = *((Vector3*)pVar.data);
+		case toInt(PublicVariableType::Vec3): {
+			Vector3 vec3 = *(std::get<Vector3*>(pVar.data));
 			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
 		}
-		case PublicVariableType::Color: return "";
-		case PublicVariableType::Model: return std::to_string(*(unsigned int*)pVar.data);
+		// case PublicVariableType::GameObject: return "";
+		// case PublicVariableType::Component: return "";
+		// case PublicVariableType::Color: return "";
+		case toInt(PublicVariableType::Model): return std::to_string(*(std::get<unsigned int*>(pVar.data)));
 		}
 		return "";
 	}

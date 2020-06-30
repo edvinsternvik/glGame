@@ -4,29 +4,29 @@
 
 namespace glGame {
 
-    PublicVariable::PublicVariable(void* data, PublicVariableType variableType, std::string name) 
-    : data(data), variableType(variableType), name(name), editor_sliderSpeed(1.0f) {
+    PublicVariable::PublicVariable(PublicVarVariant data, std::string name)
+    : data(data), name(name), editor_sliderSpeed(1.0f) {
 
     }
 
-    PublicVariable::PublicVariable(void* data, PublicVariableType variableType, std::string name, float sliderSpeed) 
-    : data(data), variableType(variableType), name(name), editor_sliderSpeed(sliderSpeed) {
+    PublicVariable::PublicVariable(PublicVarVariant data, std::string name, const float& sliderSpeed)
+    : data(data), name(name), editor_sliderSpeed(sliderSpeed) {
 
     }
 
     void PublicVariable::setData(std::string& str) {
-        switch(variableType) {
-		case PublicVariableType::Int: *(int*)data = std::stoi(str); return;
-		case PublicVariableType::Float: *(float*)data = std::stof(str); return;
-		case PublicVariableType::Double: *(double*)data = std::stod(str); return;
-		case PublicVariableType::Vec2: *(Vector2*)data = Vector2(str); return;
-		case PublicVariableType::Vec3:	 *(Vector3*)data = Vector3(str); return;
-		case PublicVariableType::Char: *(char*)data = str[0]; return;
-		case PublicVariableType::String: *(std::string*)data = str; return;
+        switch(data.index()) {
+		case toInt(PublicVariableType::Int): *std::get<int*>(data) = std::stoi(str); return;
+		case toInt(PublicVariableType::Float): *std::get<float*>(data) = std::stof(str); return;
+		case toInt(PublicVariableType::Double): *std::get<double*>(data) = std::stod(str); return;
+		case toInt(PublicVariableType::Char): *std::get<char*>(data) = str[0]; return;
+		case toInt(PublicVariableType::String): *std::get<std::string*>(data) = str; return;
+		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = Vector2(str); return;
+		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = Vector3(str); return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
-        case PublicVariableType::Model: *(unsigned int*)data = (unsigned int)std::stoi(str); return;
+        case toInt(PublicVariableType::Model): *std::get<unsigned int*>(data) = (unsigned int)std::stoi(str); return;
 		}
         
     }

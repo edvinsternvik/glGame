@@ -8,8 +8,8 @@
 namespace glGame {
 
     RigidBody::RigidBody() {
-        addPublicVariable(&gravityScale, PublicVariableType::Float, "gravityScale");
-        addPublicVariable(&mass, PublicVariableType::Float, "mass");
+        addPublicVariable(&gravityScale, "gravityScale");
+        addPublicVariable(&mass, "mass");
     }
 
     RigidBody::~RigidBody() {

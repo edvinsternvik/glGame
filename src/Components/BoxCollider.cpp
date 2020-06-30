@@ -8,9 +8,9 @@
 namespace glGame {
 
     BoxCollider::BoxCollider() : scale(1.0, 1.0, 1.0) {
-        addPublicVariable(&localPosition, PublicVariableType::Vec3, "localPosition");
-        addPublicVariable(&localRotation, PublicVariableType::Vec3, "localRotation");
-        addPublicVariable(&scale, PublicVariableType::Vec3, "scale");
+        addPublicVariable(&localPosition, "localPosition");
+        addPublicVariable(&localRotation, "localRotation");
+        addPublicVariable(&scale, "scale");
     }
 
     BoxCollider::~BoxCollider() {

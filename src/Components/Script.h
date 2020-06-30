@@ -25,6 +25,7 @@ namespace glGame {
 
     private:
         void cleanupScriptEngine();
+        PublicVarVariant getPublicVarVariant(void* data, const PublicVariableType& type);
 
     private:
         std::string filename;

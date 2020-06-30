@@ -152,47 +152,46 @@ namespace glGame {
 
 	void PropertiesWindow::drawComponentVariableGui(const PublicVariable* editorVariable) {
 		float speedMultiplier = 0.01f;
-		switch(editorVariable->variableType) {
-
-		case PublicVariableType::Int:
-			ImGui::DragInt(editorVariable->name.c_str(), (int*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
-			registerChangePublicVariableAction<int>((int*)editorVariable->data, &m_editor->actionManager);
+		switch(editorVariable->data.index()) {
+		case toInt(PublicVariableType::Int):
+			ImGui::DragInt(editorVariable->name.c_str(), std::get<int*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<int>(std::get<int*>(editorVariable->data), &m_editor->actionManager);
 			break;
-		case PublicVariableType::Float:
-			ImGui::DragFloat(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
-			registerChangePublicVariableAction<float>((float*)editorVariable->data, &m_editor->actionManager);
+		case toInt(PublicVariableType::Float):
+			ImGui::DragFloat(editorVariable->name.c_str(), std::get<float*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<float>(std::get<float*>(editorVariable->data), &m_editor->actionManager);
 			break;
-		case PublicVariableType::Double:
-			ImGui::InputDouble(editorVariable->name.c_str(), (double*)editorVariable->data);
-			registerChangePublicVariableAction<double>((double*)editorVariable->data, &m_editor->actionManager);
+		case toInt(PublicVariableType::Double):
+			ImGui::InputDouble(editorVariable->name.c_str(), std::get<double*>(editorVariable->data));
+			registerChangePublicVariableAction<double>(std::get<double*>(editorVariable->data), &m_editor->actionManager);
 			break;
-		case PublicVariableType::Vec2:
-			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
-			registerChangePublicVariableAction<Vector2>((Vector2*)editorVariable->data, &m_editor->actionManager);
-			break;
-		case PublicVariableType::Vec3:
-			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)editorVariable->data, editorVariable->editor_sliderSpeed * speedMultiplier);
-			registerChangePublicVariableAction<Vector3>((Vector3*)editorVariable->data, &m_editor->actionManager);
-			break;
-		case PublicVariableType::String: {
-			InputText(editorVariable->name.c_str(), *(std::string*)editorVariable->data, 64);
-			registerChangePublicVariableAction<std::string>((std::string*)editorVariable->data, &m_editor->actionManager);
+		case toInt(PublicVariableType::String): {
+			InputText(editorVariable->name.c_str(), *std::get<std::string*>(editorVariable->data), 64);
+			registerChangePublicVariableAction<std::string>(std::get<std::string*>(editorVariable->data), &m_editor->actionManager);
 			break;
 		}
-		case PublicVariableType::Color:
-			ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
+		case toInt(PublicVariableType::Vec2):
+			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)std::get<Vector2*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector2>(std::get<Vector2*>(editorVariable->data), &m_editor->actionManager);
 			break;
-		case PublicVariableType::Model: {
-			auto* model = AssetManager::Get().getAsset(*(unsigned int*)editorVariable->data, AssetType::Model);
+		case toInt(PublicVariableType::Vec3):
+			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)std::get<Vector3*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector3>(std::get<Vector3*>(editorVariable->data), &m_editor->actionManager);
+			break;
+		// case PublicVariableType::Color:
+		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
+		// 	break;
+		case toInt(PublicVariableType::Model): {
+			auto* model = AssetManager::Get().getAsset(*std::get<unsigned int*>(editorVariable->data), AssetType::Model);
 			std::string modelName = model ? model->name : "";
 			ImGui::Text(("Model: " + modelName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					assert(payload->DataSize == sizeof(unsigned int));
 					unsigned int payloadData = *(const unsigned int*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<unsigned int>((unsigned int*)editorVariable->data, *(unsigned int*)editorVariable->data);
-					*(unsigned int*)editorVariable->data = payloadData;
-					m_editor->actionManager.endChangePublicVariableAction<unsigned int>((unsigned int*)editorVariable->data, *(unsigned int*)editorVariable->data);
+					m_editor->actionManager.beginChangePublicVariableAction<unsigned int>(std::get<unsigned int*>(editorVariable->data), *std::get<unsigned int*>(editorVariable->data));
+					*std::get<unsigned int*>(editorVariable->data) = payloadData;
+					m_editor->actionManager.endChangePublicVariableAction<unsigned int>(std::get<unsigned int*>(editorVariable->data), *std::get<unsigned int*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();

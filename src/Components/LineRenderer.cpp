@@ -8,8 +8,8 @@
 namespace glGame {
 
 	LineRenderer::LineRenderer() {
-        addPublicVariable(&lineLength, PublicVariableType::Vec3, "LineLength");
-        addPublicVariable(&lineWidth, PublicVariableType::Float, "LineWidth");
+        addPublicVariable(&lineLength, "LineLength");
+        addPublicVariable(&lineWidth, "LineWidth");
 	}
 
 	void LineRenderer::init() {

@@ -1,27 +1,40 @@
 #pragma once
 #include <string>
+#include <variant>
+#include "../Math/Vector.h"
 
 namespace glGame {
+	
+	class GameObject;
+	class Component;
+	class Color;
+	class Model;
+
+	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, unsigned int*>
 
     enum class PublicVariableType {
-		Int=0, Float, Double, Char, String, GameObject, Component, Vec2, Vec3, Color,
+		Int=0, Float, Double, Char, String, Vec2, Vec3, 
+		GameObject, Component, Color,
 		Model, // Script, Texture etc
 		None
 	};
 
+	constexpr int toInt(const PublicVariableType& e) noexcept {
+		return static_cast<int>(e);
+	}
+
 	class PublicVariable {
 	public:
-		void* data;
-		PublicVariableType variableType;
-		std::string name;
-		float editor_sliderSpeed;
-
-		PublicVariable(void* data, PublicVariableType variableType, std::string name);
-		PublicVariable(void* data, PublicVariableType variableType, std::string name, float sliderSpeed);
+		PublicVariable(PublicVarVariant data, std::string name);
+		PublicVariable(PublicVarVariant data, std::string name, const float& sliderSpeed);
 
 		void setData(std::string& str);
 
 		static PublicVariableType getPublicVariableType(std::string& str);
+
+		PublicVarVariant data;
+		std::string name;
+		float editor_sliderSpeed;
 	};
 
 };

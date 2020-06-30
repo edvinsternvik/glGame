@@ -6,7 +6,7 @@
 namespace glGame {
 
     Script::Script() : filename("") {
-        addPublicVariable(&filename, PublicVariableType::String, "scriptfile");
+        addPublicVariable(&filename, "scriptfile");
     }
 
     Script::~Script() {
@@ -56,18 +56,13 @@ namespace glGame {
                 PublicVariableType globalVarType = PublicVariable::getPublicVariableType(globalVarTypeStr);
                 void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
 
+                PublicVariable publicVariable(getPublicVarVariant(globalVarAddr, globalVarType), globalVarDecl);
                 auto search = m_registeredPublicVars.find(globalVarDecl);
                 if(search != m_registeredPublicVars.end()) {
-                    PublicVariable temp(globalVarAddr, globalVarType, "t");
-                    temp.setData(search->second);
+                    publicVariable.setData(search->second);
                 }
-
-                m_scriptPublicVars.push_back(PublicScriptVariable(globalVarAddr, globalVarType, globalVarDecl));
+                addPublicVariable(publicVariable);
             }
-        }
-
-        for(auto& pVar : m_scriptPublicVars) {
-            addPublicVariable(&pVar.var, pVar.type, pVar.declaration);
         }
 
         // --
@@ -118,6 +113,23 @@ namespace glGame {
         for(int i = getPublicVariableCount() - 1; i > 0 ; --i) {
             removePublicVariable(i);
         }
+    }
+
+    PublicVarVariant Script::getPublicVarVariant(void* data, const PublicVariableType& type) {
+        switch(type) {
+		case PublicVariableType::Int: return PublicVarVariant((int*)data);
+		case PublicVariableType::Float: return PublicVarVariant((float*)data);
+		case PublicVariableType::Double: return PublicVarVariant((double*)data);
+		case PublicVariableType::Char: return PublicVarVariant((char*)data);
+		case PublicVariableType::String: return PublicVarVariant((std::string*)data);
+		case PublicVariableType::Vec2: return PublicVarVariant((Vector2*)data);
+		case PublicVariableType::Vec3: return PublicVarVariant((Vector3*)data);
+		// case PublicVariableType::GameObject:
+		// case PublicVariableType::Component:
+		// case PublicVariableType::Color:
+        // case PublicVariableType::Model: return addPublicVariable(&std::get<unsigned int>(scriptVariable.var), scriptVariable.declaration);
+		}
+        return PublicVarVariant();
     }
 
 }
