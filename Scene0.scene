@@ -13,7 +13,8 @@ Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
 Component: Script
 Attribute: scriptfile script.as
-Attribute: int pVarInt 5
+Attribute: int var1 199
+Attribute: int var2 533
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}

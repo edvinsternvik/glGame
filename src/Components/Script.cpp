@@ -3,7 +3,11 @@
 #include "AngelscriptInterface.h"
 #include "../Input.h"
 
+#include <cstring>
+
 namespace glGame {
+
+    asIScriptEngine* Script::s_asScriptEngine = nullptr;
 
     Script::Script() : filename("") {
         addPublicVariable(&filename, "scriptfile");
@@ -19,13 +23,15 @@ namespace glGame {
         if(filename == "") {
             return;
         }
-        m_asScriptEngine = asCreateScriptEngine();
-
-        AngelscriptInterface::Register(this, m_asScriptEngine);
+        if(s_asScriptEngine == nullptr) {
+            s_asScriptEngine = asCreateScriptEngine();
+            AngelscriptInterface::Register(s_asScriptEngine);
+        }
 
         CScriptBuilder scriptbuilder;
-        int r = scriptbuilder.StartNewModule(m_asScriptEngine, "ScriptModule");
+        int r = scriptbuilder.StartNewModule(s_asScriptEngine, filename.c_str());
         if(r < 0) std::cout << "ERROR when starting new module" << std::endl;
+        r = scriptbuilder.AddSectionFromMemory("ScriptObjectSection", AngelscriptInterface::scriptObjectSectionCode, std::strlen(AngelscriptInterface::scriptObjectSectionCode));
         r = scriptbuilder.AddSectionFromFile(filename.c_str());
         if(r < 0) {
             std::cout << "ERROR when adding script from file" << std::endl;
@@ -35,29 +41,36 @@ namespace glGame {
         r = scriptbuilder.BuildModule();
         if(r < 0) std::cout << "ERROR when building module" << std::endl;
 
-        asIScriptModule* asScriptModule = m_asScriptEngine->GetModule("ScriptModule");
+        asIScriptModule* asScriptModule = s_asScriptEngine->GetModule(filename.c_str());
+
+
+        asITypeInfo* classType;
+        asITypeInfo* base = asScriptModule->GetTypeInfoByName("ScriptObject");
+        for(int i = 0; i < asScriptModule->GetObjectTypeCount(); ++i) {
+            asITypeInfo* type = asScriptModule->GetObjectTypeByIndex(i);
+            if(type->GetTypeId() != base->GetTypeId() && type->GetBaseType() && type->GetBaseType()->GetTypeId() == base->GetTypeId()) {
+                classType = type;
+                break;
+            }
+        }
+
+        m_scriptObj = reinterpret_cast<asIScriptObject*>(s_asScriptEngine->CreateScriptObject(classType));
+
 
         // Showing public variables from script
-        unsigned int globalVariableCount = asScriptModule->GetGlobalVarCount();
-        for(unsigned int i = 0; i < globalVariableCount; ++i) {
-            bool isPublic = false;
-
-            std::vector<std::string> metadata = scriptbuilder.GetMetadataForVar(i);
-            for(std::string& meta : metadata) {
-                if(meta == "public") {
-                    isPublic = true;
-                    break;
-                }
-            }
+        unsigned int classVariableCount = m_scriptObj->GetPropertyCount();
+        for(unsigned int i = base->GetPropertyCount(); i < classVariableCount; ++i) {
+            bool isPrivate = false;
+            classType->GetProperty(i, nullptr, nullptr, &isPrivate);
             
-            if(isPublic) {
-                std::string globalVarDecl = asScriptModule->GetGlobalVarDeclaration(i);
-                std::string globalVarTypeStr = globalVarDecl.substr(0, globalVarDecl.find(' '));
-                PublicVariableType globalVarType = PublicVariable::getPublicVariableType(globalVarTypeStr);
-                void* globalVarAddr = asScriptModule->GetAddressOfGlobalVar(i);
+            if(!isPrivate) {
+                std::string publicVarDecl = classType->GetPropertyDeclaration(i);
+                std::string publicVarTypeStr = publicVarDecl.substr(0, publicVarDecl.find(' '));
+                PublicVariableType publicVarType = PublicVariable::getPublicVariableType(publicVarTypeStr);
+                void* publicVarAddr = m_scriptObj->GetAddressOfProperty(i);
 
-                PublicVariable publicVariable(getPublicVarVariant(globalVarAddr, globalVarType), globalVarDecl);
-                auto search = m_registeredPublicVars.find(globalVarDecl);
+                PublicVariable publicVariable(getPublicVarVariant(publicVarAddr, publicVarType), publicVarDecl);
+                auto search = m_registeredPublicVars.find(publicVarDecl);
                 if(search != m_registeredPublicVars.end()) {
                     publicVariable.setData(search->second);
                 }
@@ -66,28 +79,10 @@ namespace glGame {
         }
 
         // --
-
-        m_asScriptInitFunction = asScriptModule->GetFunctionByDecl("void init()");
-        if(m_asScriptInitFunction == 0) std::cout << "ERROR no function void init()" << std::endl;
-        m_asScriptUpdateFunction = asScriptModule->GetFunctionByDecl("void update(float)");
-        if(m_asScriptUpdateFunction == 0) std::cout << "ERROR no function void update(float)" << std::endl;
-
-        m_asScriptContext = m_asScriptEngine->CreateContext();
-        if(m_asScriptInitFunction) {
-            m_asScriptContext->Prepare(m_asScriptInitFunction);
-            r = m_asScriptContext->Execute();
-            if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
-        }
     }
 
     void Script::update(float deltatime) {
         #ifndef GL_GAME_EDITOR
-        if(m_asScriptUpdateFunction != nullptr) {
-            m_asScriptContext->Prepare(m_asScriptUpdateFunction);
-            m_asScriptContext->SetArgFloat(0, deltatime);
-            int r = m_asScriptContext->Execute();
-            if(r != asEXECUTION_FINISHED) std::cout << "Could not execute" << std::endl;
-        }
         #endif
     }
 
@@ -103,12 +98,10 @@ namespace glGame {
 
     void Script::cleanupScriptEngine() {
         if(m_asScriptContext != nullptr) m_asScriptContext->Release();
-        if(m_asScriptEngine != nullptr) m_asScriptEngine->ShutDownAndRelease();
 
         m_asScriptContext = nullptr;
-        m_asScriptEngine = nullptr;
-        m_asScriptInitFunction = nullptr;
-        m_asScriptUpdateFunction = nullptr;
+        if(m_scriptObj) m_scriptObj->Release();
+        m_scriptObj = nullptr;
         m_scriptPublicVars.clear();
         for(int i = getPublicVariableCount() - 1; i > 0 ; --i) {
             removePublicVariable(i);

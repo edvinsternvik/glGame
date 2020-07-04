@@ -5,12 +5,11 @@
 
 namespace glGame {
 
-    class Script;
-
     class AngelscriptInterface {
     public:
-        static void Register(Script* scriptComponent, asIScriptEngine* scriptEngine);
+        static void Register(asIScriptEngine* scriptEngine);
 
+        static const char scriptObjectSectionCode[];
     private:
         static const int keycodes[121];
         static const int mousekeycodes[8];

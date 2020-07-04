@@ -1,5 +1,4 @@
 #include "AngelscriptInterface.h"
-#include <iostream>
 #include "../Math/Vector.h"
 #include "../Input.h"
 #include "Script.h"
@@ -7,19 +6,14 @@
 #include "../GameObject.h"
 #include "../Keycodes.h"
 
+#include <iostream>
+
 namespace glGame {
 
-    void print(const std::string &in) { std::cout << in << std::flush; }
-    void print(const int &in) { std::cout << in << std::flush; }
-    void print(const float &in) { std::cout << in << std::flush; }
-    void print(const double &in) { std::cout << in << std::flush; }
-    void print(const Vector2 &in) { std::cout << in << std::flush; }
-    void print(const Vector3 &in) { std::cout << in << std::flush; }
-    void println(const std::string &in) { std::cout << in << std::endl; }
-    void println(const int &in) { std::cout << in << std::endl; }
-    void println(const float &in) { std::cout << in << std::endl; }
-    void println(const Vector2 &in) { std::cout << in << std::endl; }
-    void println(const Vector3 &in) { std::cout << in << std::endl; }
+    template<typename T>
+    void print(const T& in) { std::cout << in << std::flush; }
+    template<typename T>
+    void println(const T& in) { std::cout << in << std::endl; }
 
     void Vector3DefConstructor(void* memory) { new(memory) Vector3(0, 0, 0); }
     void Vector3Constructor(void* memory, float x, float y, float z) { new(memory) Vector3(x, y, z); }
@@ -37,10 +31,61 @@ namespace glGame {
         printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
     }
 
-    void AngelscriptInterface::Register(Script* scriptComponent, asIScriptEngine* scriptEngine) {
+    // The C++ proxy of the class that scripts inherit from in angelscript
+    class ScriptObject {
+    public:
+        static ScriptObject* Factory() {
+            asIScriptContext *ctx = asGetActiveContext();
+
+            asIScriptFunction* function = ctx->GetFunction(0);
+            if(function->GetObjectType() == 0 || std::string(function->GetObjectType()->GetName()) != "ScriptObject") {
+                ctx->SetException("Invalid attempt to manually instantiate ScriptObject");
+                return nullptr;
+            }
+
+            asIScriptObject* obj = reinterpret_cast<asIScriptObject*>(ctx->GetThisPointer(0));
+
+            return new ScriptObject(obj);
+        }
+
+        void addRef() {
+            m_refcount++;
+            if( !m_isDead->Get() )
+                m_obj->AddRef();
+        }
+
+        void release() {
+            if( !m_isDead->Get() )
+                m_obj->Release();
+ 
+            if( --m_refcount == 0 ) delete this; 
+        }
+
+    protected:
+        ScriptObject(asIScriptObject* obj) : m_obj(obj), m_isDead(obj->GetWeakRefFlag()), m_refcount(1) {
+            m_isDead->AddRef();
+            std::cout << "Created" << std::endl;
+        }
+        ~ScriptObject() {
+            m_isDead->Release();
+            std::cout << "Destroyed" << std::endl;
+        }
+
+    protected:
+        asIScriptObject* m_obj;
+        asILockableSharedBool* m_isDead;
+        int m_refcount;
+    };
+
+    void AngelscriptInterface::Register(asIScriptEngine* scriptEngine) {
         int r = scriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
         RegisterStdString(scriptEngine);
+
+        scriptEngine->RegisterObjectType("ScriptObject_t", 0, asOBJ_REF);
+        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_FACTORY, "ScriptObject_t @f()", asFUNCTION(ScriptObject::Factory), asCALL_CDECL);
+        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_ADDREF, "void f()", asMETHOD(ScriptObject, ScriptObject::addRef), asCALL_THISCALL);
+        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_RELEASE, "void f()", asMETHOD(ScriptObject, ScriptObject::release), asCALL_THISCALL);
 
         r = scriptEngine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asGetTypeTraits<Vector2>() | asOBJ_APP_CLASS_ALLFLOATS);
         r = scriptEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT, "void Vector2(float x, float y)", asFUNCTION(Vector2Constructor), asCALL_CDECL_OBJFIRST);
@@ -66,7 +111,7 @@ namespace glGame {
         r = scriptEngine->RegisterObjectType("Transform", sizeof(Transform), asOBJ_REF | asOBJ_NOCOUNT);
         r = scriptEngine->RegisterObjectMethod("Transform", "void move(float x, float y, float z)", asMETHODPR(Transform, Transform::move, (float, float, float), void), asCALL_THISCALL);
         r = scriptEngine->RegisterObjectMethod("Transform", "void move(Vector3)", asMETHODPR(Transform, Transform::move, (Vector3), void), asCALL_THISCALL);
-        r = scriptEngine->RegisterGlobalProperty("Transform transform", scriptComponent->getGameObject()->transform);
+        // r = scriptEngine->RegisterGlobalProperty("Transform transform", scriptComponent->getGameObject()->transform);
 
         
         r = scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTIONPR(print, (const std::string&), void), asCALL_CDECL);
@@ -110,6 +155,18 @@ namespace glGame {
 
     const int AngelscriptInterface::keycodes[121] = { KEY_UNKNOWN, KEY_SPACE, KEY_APOSTROPHE, KEY_COMMA, KEY_MINUS, KEY_PERIOD, KEY_SLASH, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_SEMICOLON, KEY_EQUAL, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z, KEY_LEFT_BRACKET, KEY_BACKSLASH, KEY_RIGHT_BRACKET, KEY_GRAVE_ACCENT, KEY_WORLD_1, KEY_WORLD_2, KEY_ESCAPE, KEY_ENTER, KEY_TAB, KEY_BACKSPACE, KEY_INSERT, KEY_DELETE, KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_PAGE_UP, KEY_PAGE_DOWN, KEY_HOME, KEY_END, KEY_CAPS_LOCK, KEY_SCROLL_LOCK, KEY_NUM_LOCK, KEY_PRINT_SCREEN, KEY_PAUSE, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20, KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_KP_0, KEY_KP_1, KEY_KP_2, KEY_KP_3, KEY_KP_4, KEY_KP_5, KEY_KP_6, KEY_KP_7, KEY_KP_8, KEY_KP_9, KEY_KP_DECIMAL, KEY_KP_DIVIDE, KEY_KP_MULTIPLY, KEY_KP_SUBTRACT, KEY_KP_ADD, KEY_KP_ENTER, KEY_KP_EQUAL, KEY_LEFT_SHIFT, KEY_LEFT_CONTROL, KEY_LEFT_ALT, KEY_LEFT_SUPER, KEY_RIGHT_SHIFT, KEY_RIGHT_CONTROL, KEY_RIGHT_ALT, KEY_RIGHT_SUPER, KEY_MENU};
     const int AngelscriptInterface::mousekeycodes[8] = { MOUSE_BUTTON_1, MOUSE_BUTTON_2, MOUSE_BUTTON_3, MOUSE_BUTTON_4, MOUSE_BUTTON_5, MOUSE_BUTTON_6, MOUSE_BUTTON_7, MOUSE_BUTTON_8};
+
+    // The class that scripts inherit from in angelscript
+    const char AngelscriptInterface::scriptObjectSectionCode[] = {
+    "shared abstract class ScriptObject {\n"
+    "   ScriptObject() {\n"
+    "       @m_obj = ScriptObject_t();\n"  
+    "   }\n"
+    "   ScriptObject_t @opImplCast() { return m_obj; }\n"
+    "   private ScriptObject_t @m_obj;\n"
+    "};\n"
+    };
+
 
 
 }

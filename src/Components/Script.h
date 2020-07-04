@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 class asIScriptEngine;
-class asIScriptFunction;
+class asIScriptObject;
 class asIScriptContext;
 
 namespace glGame {
@@ -29,13 +29,12 @@ namespace glGame {
 
     private:
         std::string filename;
-
-        asIScriptEngine* m_asScriptEngine = nullptr;
-        asIScriptFunction* m_asScriptInitFunction;
-        asIScriptFunction* m_asScriptUpdateFunction;
+        asIScriptObject* m_scriptObj = nullptr;
         asIScriptContext* m_asScriptContext = nullptr;
         std::vector<PublicScriptVariable> m_scriptPublicVars;
         std::unordered_map<std::string, std::string> m_registeredPublicVars;
+
+        static asIScriptEngine* s_asScriptEngine;
     };
 
 }
