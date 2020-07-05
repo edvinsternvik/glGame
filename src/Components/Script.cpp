@@ -2,6 +2,8 @@
 #include "../Math/Vector.h"
 #include "AngelscriptInterface.h"
 #include "../Input.h"
+#include "Transform.h"
+#include "../GameObject.h"
 
 #include <cstring>
 
@@ -55,7 +57,10 @@ namespace glGame {
         }
 
         m_scriptObj = reinterpret_cast<asIScriptObject*>(s_asScriptEngine->CreateScriptObject(classType));
+        Transform** scriptTransform = (Transform**)m_scriptObj->GetAddressOfProperty(0);
+        *scriptTransform = getGameObject()->transform;
 
+        asIScriptFunction* initFunction = classType->GetMethodByDecl("void init()");
 
         // Showing public variables from script
         unsigned int classVariableCount = m_scriptObj->GetPropertyCount();
@@ -79,6 +84,14 @@ namespace glGame {
         }
 
         // --
+
+        if(initFunction) {
+            asIScriptContext* context = s_asScriptEngine->RequestContext();
+            context->Prepare(initFunction);
+            context->SetObject(m_scriptObj);
+            context->Execute();
+            context->Release();
+        }
     }
 
     void Script::update(float deltatime) {

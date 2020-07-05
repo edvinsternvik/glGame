@@ -31,61 +31,10 @@ namespace glGame {
         printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
     }
 
-    // The C++ proxy of the class that scripts inherit from in angelscript
-    class ScriptObject {
-    public:
-        static ScriptObject* Factory() {
-            asIScriptContext *ctx = asGetActiveContext();
-
-            asIScriptFunction* function = ctx->GetFunction(0);
-            if(function->GetObjectType() == 0 || std::string(function->GetObjectType()->GetName()) != "ScriptObject") {
-                ctx->SetException("Invalid attempt to manually instantiate ScriptObject");
-                return nullptr;
-            }
-
-            asIScriptObject* obj = reinterpret_cast<asIScriptObject*>(ctx->GetThisPointer(0));
-
-            return new ScriptObject(obj);
-        }
-
-        void addRef() {
-            m_refcount++;
-            if( !m_isDead->Get() )
-                m_obj->AddRef();
-        }
-
-        void release() {
-            if( !m_isDead->Get() )
-                m_obj->Release();
- 
-            if( --m_refcount == 0 ) delete this; 
-        }
-
-    protected:
-        ScriptObject(asIScriptObject* obj) : m_obj(obj), m_isDead(obj->GetWeakRefFlag()), m_refcount(1) {
-            m_isDead->AddRef();
-            std::cout << "Created" << std::endl;
-        }
-        ~ScriptObject() {
-            m_isDead->Release();
-            std::cout << "Destroyed" << std::endl;
-        }
-
-    protected:
-        asIScriptObject* m_obj;
-        asILockableSharedBool* m_isDead;
-        int m_refcount;
-    };
-
     void AngelscriptInterface::Register(asIScriptEngine* scriptEngine) {
         int r = scriptEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
         RegisterStdString(scriptEngine);
-
-        scriptEngine->RegisterObjectType("ScriptObject_t", 0, asOBJ_REF);
-        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_FACTORY, "ScriptObject_t @f()", asFUNCTION(ScriptObject::Factory), asCALL_CDECL);
-        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_ADDREF, "void f()", asMETHOD(ScriptObject, ScriptObject::addRef), asCALL_THISCALL);
-        scriptEngine->RegisterObjectBehaviour("ScriptObject_t", asBEHAVE_RELEASE, "void f()", asMETHOD(ScriptObject, ScriptObject::release), asCALL_THISCALL);
 
         r = scriptEngine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asGetTypeTraits<Vector2>() | asOBJ_APP_CLASS_ALLFLOATS);
         r = scriptEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT, "void Vector2(float x, float y)", asFUNCTION(Vector2Constructor), asCALL_CDECL_OBJFIRST);
@@ -159,11 +108,10 @@ namespace glGame {
     // The class that scripts inherit from in angelscript
     const char AngelscriptInterface::scriptObjectSectionCode[] = {
     "shared abstract class ScriptObject {\n"
-    "   ScriptObject() {\n"
-    "       @m_obj = ScriptObject_t();\n"  
+    "   protected Transform@ getTransform() {\n"
+    "       return m_transform;\n"
     "   }\n"
-    "   ScriptObject_t @opImplCast() { return m_obj; }\n"
-    "   private ScriptObject_t @m_obj;\n"
+    "   private Transform@ m_transform;\n"
     "};\n"
     };
 
