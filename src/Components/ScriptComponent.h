@@ -1,40 +1,37 @@
 #pragma once
 #include "Component.h"
-#include "PublicScriptVariable.h"
-#include <unordered_map>
+#include "../Script/PublicScriptVariable.h"
+#include "../Script/Script.h"
 
-class asIScriptEngine;
+#include <unordered_map>
+#include <memory>
+
 class asIScriptObject;
-class asIScriptContext;
 
 namespace glGame {
-    
-    class Script : public Component {
+
+    class ScriptComponent : public Component {
     public:
-        Script();
-        ~Script();
+        ~ScriptComponent();
 
         virtual std::string getName() const { return "Script"; }
 
         virtual void init() override;
 		virtual void update(float deltatime) override;
 
-        void changeScriptfile(std::string& scriptfile) { filename = scriptfile; }
-
         void registerPublicScriptVariable(std::vector<std::string>& strings);
 
     private:
-        void cleanupScriptEngine();
         PublicVarVariant getPublicVarVariant(void* data, const PublicVariableType& type);
+        void cleanupScript();
 
     private:
-        std::string filename;
+        std::shared_ptr<Script> m_script;
         asIScriptObject* m_scriptObj = nullptr;
-        asIScriptContext* m_asScriptContext = nullptr;
+
         std::vector<PublicScriptVariable> m_scriptPublicVars;
         std::unordered_map<std::string, std::string> m_registeredPublicVars;
 
-        static asIScriptEngine* s_asScriptEngine;
     };
 
 }

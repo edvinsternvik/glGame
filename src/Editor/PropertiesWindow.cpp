@@ -5,7 +5,6 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Resources/Scene.h"
-#include "../Components/Script.h"
 #include "../Components/ComponentList.h"
 #include "../Resources/AssetManager.h"
 
@@ -135,16 +134,16 @@ namespace glGame {
 				ImGui::PopStyleVar();
 			}
 			
-			if(ImGui::BeginPopup("AddScriptPopup")) {
-				InputText("filename", s_stringBuffer, 64);
-				if(ImGui::Button("Add Script")) {
-					std::shared_ptr<Script> s = selectedObj->addComponent<Script>();
-					s->changeScriptfile(s_stringBuffer);
-					m_editor->actionManager.addCreateComponentAction(s);
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
+			// if(ImGui::BeginPopup("AddScriptPopup")) {
+			// 	InputText("filename", s_stringBuffer, 64);
+			// 	if(ImGui::Button("Add Script")) {
+			// 		std::shared_ptr<Script> s = selectedObj->addComponent<Script>();
+			// 		s->changeScriptfile(s_stringBuffer);
+			// 		m_editor->actionManager.addCreateComponentAction(s);
+			// 		ImGui::CloseCurrentPopup();
+			// 	}
+			// 	ImGui::EndPopup();
+			// }
 
 			ImGui::EndPopup();
 		}

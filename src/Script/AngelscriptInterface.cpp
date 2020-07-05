@@ -2,7 +2,7 @@
 #include "../Math/Vector.h"
 #include "../Input.h"
 #include "Script.h"
-#include "Transform.h"
+#include "../Components/Transform.h"
 #include "../GameObject.h"
 #include "../Keycodes.h"
 
@@ -60,7 +60,6 @@ namespace glGame {
         r = scriptEngine->RegisterObjectType("Transform", sizeof(Transform), asOBJ_REF | asOBJ_NOCOUNT);
         r = scriptEngine->RegisterObjectMethod("Transform", "void move(float x, float y, float z)", asMETHODPR(Transform, Transform::move, (float, float, float), void), asCALL_THISCALL);
         r = scriptEngine->RegisterObjectMethod("Transform", "void move(Vector3)", asMETHODPR(Transform, Transform::move, (Vector3), void), asCALL_THISCALL);
-        // r = scriptEngine->RegisterGlobalProperty("Transform transform", scriptComponent->getGameObject()->transform);
 
         
         r = scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTIONPR(print, (const std::string&), void), asCALL_CDECL);

@@ -151,7 +151,7 @@ namespace glGame {
 					pVar->setData(strings[strings.size() - 1]);
 				}
 				else if(activeComponent->getName() == "Script") {
-					((Script*)activeComponent)->registerPublicScriptVariable(strings);
+					((ScriptComponent*)activeComponent)->registerPublicScriptVariable(strings);
 				}
 			}
 		}

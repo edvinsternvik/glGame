@@ -2,7 +2,7 @@
 #include <variant>
 #include <string>
 #include "../Math/Vector.h"
-#include "PublicVariable.h"
+#include "../Components/PublicVariable.h"
 
 namespace glGame {
     #define ScriptPublicVarVariant std::variant<int, float, double, char, std::string, Vector2, Vector3>

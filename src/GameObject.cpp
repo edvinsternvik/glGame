@@ -53,7 +53,7 @@ namespace glGame {
 		else if(component == "Camera") return addComponent<Camera>();
 		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
 		else if(component == "LineRenderer") return addComponent<LineRenderer>();
-		else if(component == "Script") return addComponent<Script>();
+		else if(component == "Script") return addComponent<ScriptComponent>();
 		else if(component == "RigidBody") return addComponent<RigidBody>();
 		else if(component == "BoxCollider") return addComponent<BoxCollider>();
 		else {
