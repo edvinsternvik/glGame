@@ -12,8 +12,7 @@ Attribute: rotation {17.100000,24.299999,18.700001}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
 Component: Script
-Attribute: int var1 188
-Attribute: int var2 553
+Attribute: Script ./Assets/script.as
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}

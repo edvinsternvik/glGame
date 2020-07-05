@@ -10,14 +10,16 @@ namespace glGame {
 	class Component;
 	class Color;
 	class Model;
+	class Script;
 	using ModelAsset = std::shared_ptr<Model>;
+	using ScriptAsset = std::shared_ptr<Script>;
 
-	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, ModelAsset*>
+	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, ModelAsset*, ScriptAsset*>
 
     enum class PublicVariableType {
 		Int=0, Float, Double, Char, String, Vec2, Vec3, 
 		GameObject, Component, Color,
-		Model, // Script, Texture etc
+		Model, Script, // Texture etc
 		None
 	};
 

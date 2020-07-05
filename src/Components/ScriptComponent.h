@@ -12,6 +12,7 @@ namespace glGame {
 
     class ScriptComponent : public Component {
     public:
+        ScriptComponent();
         ~ScriptComponent();
 
         virtual std::string getName() const { return "Script"; }
@@ -25,8 +26,10 @@ namespace glGame {
         PublicVarVariant getPublicVarVariant(void* data, const PublicVariableType& type);
         void cleanupScript();
 
+    public:
+        ScriptAsset script;
+
     private:
-        std::shared_ptr<Script> m_script;
         asIScriptObject* m_scriptObj = nullptr;
 
         std::vector<PublicScriptVariable> m_scriptPublicVars;

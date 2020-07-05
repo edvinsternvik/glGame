@@ -194,6 +194,23 @@ namespace glGame {
 
 				ImGui::EndDragDropTarget();
 			}
+			break;
+		}
+		case toInt(PublicVariableType::Script): {
+			ScriptAsset script = *std::get<ScriptAsset*>(editorVariable->data);
+			std::string scriptName = script.get() != nullptr ? script->name : "";
+			ImGui::Text(("Script: " + scriptName).c_str());
+			if(ImGui::BeginDragDropTarget()) {
+				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Script")) {
+					std::string payloadData = *(std::string*)payload->Data;
+					m_editor->actionManager.beginChangePublicVariableAction<ScriptAsset>(std::get<ScriptAsset*>(editorVariable->data), *std::get<ScriptAsset*>(editorVariable->data));
+					*std::get<ScriptAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Script>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<ScriptAsset>(std::get<ScriptAsset*>(editorVariable->data), *std::get<ScriptAsset*>(editorVariable->data));
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+			break;
 		}
 		}
 	}
