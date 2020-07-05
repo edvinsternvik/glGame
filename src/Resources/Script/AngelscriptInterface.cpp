@@ -1,10 +1,10 @@
 #include "AngelscriptInterface.h"
-#include "../Math/Vector.h"
-#include "../Input.h"
+#include "../../Math/Vector.h"
+#include "../../Input.h"
 #include "Script.h"
-#include "../Components/Transform.h"
-#include "../GameObject.h"
-#include "../Keycodes.h"
+#include "../../Components/Transform.h"
+#include "../../GameObject.h"
+#include "../../Keycodes.h"
 
 #include <iostream>
 

@@ -1,7 +1,7 @@
 #include "Script.h"
-#include "../Math/Vector.h"
+#include "../../Math/Vector.h"
 #include "AngelscriptInterface.h"
-#include "../Input.h"
+#include "../../Input.h"
 
 #include <cstring>
 

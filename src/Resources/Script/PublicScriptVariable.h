@@ -1,8 +1,8 @@
 #pragma once
 #include <variant>
 #include <string>
-#include "../Math/Vector.h"
-#include "../Components/PublicVariable.h"
+#include "../../Math/Vector.h"
+#include "../../Components/PublicVariable.h"
 
 namespace glGame {
     #define ScriptPublicVarVariant std::variant<int, float, double, char, std::string, Vector2, Vector3>
