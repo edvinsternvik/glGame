@@ -11,21 +11,21 @@ namespace glGame {
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
 
-		static bool getKeyDown(int keycode);
-		static bool getKey(int keycode);
-		static bool getKeyUp(int keycode);
+		static bool GetKeyDown(int keycode);
+		static bool GetKey(int keycode);
+		static bool GetKeyUp(int keycode);
 
-		static bool getMouseKeyDown(int keycode);
-		static bool getMouseKey(int keycode);
-		static Vector2 getMousePosition();
-		static Vector2 getMouseDelta();
-		static float getMouseX();
-		static float getMouseY();
-		static float getMouseDeltaX();
-		static float getMouseDeltaY();
+		static bool GetMouseKeyDown(int keycode);
+		static bool GetMouseKey(int keycode);
+		static Vector2 GetMousePosition();
+		static Vector2 GetMouseDelta();
+		static float GetMouseX();
+		static float GetMouseY();
+		static float GetMouseDeltaX();
+		static float GetMouseDeltaY();
 
-		static const void handleEvent(Event* e);
-		static void update();
+		static const void HandleEvent(Event* e);
+		static void Update();
 
 	private:
 		Input() = default;

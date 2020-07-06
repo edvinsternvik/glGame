@@ -81,17 +81,17 @@ namespace glGame {
         scriptEngine->RegisterGlobalFunction("void println(const Vector3 &in)", asFUNCTIONPR(println, (const Vector3&), void), asCALL_CDECL);
 
 
-        scriptEngine->RegisterGlobalFunction("bool getKeyDown(int keycode)", asFUNCTION(Input::getKeyDown), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("bool getKeyUp(int keycode)", asFUNCTION(Input::getKeyUp), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("bool getKey(int keycode)", asFUNCTION(Input::getKey), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("Vector2 getMouseDelta()", asFUNCTION(Input::getMouseDelta), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("float getMouseDeltaX()", asFUNCTION(Input::getMouseDeltaX), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("float getMouseDeltaY()", asFUNCTION(Input::getMouseDeltaY), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("bool getMouseKey(int keycode)", asFUNCTION(Input::getMouseKey), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("bool getMouseKeyDown(int keycode)", asFUNCTION(Input::getMouseKeyDown), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("Vector2 getMousePosition()", asFUNCTION(Input::getMousePosition), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("float getMouseX()", asFUNCTION(Input::getMouseX), asCALL_CDECL);
-        scriptEngine->RegisterGlobalFunction("float getMouseY()", asFUNCTION(Input::getMouseY), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("bool GetKeyDown(int keycode)", asFUNCTION(Input::GetKeyDown), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("bool GetKeyUp(int keycode)", asFUNCTION(Input::GetKeyUp), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("bool GetKey(int keycode)", asFUNCTION(Input::GetKey), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("Vector2 GetMouseDelta()", asFUNCTION(Input::GetMouseDelta), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("float GetMouseDeltaX()", asFUNCTION(Input::GetMouseDeltaX), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("float GetMouseDeltaY()", asFUNCTION(Input::GetMouseDeltaY), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("bool GetMouseKey(int keycode)", asFUNCTION(Input::GetMouseKey), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("bool GetMouseKeyDown(int keycode)", asFUNCTION(Input::GetMouseKeyDown), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("Vector2 GetMousePosition()", asFUNCTION(Input::GetMousePosition), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("float GetMouseX()", asFUNCTION(Input::GetMouseX), asCALL_CDECL);
+        scriptEngine->RegisterGlobalFunction("float GetMouseY()", asFUNCTION(Input::GetMouseY), asCALL_CDECL);
 
         const char* dNamespace = scriptEngine->GetDefaultNamespace();
         scriptEngine->SetDefaultNamespace("KEY");

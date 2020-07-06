@@ -34,8 +34,8 @@ namespace glGame {
             m_selectedObjectGizmoObject->onUpdate(deltatime);
         }
 
-        if(Input::getKeyDown(KEY_LEFT_CONTROL) && Input::getKey(KEY_Z)) actionManager.undo();
-        if(Input::getKeyDown(KEY_LEFT_CONTROL) && Input::getKey(KEY_Y)) actionManager.redo();
+        if(Input::GetKey(KEY_LEFT_CONTROL) && Input::GetKeyDown(KEY_Z)) actionManager.undo();
+        if(Input::GetKey(KEY_LEFT_CONTROL) && Input::GetKeyDown(KEY_Y)) actionManager.redo();
     }
 
     void Editor::renderEditor() {

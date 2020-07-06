@@ -14,15 +14,7 @@ namespace glGame {
 
 	Input* Input::s_instance = new Input();
 
-	bool Input::getKeyDown(int keycode) {
-		if(keycode < 0 || keycode > KEY_LAST) {
-			return false;
-		}
-
-		return m_keys[keycode];
-	}
-
-	bool Input::getKey(int keycode) {
+	bool Input::GetKeyDown(int keycode) {
 		if(keycode < 0 || keycode > KEY_LAST) {
 			return false;
 		}
@@ -30,7 +22,15 @@ namespace glGame {
 		return m_keys[keycode] && !m_keysPrevious[keycode];
 	}
 
-	bool Input::getKeyUp(int keycode) {
+	bool Input::GetKey(int keycode) {
+		if(keycode < 0 || keycode > KEY_LAST) {
+			return false;
+		}
+
+		return m_keys[keycode];
+	}
+
+	bool Input::GetKeyUp(int keycode) {
 		if (keycode < 0 || keycode > KEY_LAST) {
 			return false;
 		}
@@ -38,45 +38,45 @@ namespace glGame {
 		return !m_keys[keycode] && m_keysPrevious[keycode];
 	}
 
-	bool Input::getMouseKeyDown(int keycode) {
-		if(keycode < 0 || keycode > MOUSE_BUTTON_LAST) {
-			return false;
-		}
-		return m_mouseKeys[keycode];
-	}
-
-	bool Input::getMouseKey(int keycode) {
+	bool Input::GetMouseKeyDown(int keycode) {
 		if(keycode < 0 || keycode > MOUSE_BUTTON_LAST) {
 			return false;
 		}
 		return m_mouseKeys[keycode] && !m_mouseKeysPrevious[keycode];
 	}
 
-	Vector2 Input::getMousePosition() {
+	bool Input::GetMouseKey(int keycode) {
+		if(keycode < 0 || keycode > MOUSE_BUTTON_LAST) {
+			return false;
+		}
+		return m_mouseKeys[keycode];
+	}
+
+	Vector2 Input::GetMousePosition() {
 		return Vector2(m_xpos, m_ypos);
 	}
 
-	Vector2 Input::getMouseDelta() {
+	Vector2 Input::GetMouseDelta() {
 		return Vector2(m_xpos - m_prevXpos, m_ypos - m_prevYpos);
 	}
 
-	float Input::getMouseX() {
+	float Input::GetMouseX() {
 		return m_xpos;
 	}
 
-	float Input::getMouseY() {
+	float Input::GetMouseY() {
 		return m_ypos;
 	}
 
-	float Input::getMouseDeltaX() {
+	float Input::GetMouseDeltaX() {
 		return m_xpos - m_prevXpos;
 	}
 
-	float Input::getMouseDeltaY() {
+	float Input::GetMouseDeltaY() {
 		return m_ypos - m_prevYpos;
 	}
 
-	const void Input::handleEvent(Event* e) {
+	const void Input::HandleEvent(Event* e) {
 		if(e->isInCategory(EventCategory::Keyboard)) {
 			KeyboardEvent* keyEvent = (KeyboardEvent*)e;
 			if(keyEvent->keycode < 0 || keyEvent->keycode > KEY_LAST) {
@@ -110,7 +110,7 @@ namespace glGame {
 		}
 	}
 
-	void Input::update() {
+	void Input::Update() {
 		std::memcpy(m_keysPrevious, m_keys, KEY_LAST);
 		std::memcpy(m_mouseKeysPrevious, m_mouseKeys, MOUSE_BUTTON_LAST);
 

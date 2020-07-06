@@ -56,7 +56,7 @@ namespace glGame {
 			m_editor->renderEditor();
 			#endif
 
-			Input::update();
+			Input::Update();
 			m_window->pollEvents();
 			m_window->swapBuffers();
 		}
@@ -64,7 +64,7 @@ namespace glGame {
 
 	void Application::onEvent(Event& e) {
 		if(e.isInCategory(EventCategory::Input)) {
-			Input::handleEvent(&e);
+			Input::HandleEvent(&e);
 		}
 
 		else if(e.isInCategory(EventCategory::Application)) {
