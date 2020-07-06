@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Events/KeyboardEvent.h"
 #include "Events/MouseEvent.h"
+#include "Window.h"
 
 #include <algorithm>
 #include <cstring>
@@ -11,10 +12,11 @@ namespace glGame {
 	double Input::m_xpos = 0.0, Input::m_ypos = 0.0, Input::m_prevXpos = 0.0, Input::m_prevYpos = 0.0;
 	bool Input::m_mouseKeys[MOUSE_BUTTON_LAST + 1] = { false };
 	bool Input::m_mouseKeysPrevious[MOUSE_BUTTON_LAST + 1] = { false };
+	Window* Input::m_window = nullptr;
 
 	Input* Input::s_instance = new Input();
 
-	bool Input::GetKeyDown(int keycode) {
+	bool Input::GetKeyDown(const int& keycode) {
 		if(keycode < 0 || keycode > KEY_LAST) {
 			return false;
 		}
@@ -22,7 +24,7 @@ namespace glGame {
 		return m_keys[keycode] && !m_keysPrevious[keycode];
 	}
 
-	bool Input::GetKey(int keycode) {
+	bool Input::GetKey(const int& keycode) {
 		if(keycode < 0 || keycode > KEY_LAST) {
 			return false;
 		}
@@ -30,7 +32,7 @@ namespace glGame {
 		return m_keys[keycode];
 	}
 
-	bool Input::GetKeyUp(int keycode) {
+	bool Input::GetKeyUp(const int& keycode) {
 		if (keycode < 0 || keycode > KEY_LAST) {
 			return false;
 		}
@@ -38,14 +40,14 @@ namespace glGame {
 		return !m_keys[keycode] && m_keysPrevious[keycode];
 	}
 
-	bool Input::GetMouseKeyDown(int keycode) {
+	bool Input::GetMouseKeyDown(const int& keycode) {
 		if(keycode < 0 || keycode > MOUSE_BUTTON_LAST) {
 			return false;
 		}
 		return m_mouseKeys[keycode] && !m_mouseKeysPrevious[keycode];
 	}
 
-	bool Input::GetMouseKey(int keycode) {
+	bool Input::GetMouseKey(const int& keycode) {
 		if(keycode < 0 || keycode > MOUSE_BUTTON_LAST) {
 			return false;
 		}
@@ -74,6 +76,10 @@ namespace glGame {
 
 	float Input::GetMouseDeltaY() {
 		return m_ypos - m_prevYpos;
+	}
+
+	void Input::SetCursorMode(const int& cursorMode) {
+		glfwSetInputMode(m_window->getWindow(), GLFW_CURSOR, cursorMode);
 	}
 
 	const void Input::HandleEvent(Event* e) {

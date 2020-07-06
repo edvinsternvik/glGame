@@ -1,6 +1,7 @@
 #pragma once
 #include <angelscript.h>
 #include <scriptbuilder/scriptbuilder.h>
+#include <scriptmath/scriptmath.h>
 #include <scriptstdstring/scriptstdstring.h>
 
 namespace glGame {
@@ -13,6 +14,7 @@ namespace glGame {
     private:
         static const int keycodes[121];
         static const int mousekeycodes[8];
+        static const int cursortypes[3];
     };
 
 }

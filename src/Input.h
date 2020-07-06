@@ -5,24 +5,27 @@
 
 namespace glGame {
 	class Event;
+	class Window;
 
 	class Input {
 	public:
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
 
-		static bool GetKeyDown(int keycode);
-		static bool GetKey(int keycode);
-		static bool GetKeyUp(int keycode);
+		static bool GetKeyDown(const int& keycode);
+		static bool GetKey(const int& keycode);
+		static bool GetKeyUp(const int& keycode);
 
-		static bool GetMouseKeyDown(int keycode);
-		static bool GetMouseKey(int keycode);
+		static bool GetMouseKeyDown(const int& keycode);
+		static bool GetMouseKey(const int& keycode);
 		static Vector2 GetMousePosition();
 		static Vector2 GetMouseDelta();
 		static float GetMouseX();
 		static float GetMouseY();
 		static float GetMouseDeltaX();
 		static float GetMouseDeltaY();
+
+		static void SetCursorMode(const int& cursorMode);
 
 		static const void HandleEvent(Event* e);
 		static void Update();
@@ -40,5 +43,8 @@ namespace glGame {
 		static double m_prevXpos, m_prevYpos;
 		static bool m_mouseKeys[MOUSE_BUTTON_LAST + 1];
 		static bool m_mouseKeysPrevious[MOUSE_BUTTON_LAST + 1];
+		
+		static Window* m_window;
+		friend class Application;
 	};
 }

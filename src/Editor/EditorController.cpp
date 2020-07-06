@@ -13,10 +13,14 @@ namespace glGame {
 
     void EditorController::update(float deltatime) {
         if(Input::GetMouseKey(MOUSE_BUTTON_LEFT)) {
+            Input::SetCursorMode(CURSOR_DISABLED);
             getGameObject()->transform->rotation.y += Input::GetMouseDeltaX() * 0.1;
         }
+        else {
+            Input::SetCursorMode(CURSOR_NORMAL);
+        }
 
-        float movementSpeed = deltatime;
+        float movementSpeed = deltatime * 5.0;
         Vector3 movement(0.0, 0.0, 0.0);
         if(Input::GetKey(KEY_W)) movement.z -= movementSpeed;
         if(Input::GetKey(KEY_S)) movement.z += movementSpeed;

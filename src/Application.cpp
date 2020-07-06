@@ -13,6 +13,7 @@ namespace glGame {
 		m_viewportAspectRatio = width / (float)height;
 		m_window = std::make_unique<Window>(title, width, height);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
+		Input::m_window = m_window.get();
 
 		m_renderer = std::make_unique<Renderer>(); // Initializes glew, has to be called before any opengl code
 
