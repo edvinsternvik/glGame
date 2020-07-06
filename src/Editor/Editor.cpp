@@ -33,6 +33,9 @@ namespace glGame {
             m_editorCameraGameObject->onUpdate(deltatime);
             m_selectedObjectGizmoObject->onUpdate(deltatime);
         }
+        else {
+            Input::SetCursorMode(CURSOR_NORMAL);
+        }
 
         if(Input::GetKey(KEY_LEFT_CONTROL) && Input::GetKeyDown(KEY_Z)) actionManager.undo();
         if(Input::GetKey(KEY_LEFT_CONTROL) && Input::GetKeyDown(KEY_Y)) actionManager.redo();
