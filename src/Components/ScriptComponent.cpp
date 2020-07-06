@@ -44,6 +44,7 @@ namespace glGame {
                 }
             }
 
+            #ifndef GL_GAME_EDITOR
             if(script->m_initMethod) {
                 asIScriptContext* context = script->s_asScriptEngine->RequestContext();
                 context->Prepare(script->m_initMethod);
@@ -51,6 +52,7 @@ namespace glGame {
                 context->Execute();
                 context->Release();
             }
+            #endif
         }
     }
 
