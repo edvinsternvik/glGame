@@ -55,6 +55,7 @@ namespace glGame {
     }
 
     void ScriptComponent::update(float deltatime) {
+        #ifndef GL_GAME_EDITOR
         if(script.get() && m_scriptObj && script->m_updateMethod) {
             asIScriptContext* context = script->s_asScriptEngine->RequestContext();
             context->Prepare(script->m_updateMethod);
@@ -63,6 +64,7 @@ namespace glGame {
             context->Execute();
             context->Release();
         }
+        #endif
     }
 
     void ScriptComponent::registerPublicScriptVariable(std::vector<std::string>& strings) {

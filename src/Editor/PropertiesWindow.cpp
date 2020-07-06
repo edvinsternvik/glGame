@@ -29,7 +29,6 @@ namespace glGame {
 	void PropertiesWindow::renderWindow() {
 		if(m_scene == nullptr) return;
 
-		static std::string s_stringBuffer = "";
 		std::shared_ptr<GameObject> selectedObj = m_scene->getSelectedGameObject();
 
 		if (!selectedObj.get()) {
@@ -116,15 +115,9 @@ namespace glGame {
 			for(const char* component : addComponentEnabled) {
 				if(ImGui::Button(component)) {
 					std::string componentStr = std::string(component);
-					s_stringBuffer = "";
-					if(componentStr == "Script") {
-						ImGui::OpenPopup("AddScriptPopup");
-					}
-					else {
-						std::shared_ptr<Component> newComponent = selectedObj->addComponent(componentStr);
-						m_editor->actionManager.addCreateComponentAction(newComponent);
-						ImGui::CloseCurrentPopup();
-					}
+					std::shared_ptr<Component> newComponent = selectedObj->addComponent(componentStr);
+					m_editor->actionManager.addCreateComponentAction(newComponent);
+					ImGui::CloseCurrentPopup();
 				}
 			}
 
@@ -133,17 +126,6 @@ namespace glGame {
 				ImGui::Button(component);
 				ImGui::PopStyleVar();
 			}
-			
-			// if(ImGui::BeginPopup("AddScriptPopup")) {
-			// 	InputText("filename", s_stringBuffer, 64);
-			// 	if(ImGui::Button("Add Script")) {
-			// 		std::shared_ptr<Script> s = selectedObj->addComponent<Script>();
-			// 		s->changeScriptfile(s_stringBuffer);
-			// 		m_editor->actionManager.addCreateComponentAction(s);
-			// 		ImGui::CloseCurrentPopup();
-			// 	}
-			// 	ImGui::EndPopup();
-			// }
 
 			ImGui::EndPopup();
 		}

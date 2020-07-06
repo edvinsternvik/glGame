@@ -4,6 +4,9 @@ Attribute: position {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
+Component: Script
+Attribute: Script ./Assets/camera.as
+Attribute: float speed 5.000000
 GameObject: Object1
 Component: Transform
 Attribute: position {0.820000,1.060000,-10.400000}
@@ -11,8 +14,6 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {17.100000,24.299999,18.700001}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
-Component: Script
-Attribute: Script ./Assets/script.as
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
