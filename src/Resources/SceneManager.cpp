@@ -180,6 +180,7 @@ namespace glGame {
 		// case PublicVariableType::Color: return "";
 		case toInt(PublicVariableType::Model): return (*std::get<ModelAsset*>(pVar.data))->name;
 		case toInt(PublicVariableType::Script): return (*std::get<ScriptAsset*>(pVar.data))->name;
+		case toInt(PublicVariableType::Texture): return (*std::get<TextureAsset*>(pVar.data))->name;
 		}
 		return "";
 	}

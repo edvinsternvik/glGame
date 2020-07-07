@@ -194,6 +194,22 @@ namespace glGame {
 			}
 			break;
 		}
+		case toInt(PublicVariableType::Texture): {
+			TextureAsset texture = *std::get<TextureAsset*>(editorVariable->data);
+			std::string scriptName = texture.get() != nullptr ? texture->name : "";
+			ImGui::Text(("Texture: " + scriptName).c_str());
+			if(ImGui::BeginDragDropTarget()) {
+				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Texture")) {
+					std::string payloadData = *(std::string*)payload->Data;
+					m_editor->actionManager.beginChangePublicVariableAction<TextureAsset>(std::get<TextureAsset*>(editorVariable->data), *std::get<TextureAsset*>(editorVariable->data));
+					*std::get<TextureAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Texture>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<TextureAsset>(std::get<TextureAsset*>(editorVariable->data), *std::get<TextureAsset*>(editorVariable->data));
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+			break;
+		}
 		}
 	}
 

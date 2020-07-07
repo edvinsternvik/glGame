@@ -3,6 +3,7 @@
 #include "../Resources/AssetManager.h"
 #include "../Resources/Model.h"
 #include "../Resources/Script/Script.h"
+#include "../Resources/Texture.h"
 #include <sstream>
 
 namespace glGame {
@@ -31,6 +32,7 @@ namespace glGame {
 		// case PublicVariableType::Color:
         case toInt(PublicVariableType::Model): *std::get<ModelAsset*>(data) = AssetManager::Get().getAsset<Model>(str); return;
         case toInt(PublicVariableType::Script): *std::get<ScriptAsset*>(data) = AssetManager::Get().getAsset<Script>(str); return;
+        case toInt(PublicVariableType::Texture): *std::get<TextureAsset*>(data) = AssetManager::Get().getAsset<Texture>(str); return;
 		}
         
     }
@@ -48,6 +50,7 @@ namespace glGame {
         else if(str == "Color") return PublicVariableType::Color;
         else if(str == "Model") return PublicVariableType::Model;
         else if(str == "Script") return PublicVariableType::Script;
+        else if(str == "Texture") return PublicVariableType::Texture;
 
         return PublicVariableType::None;
     }

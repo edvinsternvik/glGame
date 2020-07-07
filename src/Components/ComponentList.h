@@ -7,9 +7,10 @@
 #include "ScriptComponent.h"
 #include "RigidBody.h"
 #include "BoxCollider.h"
+#include "Material.h"
 
 namespace glGame {
     namespace componentList {
-        static const char* s_components[7] = { "Transform", "Camera", "Script", "MeshRenderer", "LineRenderer", "RigidBody", "BoxCollider" };
+        static const char* s_components[8] = { "Transform", "Camera", "Script", "MeshRenderer", "LineRenderer", "RigidBody", "BoxCollider", "Material" };
     }
 }
