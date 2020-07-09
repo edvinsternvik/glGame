@@ -28,11 +28,11 @@ namespace glGame {
 
 	public:
 		Physics3d physics;
+		Renderer renderer;
 
 	private:
 		bool m_running = true, m_focused = true;
 		std::unique_ptr<Window> m_window;
-		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<SceneManager> m_sceneManager;
 		std::unique_ptr<AssetManager> m_assetManager;
 		Time m_time;

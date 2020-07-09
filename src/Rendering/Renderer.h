@@ -5,19 +5,22 @@
 #include "../Resources/Model.h"
 #include <memory>
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace glGame {
 
 	class Scene;
 	class GameObject;
+	class Camera;
 
 	class Renderer {
 	public:
-		Renderer();
+		void init();
 
-		void initGLEW();
+		void submit(Model* model, const glm::mat4& modelMatrix);
+		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
 
-		void beginRender();
+		void beginRender(Camera* camera);
 		void render(Scene* scene);
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
 		void endRender();
@@ -25,6 +28,7 @@ namespace glGame {
 		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
 
 	private:
+		void initGLEW();
 		void clearScreen();
 
 	private:

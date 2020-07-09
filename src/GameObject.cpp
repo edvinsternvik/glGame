@@ -77,14 +77,6 @@ namespace glGame {
 		if(index < 1 || index > getComponentSize()) // index < 1 because it should not remove Transform
 			return;
 
-		for(int i = 0; i < rendererComponents.size(); ++i) {
-			RendererComponent* rC = rendererComponents[i];
-			if(rC == m_components[index].get()) {
-				rendererComponents.erase(rendererComponents.begin() + i);
-				break;
-			}
-		}
-
 		m_components.erase(m_components.begin() + index);
 	}
 

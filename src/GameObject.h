@@ -35,8 +35,8 @@ namespace glGame{
 		}
 
 		std::shared_ptr<Component> addComponent(std::shared_ptr<Component> component);
-
 		std::shared_ptr<Component> addComponent(std::string& component);
+
 		void addComponentToInitQueue(int index);
 		void addComponentToInitQueue(Component* component);
 		void removeComponent(int index);
@@ -49,7 +49,6 @@ namespace glGame{
 	public:
 		std::string name;
 		Transform* transform = nullptr;
-		std::vector<RendererComponent*> rendererComponents;
 
 	private:
 		void init();

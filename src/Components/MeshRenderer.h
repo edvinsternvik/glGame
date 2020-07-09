@@ -17,10 +17,6 @@ namespace glGame {
 
 	public:
 		ModelAsset model;
-
-	private:
-
-		virtual void renderComponent(Shader* shader);
 	};
 
 }

@@ -6,13 +6,6 @@
 
 namespace glGame {
 
-	void RendererComponent::init() {
-		for(auto* rc : getGameObject()->rendererComponents) {
-			if(rc == this) return;
-		}
-		getGameObject()->rendererComponents.push_back(this);
-	}
-
     void RendererComponent::updateModelMatrix() {
 		Vector3& position = getGameObject()->transform->position;
 		Vector3& scale = getGameObject()->transform->scale;

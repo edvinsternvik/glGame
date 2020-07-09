@@ -21,9 +21,6 @@ namespace glGame {
         Vector3 lineLength;
         float lineWidth = 5.0;
 
-	private:
-		virtual void renderComponent(Shader* shader);
-
     private:
         std::unique_ptr<VertexArray> m_vao;
         std::unique_ptr<VertexBuffer> m_vbo;

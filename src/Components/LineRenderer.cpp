@@ -23,17 +23,7 @@ namespace glGame {
 	}
 
 	void LineRenderer::onRender() {
-		updateModelMatrix();
-	}
-
-	void LineRenderer::renderComponent(Shader* shader) {
-        shader->setUniformMat4("u_model", &(modelMatrix[0][0]));
-
-		m_vao->bind();
-        m_vbo->updateData(&lineLength.x);
-		glLineWidth(lineWidth);
-		glDrawArrays(GL_LINES, 0, 2);
-		m_vao->unbind();
+        updateModelMatrix();
 	}
 
 }

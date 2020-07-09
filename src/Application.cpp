@@ -15,7 +15,7 @@ namespace glGame {
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
 		Input::m_window = m_window.get();
 
-		m_renderer = std::make_unique<Renderer>(); // Initializes glew, has to be called before any opengl code
+		renderer.init(); // Initializes glew, has to be called before any opengl code
 
 		m_assetManager = std::make_unique<AssetManager>();
 
@@ -23,7 +23,7 @@ namespace glGame {
 		m_sceneManager->initializeScene();
 
 		#ifdef GL_GAME_EDITOR
-		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), m_renderer->getEditorFrameTexture(), m_viewportAspectRatio);
+		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), renderer.getEditorFrameTexture(), m_viewportAspectRatio);
 		#endif
 	}
 
@@ -45,13 +45,13 @@ namespace glGame {
 			#endif
 
 
-			m_renderer->beginRender();
-			m_renderer->render(m_sceneManager->getActiveScene());
+			renderer.beginRender(m_sceneManager->getActiveScene()->activeCamera.lock().get());
+			renderer.render(m_sceneManager->getActiveScene());
 			
 			#ifdef GL_GAME_EDITOR
-			m_renderer->renderGizmos(m_editor->getGizmoObjects());
+			renderer.renderGizmos(m_editor->getGizmoObjects());
 			#endif
-			m_renderer->endRender();
+			renderer.endRender();
 
 			#ifdef GL_GAME_EDITOR
 			m_editor->renderEditor();
