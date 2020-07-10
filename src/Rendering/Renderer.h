@@ -16,6 +16,7 @@ namespace glGame {
 
 	struct ObjectRenderData {
 	public:
+		ObjectRenderData() {}
 		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
 			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
 
@@ -31,6 +32,7 @@ namespace glGame {
 
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
+		void setMaterial(Material* material);
 
 		void beginRender(Camera* camera);
 		void render(Scene* scene);
@@ -52,7 +54,7 @@ namespace glGame {
 		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		std::unique_ptr<Shader> m_shader;
-		std::vector<ObjectRenderData> m_renderData;
+		ObjectRenderData m_objectRenderData;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};

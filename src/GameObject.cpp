@@ -56,7 +56,7 @@ namespace glGame {
 		else if(component == "Script") return addComponent<ScriptComponent>();
 		else if(component == "RigidBody") return addComponent<RigidBody>();
 		else if(component == "BoxCollider") return addComponent<BoxCollider>();
-		else if(component == "Material") return addComponent<Material>();
+		else if(component == "Material") return addComponent<MaterialComponent>();
 		else {
 			std::cout << "ERROR: Could not add component: " << component << " to gameobject: " << name << ". Component " << component << " was not found" << std::endl;
 			return nullptr;

@@ -3,6 +3,7 @@
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
+#include "Material.h"
 
 #include <iostream>
 
@@ -21,13 +22,15 @@ namespace glGame {
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
-		if(model == nullptr) return;
-		m_renderData.push_back(ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), nullptr, modelMatrix));
+		m_objectRenderData = ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), m_objectRenderData.material, modelMatrix);
 	}
 
 	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix) {
-		if(vertexArray == nullptr) return;
-		m_renderData.push_back(ObjectRenderData(vertexArray, verticies, nullptr, modelMatrix));
+		m_objectRenderData = ObjectRenderData(vertexArray, verticies, m_objectRenderData.material, modelMatrix);
+	}
+
+	void Renderer::setMaterial(Material* material) {
+		m_objectRenderData.material = material;
 	}
 
 	void Renderer::beginRender(Camera* camera) {
@@ -49,13 +52,24 @@ namespace glGame {
 
 	void Renderer::render(Scene* scene) {
 		//Render scene
-		m_renderData.clear();
-		scene->onRender();
+		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
+			GameObject* gameObject = scene->getGameObject(i);
 
-		for(ObjectRenderData& objectRenderData : m_renderData) {
-			objectRenderData.vao->bind();
-			m_shader->setUniformMat4("u_model", &(objectRenderData.modelMatrix[0][0]));
-			glDrawArrays(GL_TRIANGLES, 0, objectRenderData.verticies);
+			m_objectRenderData.vao = nullptr;
+			m_objectRenderData.material = nullptr;
+			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
+				gameObject->getComponent(j)->onRender();
+			}
+
+			if(m_objectRenderData.vao) {
+				if(m_objectRenderData.material) {
+					if(m_objectRenderData.material->texture.get()) m_objectRenderData.material->texture->bind();
+				}
+
+				m_objectRenderData.vao->bind();
+				m_shader->setUniformMat4("u_model", &(m_objectRenderData.modelMatrix[0][0]));
+				glDrawArrays(GL_TRIANGLES, 0, m_objectRenderData.verticies);
+			}
 		}
 	}
 

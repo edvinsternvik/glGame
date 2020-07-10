@@ -21,6 +21,8 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Component: Material
+Attribute: Texture ./Assets/test.png
 GameObject: Object2
 Component: Transform
 Attribute: position {-2.810000,5.190000,-9.780000}

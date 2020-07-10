@@ -9,10 +9,12 @@ uniform mat4 u_model;
 
 vec3 lightPos = vec3(4.0, 4.0, 4.0);
 
+out vec2 TextureCoordinates;
 out float lightDir;
 
 void main() {
-//	lightDir = 1.0;
+	TextureCoordinates = aTex;
+
 	vec4 pos = u_model * vec4(aPos, 1.0);
 	vec3 normal = normalize(mat3(transpose(inverse(u_model))) * aNormal);
 	vec3 hello = normalize(lightPos - vec3(pos));

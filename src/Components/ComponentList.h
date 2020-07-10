@@ -7,7 +7,7 @@
 #include "ScriptComponent.h"
 #include "RigidBody.h"
 #include "BoxCollider.h"
-#include "Material.h"
+#include "MaterialComponent.h"
 
 namespace glGame {
     namespace componentList {

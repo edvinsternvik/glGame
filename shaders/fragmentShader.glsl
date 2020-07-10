@@ -1,8 +1,11 @@
 #version 330 core
 out vec4 FragColor;
 
+in vec2 TextureCoordinates;
 in float lightDir;
 
+uniform sampler2D textureSampler;
+
 void main() {
-	FragColor = vec4(1.0, 0.0, 0.0, 1.0) * max((lightDir), 0.2);
+	FragColor = texture(textureSampler, TextureCoordinates) * max((lightDir), 0.2);
 }
