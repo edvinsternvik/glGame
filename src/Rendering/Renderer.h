@@ -12,6 +12,18 @@ namespace glGame {
 	class Scene;
 	class GameObject;
 	class Camera;
+	class Material;
+
+	struct ObjectRenderData {
+	public:
+		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
+			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
+
+		VertexArray* vao;
+		unsigned int verticies;
+		Material* material;
+		glm::mat4 modelMatrix;
+	};
 
 	class Renderer {
 	public:
@@ -40,6 +52,7 @@ namespace glGame {
 		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		std::unique_ptr<Shader> m_shader;
+		std::vector<ObjectRenderData> m_renderData;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};

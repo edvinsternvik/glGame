@@ -22,17 +22,12 @@ namespace glGame {
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
 		if(model == nullptr) return;
-		model->bind();
-		m_shader->setUniformMat4("u_model", &(modelMatrix[0][0]));
-		glDrawArrays(GL_TRIANGLES, 0, model->getVerticiesCount());
+		m_renderData.push_back(ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), nullptr, modelMatrix));
 	}
 
 	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix) {
 		if(vertexArray == nullptr) return;
-
-		vertexArray->bind();
-		m_shader->setUniformMat4("u_model", &(modelMatrix[0][0]));
-		glDrawArrays(GL_TRIANGLES, 0, verticies);
+		m_renderData.push_back(ObjectRenderData(vertexArray, verticies, nullptr, modelMatrix));
 	}
 
 	void Renderer::beginRender(Camera* camera) {
@@ -54,7 +49,14 @@ namespace glGame {
 
 	void Renderer::render(Scene* scene) {
 		//Render scene
+		m_renderData.clear();
 		scene->onRender();
+
+		for(ObjectRenderData& objectRenderData : m_renderData) {
+			objectRenderData.vao->bind();
+			m_shader->setUniformMat4("u_model", &(objectRenderData.modelMatrix[0][0]));
+			glDrawArrays(GL_TRIANGLES, 0, objectRenderData.verticies);
+		}
 	}
 
 	void Renderer::renderGizmos(const std::vector<GameObject*>& gizmoObjects) {

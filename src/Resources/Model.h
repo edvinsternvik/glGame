@@ -14,6 +14,7 @@ namespace glGame {
 		virtual const char* getAssetTypeString() { return "Model"; }
         static AssetType getAssetType() { return AssetType::Model; }
 
+		VertexArray* getVertexArray() const { return m_vao.get(); }
 		void bind();
 		void unbind();
 
