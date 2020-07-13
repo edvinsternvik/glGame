@@ -7,6 +7,7 @@ Component: Camera
 Component: Script
 Attribute: Script ./Assets/camera.as
 Attribute: float speed 5.000000
+Component: Skybox
 GameObject: Object1
 Component: Transform
 Attribute: position {0.820000,1.060000,-10.400000}
@@ -22,7 +23,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Component: Material
-Attribute: Texture ./Assets/test.png
+Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Object2
 Component: Transform
 Attribute: position {-2.810000,5.190000,-9.780000}
@@ -37,6 +38,8 @@ Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
+Component: Material
+Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Ground
 Component: Transform
 Attribute: position {0.000000,-12.774000,-14.320000}
@@ -51,6 +54,8 @@ Attribute: scale {10.000000,10.000000,10.000000}
 Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
+Component: Material
+Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Object3
 Component: Transform
 Attribute: position {2.510000,5.130000,-11.320000}
@@ -65,6 +70,8 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Component: Material
+Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: New GameObject
 Component: Transform
 Attribute: position {-1.810000,-0.790000,-9.820000}
@@ -79,3 +86,5 @@ Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
+Component: Material
+Attribute: Texture ./Assets/plywood_diff_1k.jpg
