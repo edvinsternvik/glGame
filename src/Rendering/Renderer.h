@@ -13,6 +13,7 @@ namespace glGame {
 	class GameObject;
 	class Camera;
 	class Material;
+	class Cubemap;
 
 	struct ObjectRenderData {
 	public:
@@ -32,6 +33,7 @@ namespace glGame {
 
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
+		void submit(Cubemap* cubemap);
 		void setMaterial(Material* material);
 
 		void beginRender(Camera* camera);
@@ -54,7 +56,9 @@ namespace glGame {
 		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		std::unique_ptr<Shader> m_shader;
+		std::unique_ptr<Shader> m_cubemapShader;
 		ObjectRenderData m_objectRenderData;
+		Cubemap* m_cubemap = nullptr;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};

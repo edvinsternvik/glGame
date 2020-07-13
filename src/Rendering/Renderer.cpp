@@ -3,6 +3,7 @@
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
+#include "Cubemap.h"
 #include "Material.h"
 
 #include <iostream>
@@ -17,6 +18,7 @@ namespace glGame {
 		#endif
 
 		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
+		m_cubemapShader = std::make_unique<Shader>("shaders/vertexShaderCubemap.glsl", "shaders/fragmentShaderCubemap.glsl");
 
 		m_shader->useShader();
 	}
@@ -27,6 +29,10 @@ namespace glGame {
 
 	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix) {
 		m_objectRenderData = ObjectRenderData(vertexArray, verticies, m_objectRenderData.material, modelMatrix);
+	}
+
+	void Renderer::submit(Cubemap* cubemap) {
+		m_cubemap = cubemap;
 	}
 
 	void Renderer::setMaterial(Material* material) {
@@ -41,11 +47,16 @@ namespace glGame {
 		m_editorFramebuffer->bind();
 		#endif
 
-		m_shader->useShader();
 		if(camera != nullptr) {
+			m_shader->useShader();
 			m_shader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
 			m_shader->setUniformMat4("u_view", &(camera->getViewMatrix()[0][0]));
+
+			m_cubemapShader->useShader();
+			m_cubemapShader->setUniformMat4("u_projection", &(camera->getProjectionMatrix()[0][0]));
+			m_cubemapShader->setUniformMat4("u_view", &(camera->getViewMatrix()[0][0]));
 		}
+		m_shader->useShader();
 
 		clearScreen();
 	}
@@ -70,6 +81,19 @@ namespace glGame {
 				m_shader->setUniformMat4("u_model", &(m_objectRenderData.modelMatrix[0][0]));
 				glDrawArrays(GL_TRIANGLES, 0, m_objectRenderData.verticies);
 			}
+		}
+
+		if(m_cubemap) {
+			glDepthMask(GL_FALSE);
+			glDepthFunc(GL_LEQUAL);
+			
+			m_cubemapShader->useShader();
+			m_cubemap->bind();
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			m_cubemap = nullptr;
+			glDepthMask(GL_TRUE);
+			glDepthFunc(GL_LESS);
 		}
 	}
 
