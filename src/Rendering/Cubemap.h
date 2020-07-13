@@ -1,4 +1,6 @@
 #pragma once
+#include "../Resources/Texture.h"
+
 #include <memory>
 #include <string>
 #include <array>
@@ -9,7 +11,7 @@ namespace glGame {
 
     class Cubemap {
     public:
-        Cubemap(const std::array<std::string, 6>& texturePaths);
+        Cubemap(TextureAsset textureAssets[6]);
 
         void bind();
         void unbind();
@@ -18,7 +20,7 @@ namespace glGame {
     private:
 
     private:
-        unsigned int m_textureId;
+        unsigned int m_textureId = 0;
         int m_imageWidth, m_imageHeight, m_channels;
 
         static float s_cubemapVertices[];

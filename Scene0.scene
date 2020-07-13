@@ -8,6 +8,12 @@ Component: Script
 Attribute: Script ./Assets/camera.as
 Attribute: float speed 5.000000
 Component: Skybox
+Attribute: PositiveX ./Assets/skybox/px.png
+Attribute: NegativeX ./Assets/skybox/nx.png
+Attribute: PositiveY ./Assets/skybox/py.png
+Attribute: NegativeY ./Assets/skybox/ny.png
+Attribute: PositiveZ ./Assets/skybox/pz.png
+Attribute: NegativeZ ./Assets/skybox/nz.png
 GameObject: Object1
 Component: Transform
 Attribute: position {0.820000,1.060000,-10.400000}

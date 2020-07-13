@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "../Rendering/Cubemap.h"
+#include "../Resources/Texture.h"
 
 namespace glGame {
 
@@ -14,7 +15,8 @@ namespace glGame {
 		virtual void onRender() override;
 
     public:
-        Cubemap cubemap;
+        std::unique_ptr<Cubemap> cubemap;
+        TextureAsset textures[6];
     };
 
 }
