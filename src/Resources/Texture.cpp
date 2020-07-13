@@ -32,7 +32,7 @@ namespace glGame {
     }
 
     Texture::~Texture() {
-
+        glDeleteTextures(1, &m_textureId);
     }
 
     void Texture::bind() {
