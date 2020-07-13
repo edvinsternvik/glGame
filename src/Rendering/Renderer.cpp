@@ -17,8 +17,8 @@ namespace glGame {
 		m_editorFramebuffer = std::make_unique<FrameBuffer>();
 		#endif
 
-		m_shader = std::make_unique<Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
-		m_cubemapShader = std::make_unique<Shader>("shaders/vertexShaderCubemap.glsl", "shaders/fragmentShaderCubemap.glsl");
+		m_shader = std::make_unique<Shader>("Assets/shaders/simple.glsl");
+		m_cubemapShader = std::make_unique<Shader>("Assets/shaders/cubemapShader.glsl");
 
 		m_shader->useShader();
 	}

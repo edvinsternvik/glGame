@@ -1,22 +1,24 @@
 #include "Shader.h"
 #include <fstream>
 #include <sstream>
+#include <cstring>
 #include <iostream>
 
 #include <GL/glew.h>
 
 namespace glGame {
 
-	Shader::Shader(std::string vertexShaderFilepath, std::string fragmentShaderFilepath) {
-		std::string vertexShaderSource = getShaderStringFromFile(vertexShaderFilepath);
-		unsigned int vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource);
+	Shader::Shader(std::string shaderPath) {
+		std::unordered_map<int, std::string> shaderSources = getShaderSourcesFromFile(shaderPath);
 
-		std::string fragmentShaderSource = getShaderStringFromFile(fragmentShaderFilepath);
-		unsigned int fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+		std::unordered_map<int, unsigned int> shaderIds;
+		for(auto& shaderSource : shaderSources) {
+			shaderIds[shaderSource.first] = createShader(shaderSource.first, shaderSource.second);
+		}
 		
-		m_shaderProgramID = createShaderProgram(vertexShaderId, fragmentShaderId);
-		deleteShader(vertexShaderId);
-		deleteShader(fragmentShaderId);
+		m_shaderProgramID = createShaderProgram(shaderIds[GL_VERTEX_SHADER], shaderIds[GL_FRAGMENT_SHADER]);
+		
+		for(auto& shaderId : shaderIds) deleteShader(shaderId.second);
 	}
 
 	void Shader::useShader() {
@@ -33,15 +35,39 @@ namespace glGame {
 		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
 	}
 
-	std::string Shader::getShaderStringFromFile(std::string& filepath) {
+	std::unordered_map<int, std::string> Shader::getShaderSourcesFromFile(std::string& filepath) {
+		std::unordered_map<int, std::string> shaderSources;
+
 		std::fstream filestream(filepath, std::ios::in | std::ios::binary);
 		if(!filestream.is_open()) {
 			std::cout << "Could not open file " << filepath << std::endl;
-			return "";
+			return shaderSources;
 		}
 		std::stringstream buffer;
 		buffer << filestream.rdbuf();
-		return buffer.str();
+		filestream.close();
+
+		std::string file = buffer.str();
+		const char* typeToken = "#type";
+		size_t typeTokenLength = std::strlen(typeToken);
+		size_t pos = file.find(typeToken, 0);
+		while(pos != std::string::npos) {
+			size_t eol = file.find_first_of("\r\n", pos);
+			size_t begin = pos + typeTokenLength + 1;
+			std::string typeStr = file.substr(begin, eol - begin);
+			size_t nextLinePos = file.find_first_of("\r\n", eol);
+			pos = file.find(typeToken, nextLinePos);
+
+			shaderSources[getShaderTypeFromString(typeStr)] = (pos == std::string::npos) ? file.substr(nextLinePos) : file.substr(nextLinePos, pos - nextLinePos);
+		}
+
+		return shaderSources;
+	}
+
+	int Shader::getShaderTypeFromString(const std::string& typeString) {
+		if(typeString == "vertex") return GL_VERTEX_SHADER;
+		if(typeString == "fragment") return GL_FRAGMENT_SHADER;
+		else return 0;
 	}
 
 	unsigned int Shader::createShader(unsigned int shaderType, std::string& shaderSource) {
