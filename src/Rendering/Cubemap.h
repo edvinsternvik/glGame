@@ -13,6 +13,7 @@ namespace glGame {
     class Cubemap {
     public:
         Cubemap(Asset<Texture> textureAssets[6]);
+        ~Cubemap();
 
         void bind();
         void unbind();

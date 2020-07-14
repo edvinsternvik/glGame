@@ -34,6 +34,10 @@ namespace glGame {
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     }
 
+    Cubemap::~Cubemap() {
+        glDeleteTextures(1, &m_textureId);
+    }
+
     void Cubemap::bind() {
         Cubemap::getVertexArray()->bind();
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);

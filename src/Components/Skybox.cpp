@@ -17,7 +17,7 @@ namespace glGame {
             if(!textures[i].get()) return;
         }
 
-        if(!cubemap.get()) cubemap = std::make_unique<Cubemap>(textures);
+        cubemap = std::make_unique<Cubemap>(textures);
     }
 
     void Skybox::onRender() {
