@@ -1,5 +1,4 @@
 #pragma once
-#include "../Asset.h"
 #include <string>
 #include <memory>
 
@@ -10,12 +9,9 @@ class asIScriptFunction;
 
 namespace glGame {
     
-    class Script : public Asset {
+    class Script {
     public:
         Script(const char* filename);
-
-        virtual const char* getAssetTypeString() { return "Script"; }
-        static AssetType getAssetType() { return AssetType::Script; }
 
     private:
         asIScriptModule* m_asScriptModule = nullptr;
@@ -28,7 +24,5 @@ namespace glGame {
 
         friend class ScriptComponent;
     };
-
-    using ScriptAsset = std::shared_ptr<Script>;
 
 }

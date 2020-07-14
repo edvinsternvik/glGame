@@ -10,7 +10,7 @@ namespace glGame {
     public:
         AssetData() {}
         AssetData(const AssetType& assetType, const std::string& assetTypeString) : assetType(assetType), assetTypeString(assetTypeString) {}
-        std::weak_ptr<Asset> asset;
+        std::weak_ptr<assetInternal::AssetT> asset;
         AssetType assetType;
         std::string assetTypeString;
     };
@@ -20,17 +20,17 @@ namespace glGame {
         AssetManager();
 
         template<class T>
-        std::shared_ptr<T> getAsset(const std::string& assetName) {
+        Asset<T> getAsset(const std::string& assetName) {
             auto search = m_assets.find(assetName);
-            if(search == m_assets.end() || search->second.assetType != T::getAssetType()) return std::shared_ptr<T>();
+            if(search == m_assets.end() || search->second.assetType != assetInternal::getAssetType<T>()) return Asset<T>();
             if(search->second.asset.expired()) {
-                std::shared_ptr<T> newAsset = std::make_shared<T>(assetName.c_str());
-                search->second.asset = newAsset;
+                Asset<T> newAsset(assetName.c_str());
+                search->second.asset = newAsset.asset;
 
                 return newAsset;
             }
 
-            return std::dynamic_pointer_cast<T>(search->second.asset.lock());
+            return Asset<T>(search->second.asset);
         }
         void updateAssets();
         inline int assetCount() const { return m_assets.size(); }

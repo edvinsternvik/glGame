@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "../Resources/Script/PublicScriptVariable.h"
 #include "../Resources/Script/Script.h"
+#include "../Resources/Asset.h"
 
 #include <unordered_map>
 #include <memory>
@@ -27,7 +28,7 @@ namespace glGame {
         void cleanupScript();
 
     public:
-        ScriptAsset script;
+        Asset<Script> script;
 
     private:
         asIScriptObject* m_scriptObj = nullptr;

@@ -9,20 +9,20 @@
 
 namespace glGame {
 
-    Cubemap::Cubemap(TextureAsset textureAssets[6]) {
+    Cubemap::Cubemap(Asset<Texture> textureAssets[6]) {
         glGenTextures(1, &m_textureId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
 
         for(int i = 0; i < 6; ++i) {
             stbi_set_flip_vertically_on_load(false);
 
-            unsigned char* data = stbi_load(textureAssets[i]->name.c_str(), &m_imageWidth, &m_imageHeight, &m_channels, 3);
+            unsigned char* data = stbi_load(textureAssets[i].getPath().c_str(), &m_imageWidth, &m_imageHeight, &m_channels, 3);
             if(data) {
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, m_imageWidth, m_imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
                 stbi_image_free(data);
             }
             else {
-                std::cout << "Could not load image " << textureAssets[i]->name << std::endl;
+                std::cout << "Could not load image " << textureAssets[i].getPath() << std::endl;
                 stbi_image_free(data);
             }
         }

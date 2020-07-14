@@ -163,15 +163,15 @@ namespace glGame {
 		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 		// 	break;
 		case toInt(PublicVariableType::Model): {
-			ModelAsset model = *std::get<ModelAsset*>(editorVariable->data);
-			std::string modelName = model.get() != nullptr ? model->name : "";
+			Asset<Model> model = *std::get<Asset<Model>*>(editorVariable->data);
+			std::string modelName = model.get() != nullptr ? model.getPath() : "";
 			ImGui::Text(("Model: " + modelName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<ModelAsset>(std::get<ModelAsset*>(editorVariable->data), *std::get<ModelAsset*>(editorVariable->data));
-					*std::get<ModelAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Model>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<ModelAsset>(std::get<ModelAsset*>(editorVariable->data), *std::get<ModelAsset*>(editorVariable->data));
+					m_editor->actionManager.beginChangePublicVariableAction<Asset<Model>>(std::get<Asset<Model>*>(editorVariable->data), *std::get<Asset<Model>*>(editorVariable->data));
+					*std::get<Asset<Model>*>(editorVariable->data) = AssetManager::Get().getAsset<Model>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<Asset<Model>>(std::get<Asset<Model>*>(editorVariable->data), *std::get<Asset<Model>*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();
@@ -179,15 +179,15 @@ namespace glGame {
 			break;
 		}
 		case toInt(PublicVariableType::Script): {
-			ScriptAsset script = *std::get<ScriptAsset*>(editorVariable->data);
-			std::string scriptName = script.get() != nullptr ? script->name : "";
+			Asset<Script> script = *std::get<Asset<Script>*>(editorVariable->data);
+			std::string scriptName = script.get() != nullptr ? script.getPath() : "";
 			ImGui::Text(("Script: " + scriptName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Script")) {
 					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<ScriptAsset>(std::get<ScriptAsset*>(editorVariable->data), *std::get<ScriptAsset*>(editorVariable->data));
-					*std::get<ScriptAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Script>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<ScriptAsset>(std::get<ScriptAsset*>(editorVariable->data), *std::get<ScriptAsset*>(editorVariable->data));
+					m_editor->actionManager.beginChangePublicVariableAction<Asset<Script>>(std::get<Asset<Script>*>(editorVariable->data), *std::get<Asset<Script>*>(editorVariable->data));
+					*std::get<Asset<Script>*>(editorVariable->data) = AssetManager::Get().getAsset<Script>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<Asset<Script>>(std::get<Asset<Script>*>(editorVariable->data), *std::get<Asset<Script>*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();
@@ -195,15 +195,15 @@ namespace glGame {
 			break;
 		}
 		case toInt(PublicVariableType::Texture): {
-			TextureAsset texture = *std::get<TextureAsset*>(editorVariable->data);
-			std::string scriptName = texture.get() != nullptr ? texture->name : "";
+			Asset<Texture> texture = *std::get<Asset<Texture>*>(editorVariable->data);
+			std::string scriptName = texture.get() != nullptr ? texture.getPath() : "";
 			ImGui::Text(("Texture: " + scriptName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Texture")) {
 					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<TextureAsset>(std::get<TextureAsset*>(editorVariable->data), *std::get<TextureAsset*>(editorVariable->data));
-					*std::get<TextureAsset*>(editorVariable->data) = AssetManager::Get().getAsset<Texture>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<TextureAsset>(std::get<TextureAsset*>(editorVariable->data), *std::get<TextureAsset*>(editorVariable->data));
+					m_editor->actionManager.beginChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
+					*std::get<Asset<Texture>*>(editorVariable->data) = AssetManager::Get().getAsset<Texture>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();

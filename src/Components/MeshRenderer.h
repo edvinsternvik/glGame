@@ -3,6 +3,7 @@
 #include "RendererComponent.h"
 #include <glm/glm.hpp>
 #include "../Resources/Model.h"
+#include "../Resources/Asset.h"
 
 namespace glGame {
 	
@@ -16,7 +17,7 @@ namespace glGame {
 		virtual void onRender() override;
 
 	public:
-		ModelAsset model;
+		Asset<Model> model;
 	};
 
 }

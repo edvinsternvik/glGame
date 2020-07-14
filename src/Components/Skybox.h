@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "../Rendering/Cubemap.h"
 #include "../Resources/Texture.h"
+#include "../Resources/Asset.h"
 
 namespace glGame {
 
@@ -16,7 +17,7 @@ namespace glGame {
 
     public:
         std::unique_ptr<Cubemap> cubemap;
-        TextureAsset textures[6];
+        Asset<Texture> textures[6];
     };
 
 }

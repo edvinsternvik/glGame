@@ -1,5 +1,6 @@
 #pragma once
 #include "../Resources/Texture.h"
+#include "../Resources/Asset.h"
 
 #include <memory>
 #include <string>
@@ -11,7 +12,7 @@ namespace glGame {
 
     class Cubemap {
     public:
-        Cubemap(TextureAsset textureAssets[6]);
+        Cubemap(Asset<Texture> textureAssets[6]);
 
         void bind();
         void unbind();

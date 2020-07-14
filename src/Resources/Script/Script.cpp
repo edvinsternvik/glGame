@@ -9,20 +9,17 @@ namespace glGame {
 
     asIScriptEngine* Script::s_asScriptEngine = nullptr;
 
-    Script::Script(const char* filename) : Asset(filename) {
-        if(name == "") {
-            return;
-        }
+    Script::Script(const char* filename) {
         if(s_asScriptEngine == nullptr) {
             s_asScriptEngine = asCreateScriptEngine();
             AngelscriptInterface::Register(s_asScriptEngine);
         }
 
         CScriptBuilder scriptbuilder;
-        int r = scriptbuilder.StartNewModule(s_asScriptEngine, name.c_str());
+        int r = scriptbuilder.StartNewModule(s_asScriptEngine, filename);
         if(r < 0) std::cout << "ERROR when starting new module" << std::endl;
         r = scriptbuilder.AddSectionFromMemory("ScriptObjectSection", AngelscriptInterface::scriptObjectSectionCode, std::strlen(AngelscriptInterface::scriptObjectSectionCode));
-        r = scriptbuilder.AddSectionFromFile(name.c_str());
+        r = scriptbuilder.AddSectionFromFile(filename);
         if(r < 0) {
             std::cout << "ERROR when adding script from file" << std::endl;
             return;
@@ -30,7 +27,7 @@ namespace glGame {
         r = scriptbuilder.BuildModule();
         if(r < 0) std::cout << "ERROR when building module" << std::endl;
 
-        m_asScriptModule = s_asScriptEngine->GetModule(name.c_str());
+        m_asScriptModule = s_asScriptEngine->GetModule(filename);
 
 
         m_baseTypeInfo = m_asScriptModule->GetTypeInfoByName("ScriptObject");

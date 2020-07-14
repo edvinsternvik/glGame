@@ -8,7 +8,7 @@
 
 namespace glGame {
 
-    Texture::Texture(const char* filepath) : Asset(filepath) {
+    Texture::Texture(const char* filepath) {
         stbi_set_flip_vertically_on_load(true);
 
         unsigned char* data = stbi_load(filepath, &m_imageWidth, &m_imageHeight, &m_channels, 4);

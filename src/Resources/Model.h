@@ -1,5 +1,4 @@
 #pragma once
-#include "Asset.h"
 #include "../Rendering/VertexArray.h"
 #include "../Rendering/VertexBuffer.h"
 
@@ -7,12 +6,9 @@
 
 namespace glGame {
 
-	class Model : public Asset {
+	class Model {
 	public:
 		Model(const char* fileName);
-
-		virtual const char* getAssetTypeString() { return "Model"; }
-        static AssetType getAssetType() { return AssetType::Model; }
 
 		VertexArray* getVertexArray() const { return m_vao.get(); }
 		void bind();
@@ -26,7 +22,4 @@ namespace glGame {
 
 		int m_verticies;
 	};
-
-	using ModelAsset = std::shared_ptr<Model>;
-
 }

@@ -178,9 +178,9 @@ namespace glGame {
 		// case PublicVariableType::GameObject: return "";
 		// case PublicVariableType::Component: return "";
 		// case PublicVariableType::Color: return "";
-		case toInt(PublicVariableType::Model): return (*std::get<ModelAsset*>(pVar.data))->name;
-		case toInt(PublicVariableType::Script): return (*std::get<ScriptAsset*>(pVar.data))->name;
-		case toInt(PublicVariableType::Texture): return (*std::get<TextureAsset*>(pVar.data))->name;
+		case toInt(PublicVariableType::Model): return (*std::get<Asset<Model>*>(pVar.data)).getPath();
+		case toInt(PublicVariableType::Script): return (*std::get<Asset<Script>*>(pVar.data)).getPath();
+		case toInt(PublicVariableType::Texture): return (*std::get<Asset<Texture>*>(pVar.data)).getPath();
 		}
 		return "";
 	}

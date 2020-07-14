@@ -3,7 +3,7 @@
 
 namespace glGame {
 
-	Model::Model(const char* fileName) : Asset(fileName) {
+	Model::Model(const char* fileName) {
 		m_vao = std::make_unique<VertexArray>();
 		m_vao->bind();
 

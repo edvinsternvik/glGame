@@ -30,9 +30,9 @@ namespace glGame {
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
-        case toInt(PublicVariableType::Model): *std::get<ModelAsset*>(data) = AssetManager::Get().getAsset<Model>(str); return;
-        case toInt(PublicVariableType::Script): *std::get<ScriptAsset*>(data) = AssetManager::Get().getAsset<Script>(str); return;
-        case toInt(PublicVariableType::Texture): *std::get<TextureAsset*>(data) = AssetManager::Get().getAsset<Texture>(str); return;
+        case toInt(PublicVariableType::Model): *std::get<Asset<Model>*>(data) = AssetManager::Get().getAsset<Model>(str); return;
+        case toInt(PublicVariableType::Script): *std::get<Asset<Script>*>(data) = AssetManager::Get().getAsset<Script>(str); return;
+        case toInt(PublicVariableType::Texture): *std::get<Asset<Texture>*>(data) = AssetManager::Get().getAsset<Texture>(str); return;
 		}
         
     }
