@@ -1,7 +1,5 @@
 #include "AssetManager.h"
 
-#include "Model.h"
-
 #include <filesystem>
 #include <fstream>
 #include <sstream>

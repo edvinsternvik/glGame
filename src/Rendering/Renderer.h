@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include "FrameBuffer.h"
 #include "Shader.h"
-#include "../Resources/Model.h"
+#include "Model.h"
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>

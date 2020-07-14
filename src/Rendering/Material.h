@@ -1,5 +1,5 @@
 #pragma once
-#include "../Resources/Texture.h"
+#include "Texture.h"
 #include "../Resources/Asset.h"
 
 namespace glGame {

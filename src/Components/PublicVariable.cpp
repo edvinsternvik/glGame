@@ -1,9 +1,9 @@
 #include "PublicVariable.h"
 #include "../Math/Vector.h"
 #include "../Resources/AssetManager.h"
-#include "../Resources/Model.h"
-#include "../Resources/Script/Script.h"
-#include "../Resources/Texture.h"
+#include "../Rendering/Model.h"
+#include "../Script/Script.h"
+#include "../Rendering/Texture.h"
 #include <sstream>
 
 namespace glGame {

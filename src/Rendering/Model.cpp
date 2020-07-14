@@ -1,5 +1,5 @@
 #include "Model.h"
-#include "ModelLoader.h"
+#include "../Resources/ModelLoader.h"
 
 namespace glGame {
 

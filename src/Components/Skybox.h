@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
 #include "../Rendering/Cubemap.h"
-#include "../Resources/Texture.h"
 #include "../Resources/Asset.h"
 
 namespace glGame {

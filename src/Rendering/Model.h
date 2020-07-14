@@ -1,6 +1,6 @@
 #pragma once
-#include "../Rendering/VertexArray.h"
-#include "../Rendering/VertexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
 
 #include <memory>
 
