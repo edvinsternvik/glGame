@@ -4,6 +4,7 @@
 namespace glGame {
 
     MaterialComponent::MaterialComponent() {
+        addPublicVariable(&material.shader, "Shader");
         addPublicVariable(&material.texture, "Texture");
     }
 

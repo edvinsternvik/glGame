@@ -40,6 +40,8 @@ namespace glGame {
             assetData = AssetData(AssetType::Script, "Script");
         else if(extension == ".png" || extension == ".jpg" || extension == ".jpeg")
             assetData = AssetData(AssetType::Texture, "Texture");
+        else if(extension == ".glsl" || extension == ".shader")
+            assetData = AssetData(AssetType::Shader, "Shader");
         else {
             return;
         }

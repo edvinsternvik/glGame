@@ -27,16 +27,23 @@ namespace glGame {
 		glm::mat4 modelMatrix;
 	};
 
+	struct SkyboxRenderData {
+		SkyboxRenderData() : cubemap(nullptr), shader(nullptr) {}
+		SkyboxRenderData(Cubemap* cubemap, Shader* shader) : cubemap(cubemap), shader(shader) {}
+		Cubemap* cubemap;
+		Shader* shader;
+	};
+
 	class Renderer {
 	public:
 		void init();
 
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
-		void submit(Cubemap* cubemap);
+		void submit(Cubemap* cubemap, Shader* shader);
 		void setMaterial(Material* material);
 
-		void beginRender(Camera* camera);
+		void beginRender();
 		void render(Scene* scene);
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
 		void endRender();
@@ -55,10 +62,8 @@ namespace glGame {
 
 		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
-		std::unique_ptr<Shader> m_shader;
-		std::unique_ptr<Shader> m_cubemapShader;
 		ObjectRenderData m_objectRenderData;
-		Cubemap* m_cubemap = nullptr;
+		SkyboxRenderData m_skyboxRenderData;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};

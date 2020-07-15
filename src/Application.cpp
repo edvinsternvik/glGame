@@ -45,7 +45,7 @@ namespace glGame {
 			#endif
 
 
-			renderer.beginRender(m_sceneManager->getActiveScene()->activeCamera.lock().get());
+			renderer.beginRender();
 			renderer.render(m_sceneManager->getActiveScene());
 			
 			#ifdef GL_GAME_EDITOR

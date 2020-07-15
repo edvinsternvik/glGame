@@ -8,8 +8,8 @@
 
 namespace glGame {
 
-	Shader::Shader(std::string shaderPath) {
-		std::unordered_map<int, std::string> shaderSources = getShaderSourcesFromFile(shaderPath);
+	Shader::Shader(const char* filepath) {
+		std::unordered_map<int, std::string> shaderSources = getShaderSourcesFromFile(std::string(filepath));
 
 		std::unordered_map<int, unsigned int> shaderIds;
 		for(auto& shaderSource : shaderSources) {
@@ -35,7 +35,7 @@ namespace glGame {
 		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
 	}
 
-	std::unordered_map<int, std::string> Shader::getShaderSourcesFromFile(std::string& filepath) {
+	std::unordered_map<int, std::string> Shader::getShaderSourcesFromFile(const std::string& filepath) {
 		std::unordered_map<int, std::string> shaderSources;
 
 		std::fstream filestream(filepath, std::ios::in | std::ios::binary);

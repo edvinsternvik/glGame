@@ -7,6 +7,7 @@
 #include "../Resources/Scene.h"
 #include "../Components/ComponentList.h"
 #include "../Resources/AssetManager.h"
+#include "../Rendering/Shader.h"
 
 #include "Editor.h"
 
@@ -196,14 +197,30 @@ namespace glGame {
 		}
 		case toInt(PublicVariableType::Texture): {
 			Asset<Texture> texture = *std::get<Asset<Texture>*>(editorVariable->data);
-			std::string scriptName = texture.get() != nullptr ? texture.getPath() : "";
-			ImGui::Text(("Texture: " + scriptName).c_str());
+			std::string textureName = texture.get() != nullptr ? texture.getPath() : "";
+			ImGui::Text(("Texture: " + textureName).c_str());
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Texture")) {
 					std::string payloadData = *(std::string*)payload->Data;
 					m_editor->actionManager.beginChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
 					*std::get<Asset<Texture>*>(editorVariable->data) = AssetManager::Get().getAsset<Texture>(payloadData);
 					m_editor->actionManager.endChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+			break;
+		}
+		case toInt(PublicVariableType::Shader): {
+			Asset<Shader> shader = *std::get<Asset<Shader>*>(editorVariable->data);
+			std::string shaderName = shader.get() != nullptr ? shader.getPath() : "";
+			ImGui::Text(("Shader: " + shaderName).c_str());
+			if(ImGui::BeginDragDropTarget()) {
+				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Shader")) {
+					std::string payloadData = *(std::string*)payload->Data;
+					m_editor->actionManager.beginChangePublicVariableAction<Asset<Shader>>(std::get<Asset<Shader>*>(editorVariable->data), *std::get<Asset<Shader>*>(editorVariable->data));
+					*std::get<Asset<Shader>*>(editorVariable->data) = AssetManager::Get().getAsset<Shader>(payloadData);
+					m_editor->actionManager.endChangePublicVariableAction<Asset<Shader>>(std::get<Asset<Shader>*>(editorVariable->data), *std::get<Asset<Shader>*>(editorVariable->data));
 				}
 
 				ImGui::EndDragDropTarget();

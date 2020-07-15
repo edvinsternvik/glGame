@@ -8,6 +8,7 @@ Component: Script
 Attribute: Script ./Assets/camera.as
 Attribute: float speed 5.000000
 Component: Skybox
+Attribute: Shader ./Assets/shaders/cubemapShader.glsl
 Attribute: PositiveX ./Assets/skybox/px.png
 Attribute: NegativeX ./Assets/skybox/nx.png
 Attribute: PositiveY ./Assets/skybox/py.png
@@ -29,6 +30,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Component: Material
+Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Object2
 Component: Transform
@@ -45,6 +47,7 @@ Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Component: Material
+Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Ground
 Component: Transform
@@ -61,6 +64,7 @@ Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
 Component: Material
+Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: Object3
 Component: Transform
@@ -77,6 +81,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Component: Material
+Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg
 GameObject: New GameObject
 Component: Transform
@@ -93,4 +98,5 @@ Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Component: Material
+Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg

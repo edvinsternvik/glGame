@@ -4,6 +4,7 @@
 namespace glGame {
 
     Skybox::Skybox() {
+        addPublicVariable(&shader, "Shader");
         addPublicVariable(&textures[0], "PositiveX");
         addPublicVariable(&textures[1], "NegativeX");
         addPublicVariable(&textures[2], "PositiveY");
@@ -21,7 +22,7 @@ namespace glGame {
     }
 
     void Skybox::onRender() {
-        if(cubemap.get()) Application::Get().renderer.submit(cubemap.get());
+        if(cubemap.get() && !shader.expired()) Application::Get().renderer.submit(cubemap.get(), shader.get());
     }
 
 }

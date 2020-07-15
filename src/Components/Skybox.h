@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "../Rendering/Cubemap.h"
+#include "../Rendering/Shader.h"
 #include "../Resources/Asset.h"
 
 namespace glGame {
@@ -16,6 +17,7 @@ namespace glGame {
 
     public:
         std::unique_ptr<Cubemap> cubemap;
+        Asset<Shader> shader;
         Asset<Texture> textures[6];
     };
 

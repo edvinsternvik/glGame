@@ -181,6 +181,7 @@ namespace glGame {
 		case toInt(PublicVariableType::Model): return (*std::get<Asset<Model>*>(pVar.data)).getPath();
 		case toInt(PublicVariableType::Script): return (*std::get<Asset<Script>*>(pVar.data)).getPath();
 		case toInt(PublicVariableType::Texture): return (*std::get<Asset<Texture>*>(pVar.data)).getPath();
+		case toInt(PublicVariableType::Shader): return (*std::get<Asset<Shader>*>(pVar.data)).getPath();
 		}
 		return "";
 	}

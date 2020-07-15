@@ -12,6 +12,7 @@ namespace glGame {
     class Model;
     class Texture;
     class Script;
+    class Shader;
 
     namespace assetInternal {
         class AssetT {
@@ -28,11 +29,13 @@ namespace glGame {
         template<> AssetType getAssetType<Model>();
         template<> AssetType getAssetType<Texture>();
         template<> AssetType getAssetType<Script>();
+        template<> AssetType getAssetType<Shader>();
 
         template<class T> const char* getAssetTypeString();
         template<> const char* getAssetTypeString<Model>();
         template<> const char* getAssetTypeString<Texture>();
         template<> const char* getAssetTypeString<Script>();
+        template<> const char* getAssetTypeString<Shader>();
 
         template<class T>
         class Asset : public AssetT {

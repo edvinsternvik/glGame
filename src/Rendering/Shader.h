@@ -7,14 +7,14 @@ namespace glGame {
 
 	class Shader {
 	public:
-		Shader(std::string shaderPath);
+		Shader(const char* filepath);
 
 		void useShader();
 		void setUniform3f(const char* name, float v1, float v2, float v3);
 		void setUniformMat4(const char* name, const float* matrix);
 
 	private:
-		std::unordered_map<int, std::string> getShaderSourcesFromFile(std::string& filepath);
+		std::unordered_map<int, std::string> getShaderSourcesFromFile(const std::string& filepath);
 		int getShaderTypeFromString(const std::string& typeString);
 		unsigned int createShader(unsigned int shaderType, std::string& shaderSource);
 		void deleteShader(unsigned int shaderID);

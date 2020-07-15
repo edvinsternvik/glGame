@@ -11,12 +11,12 @@ namespace glGame {
 	class Component;
 	class Color;
 
-	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, Asset<Model>*, Asset<Script>*, Asset<Texture>*>
+	#define PublicVarVariant std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>
 
     enum class PublicVariableType {
 		Int=0, Float, Double, Char, String, Vec2, Vec3, 
 		GameObject, Component, Color,
-		Model, Script, Texture,
+		Model, Script, Texture, Shader,
 		None
 	};
 

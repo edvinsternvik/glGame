@@ -4,6 +4,7 @@
 #include "../Rendering/Model.h"
 #include "../Script/Script.h"
 #include "../Rendering/Texture.h"
+#include "../Rendering/Shader.h"
 #include <sstream>
 
 namespace glGame {
@@ -33,6 +34,7 @@ namespace glGame {
         case toInt(PublicVariableType::Model): *std::get<Asset<Model>*>(data) = AssetManager::Get().getAsset<Model>(str); return;
         case toInt(PublicVariableType::Script): *std::get<Asset<Script>*>(data) = AssetManager::Get().getAsset<Script>(str); return;
         case toInt(PublicVariableType::Texture): *std::get<Asset<Texture>*>(data) = AssetManager::Get().getAsset<Texture>(str); return;
+        case toInt(PublicVariableType::Shader): *std::get<Asset<Shader>*>(data) = AssetManager::Get().getAsset<Shader>(str); return;
 		}
         
     }
@@ -51,6 +53,7 @@ namespace glGame {
         else if(str == "Model") return PublicVariableType::Model;
         else if(str == "Script") return PublicVariableType::Script;
         else if(str == "Texture") return PublicVariableType::Texture;
+        else if(str == "Shader") return PublicVariableType::Shader;
 
         return PublicVariableType::None;
     }
