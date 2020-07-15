@@ -23,14 +23,12 @@ namespace glGame {
         ImGuiStyle& style = ImGui::GetStyle();
         float window_visible = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
         int number = 0, totalAssetCount = m_assetManager->assetCount();
-        float currentLineX = 0.0;
         for(auto it = m_assetManager->getAssetsBegin(); it != m_assetManager->getAssetsEnd(); ++it, ++number) {
             ImVec2 buttonSize = ImGui::CalcTextSize(it->first.c_str());
             buttonSize = ImVec2(buttonSize.x + 25, 50);
 
-            currentLineX += buttonSize.x + style.ItemSpacing.x;
-            if(currentLineX < window_visible) ImGui::SameLine();
-            else currentLineX = 0.0;
+            float nextSize = ImGui::GetItemRectMax().x + buttonSize.x + style.ItemSpacing.x;
+            if(number > 0 && nextSize < window_visible) ImGui::SameLine();
 
             ImGui::PushID(number);
             ImGui::Button(it->first.c_str(), buttonSize);
