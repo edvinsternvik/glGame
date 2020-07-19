@@ -1,6 +1,5 @@
 #pragma once
-#include "Texture.h"
-#include "../Resources/Asset.h"
+#include "../Resources/TextureAsset.h"
 
 #include <memory>
 #include <string>

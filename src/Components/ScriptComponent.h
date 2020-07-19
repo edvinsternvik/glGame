@@ -1,8 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "../Script/PublicScriptVariable.h"
-#include "../Script/Script.h"
-#include "../Resources/Asset.h"
+#include "../Resources/ScriptAsset.h"
 
 #include <unordered_map>
 #include <memory>

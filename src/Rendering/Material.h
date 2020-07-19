@@ -1,7 +1,6 @@
 #pragma once
-#include "Texture.h"
-#include "Shader.h"
-#include "../Resources/Asset.h"
+#include "../Resources/ShaderAsset.h"
+#include "../Resources/TextureAsset.h"
 
 namespace glGame {
 

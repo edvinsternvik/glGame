@@ -1,8 +1,8 @@
 #pragma once
 #include "Component.h"
 #include "../Rendering/Cubemap.h"
-#include "../Rendering/Shader.h"
-#include "../Resources/Asset.h"
+#include "../Resources/ShaderAsset.h"
+#include "../Resources/TextureAsset.h"
 
 namespace glGame {
 

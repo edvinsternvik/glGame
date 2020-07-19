@@ -2,8 +2,7 @@
 #include <memory>
 #include "RendererComponent.h"
 #include <glm/glm.hpp>
-#include "../Rendering/Model.h"
-#include "../Resources/Asset.h"
+#include "../Resources/ModelAsset.h"
 
 namespace glGame {
 	

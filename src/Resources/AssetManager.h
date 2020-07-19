@@ -22,7 +22,7 @@ namespace glGame {
         template<class T>
         Asset<T> getAsset(const std::string& assetName) {
             auto search = m_assets.find(assetName);
-            if(search == m_assets.end() || search->second.assetType != assetInternal::getAssetType<T>()) return Asset<T>();
+            if(search == m_assets.end() || search->second.assetType != assetInternal::Asset<T>::GetAssetType()) return Asset<T>();
             if(search->second.asset.expired()) {
                 Asset<T> newAsset(assetName.c_str());
                 search->second.asset = newAsset.asset;
