@@ -2,9 +2,13 @@
 
 namespace glGame {
 
+    enum TextureType {
+        sRGB, RGB
+    };
+
     class Texture {
     public:
-        Texture(const char* filepath);
+        Texture(const char* filepath, TextureType textureType);
         ~Texture();
 
         void bind();

@@ -31,6 +31,9 @@ namespace glGame {
 		if(!m_editor->getSelectedItem<GameObject>().expired()) {
 			drawGameObjectPropertiesWindow(m_editor->getSelectedItem<GameObject>().lock());
 		}
+		else if(!m_editor->getSelectedItem<assetInternal::AssetT>().expired()) {
+			drawAssetPropertiesWindow(m_editor->getSelectedItem<assetInternal::AssetT>().lock());
+		}
 	}
 
 	void PropertiesWindow::drawComponentVariableGui(const PublicVariable* editorVariable) {
@@ -231,6 +234,35 @@ namespace glGame {
 			}
 
 			ImGui::EndPopup();
+		}
+	}
+
+	void PropertiesWindow::drawAssetPropertiesWindow(std::shared_ptr<assetInternal::AssetT> selectedAsset) {
+		if (!selectedAsset.get()) {
+			return;
+		}
+
+		ImGui::Spacing();
+		ImGui::Text(selectedAsset->filepath.c_str());
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		float window_visible = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+		float titleSize = ImGui::GetItemRectMax().x;
+		float nextSize = titleSize + ImGui::CalcTextSize("Refresh").x + style.ItemSpacing.x;
+		if(nextSize < window_visible) ImGui::SameLine();
+		if(ImGui::SmallButton("Refresh##ID")) {
+		}
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		for(auto& pVar : selectedAsset->m_publicVariables) {
+			drawComponentVariableGui(&pVar);
+
+			ImGui::Spacing();
 		}
 	}
 

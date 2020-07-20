@@ -1,6 +1,5 @@
 #pragma once
 #include "../Math/Vector.h"
-#include "../Resources/Asset.h"
 #include <string>
 #include <variant>
 #include <memory>
@@ -10,6 +9,13 @@ namespace glGame {
 	class GameObject;
 	class Component;
 	class Color;
+
+	template<class T>
+	class Asset;
+	class Model;
+    class Texture;
+    class Script;
+    class Shader;
 
 	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>;
 

@@ -11,6 +11,7 @@ namespace glGame {
 	class AssetManager;
 	class GameObject;
 	class Editor;
+	namespace assetInternal { class AssetT; }
 
 	class GuiWindow {
 	public:
@@ -69,7 +70,7 @@ namespace glGame {
 
 	private:
 		void drawGameObjectPropertiesWindow(std::shared_ptr<GameObject> selectedObj);
-		// void drawAssetPropertiesWindow(std::shared_ptr<assetInternal::AssetT> asset);
+		void drawAssetPropertiesWindow(std::shared_ptr<assetInternal::AssetT> selectedAsset);
 		void drawComponentVariableGui(const PublicVariable* editorVariable);
 
 	private:

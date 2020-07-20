@@ -1,5 +1,7 @@
 #pragma once
+#include "../Components/PublicVariable.h"
 #include <string>
+#include <vector>
 
 namespace glGame {
 
@@ -8,11 +10,6 @@ namespace glGame {
         None
     };
 
-    class Model;
-    class Texture;
-    class Script;
-    class Shader;
-
     namespace assetInternal {
         class AssetT {
         public:
@@ -20,8 +17,13 @@ namespace glGame {
 
             virtual const char* getAssetTypeString() = 0;
 
+        protected:
+            void addPublicVariable(glGame::PublicVarVariant data, std::string name) { m_publicVariables.push_back(glGame::PublicVariable(data, name)); }
+		    void addPublicVariable(glGame::PublicVarVariant data, std::string name, const float& sliderSpeed) { m_publicVariables.push_back(glGame::PublicVariable(data, name, sliderSpeed)); }
+
         public:
             std::string filepath;
+            std::vector<glGame::PublicVariable> m_publicVariables;
         };
 
         template<class T>

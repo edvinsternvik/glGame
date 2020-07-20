@@ -5,6 +5,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "../Resources/AssetManager.h"
+#include "Editor.h"
 #include <iostream>
 
 namespace glGame {
@@ -31,7 +32,9 @@ namespace glGame {
             if(number > 0 && nextSize < window_visible) ImGui::SameLine();
 
             ImGui::PushID(number);
-            ImGui::Button(it->first.c_str(), buttonSize);
+            if(ImGui::Button(it->first.c_str(), buttonSize)) {
+                m_editor->selectItem(it->second.asset);
+            }
             ImGui::PopID();
 
             if(ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
