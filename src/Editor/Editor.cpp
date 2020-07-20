@@ -42,16 +42,16 @@ namespace glGame {
     }
 
     void Editor::renderEditor() {
-        if(m_scene->getSelectedGameObject().get()) {
-            m_selectedObjectGizmoObject->transform->position = m_scene->getSelectedGameObject().get()->transform->position;
-            m_selectedObjectGizmoObject->transform->rotation = m_scene->getSelectedGameObject().get()->transform->rotation;
+        if(!getSelectedItem<GameObject>().expired()) {
+            m_selectedObjectGizmoObject->transform->position = getSelectedItem<GameObject>().lock()->transform->position;
+            m_selectedObjectGizmoObject->transform->rotation = getSelectedItem<GameObject>().lock()->transform->rotation;
             m_selectedObjectGizmoObject->onRender();
         }
         m_editorGui->OnGuiRender();
     }
 
     std::vector<GameObject*> Editor::getGizmoObjects() const {
-        if(m_scene->getSelectedGameObject().get()) return {m_selectedObjectGizmoObject.get()};
+        if(!getSelectedItem<GameObject>().expired()) return {m_selectedObjectGizmoObject.get()};
         else return {};
     }
 
@@ -67,5 +67,4 @@ namespace glGame {
     void Editor::setAssetManager(AssetManager* assetManager) {
         m_assetWindow->setAssetManger(assetManager);
     }
-
 }

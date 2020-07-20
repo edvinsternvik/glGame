@@ -28,107 +28,8 @@ namespace glGame {
 	PropertiesWindow::PropertiesWindow() : m_scene(nullptr) {}
 
 	void PropertiesWindow::renderWindow() {
-		if(m_scene == nullptr) return;
-
-		std::shared_ptr<GameObject> selectedObj = m_scene->getSelectedGameObject();
-
-		if (!selectedObj.get()) {
-			return;
-		}
-
-		ImGui::Spacing();
-
-		InputText("###NAME", selectedObj->name, 64);
-		registerChangePublicVariableAction<std::string>(&selectedObj->name, &m_editor->actionManager);
-		ImGui::SameLine();
-		if(ImGui::Button("Delete")) {
-			m_scene->deleteGameObject(selectedObj.get());
-			m_editor->actionManager.addDeleteGameObjectAction(selectedObj, m_scene);
-			return;
-		}
-
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Separator();
-		ImGui::Spacing();
-		ImGui::Text("Components");
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Separator();
-		ImGui::Spacing();
-
-		int componentVariableIndex = 0;
-		for(int i = 0; i < selectedObj->getComponentSize(); ++i) {
-			const std::shared_ptr<Component> selectedComponent = selectedObj->getComponent(i);
-			ImGui::Text(selectedComponent->getName().c_str());
-			if(selectedComponent->getName() != "Transform") {
-				ImGui::SameLine();
-				ImGui::PushID(i);
-				if(ImGui::SmallButton("X##ID")) {
-					selectedObj->removeComponent(i);
-					m_editor->actionManager.addDeleteComponentAction(selectedComponent);
-					ImGui::PopID();
-					continue;
-				}
-
-				ImGui::SameLine();
-				if(ImGui::SmallButton("Refresh##ID")) {
-					selectedObj->addComponentToInitQueue(i);
-				}
-				ImGui::PopID();
-			}
-
-			ImGui::Spacing();
-
-			int editorVariableCount = selectedComponent->getPublicVariableCount();
-			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; ++editorVariableIndex) {
-				const PublicVariable* publicVariable = &selectedComponent->getPublicVariable(editorVariableIndex);
-
-				ImGui::PushID(componentVariableIndex++); 
-				drawComponentVariableGui(publicVariable);
-				ImGui::PopID();
-
-				ImGui::Spacing();
-			}
-
-			ImGui::Spacing();
-			ImGui::Separator();
-			ImGui::Spacing();
-		}
-
-		ImGui::SameLine(50);
-		if(ImGui::Button("Add Component", ImVec2(-50, 25))) {
-			ImGui::OpenPopup("AddComponentPopup");
-		}
-
-		if(ImGui::BeginPopup("AddComponentPopup")) {
-			std::vector<const char*> addComponentEnabled, addComponentDisabled;
-			for(const char* component : componentList::s_components) {
-				bool disabled = false;
-				if(component == "Transform") disabled = true;
-
-				if(disabled) addComponentDisabled.push_back(component);
-				else addComponentEnabled.push_back(component);
-			}
-
-			for(const char* component : addComponentEnabled) {
-				if(ImGui::Button(component)) {
-					std::string componentStr = std::string(component);
-					std::shared_ptr<Component> newComponent = selectedObj->addComponent(componentStr);
-					m_editor->actionManager.addCreateComponentAction(newComponent);
-					ImGui::CloseCurrentPopup();
-				}
-			}
-
-			for(const char* component : addComponentDisabled) {
-				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.25);
-				ImGui::Button(component);
-				ImGui::PopStyleVar();
-			}
-
-			ImGui::EndPopup();
+		if(!m_editor->getSelectedItem<GameObject>().expired()) {
+			drawGameObjectPropertiesWindow(m_editor->getSelectedItem<GameObject>().lock());
 		}
 	}
 
@@ -227,6 +128,109 @@ namespace glGame {
 			}
 			break;
 		}
+		}
+	}
+
+	void PropertiesWindow::drawGameObjectPropertiesWindow(std::shared_ptr<GameObject> selectedObj) {
+		if(m_scene == nullptr) return;
+
+		if (!selectedObj.get()) {
+			return;
+		}
+
+		ImGui::Spacing();
+
+		InputText("###NAME", selectedObj->name, 64);
+		registerChangePublicVariableAction<std::string>(&selectedObj->name, &m_editor->actionManager);
+		ImGui::SameLine();
+		if(ImGui::Button("Delete")) {
+			m_scene->deleteGameObject(selectedObj.get());
+			m_editor->actionManager.addDeleteGameObjectAction(selectedObj, m_scene);
+			return;
+		}
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Text("Components");
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		int componentVariableIndex = 0;
+		for(int i = 0; i < selectedObj->getComponentSize(); ++i) {
+			const std::shared_ptr<Component> selectedComponent = selectedObj->getComponent(i);
+			ImGui::Text(selectedComponent->getName().c_str());
+			if(selectedComponent->getName() != "Transform") {
+				ImGui::SameLine();
+				ImGui::PushID(i);
+				if(ImGui::SmallButton("X##ID")) {
+					selectedObj->removeComponent(i);
+					m_editor->actionManager.addDeleteComponentAction(selectedComponent);
+					ImGui::PopID();
+					continue;
+				}
+
+				ImGui::SameLine();
+				if(ImGui::SmallButton("Refresh##ID")) {
+					selectedObj->addComponentToInitQueue(i);
+				}
+				ImGui::PopID();
+			}
+
+			ImGui::Spacing();
+
+			int editorVariableCount = selectedComponent->getPublicVariableCount();
+			for(int editorVariableIndex = 0; editorVariableIndex < editorVariableCount; ++editorVariableIndex) {
+				const PublicVariable* publicVariable = &selectedComponent->getPublicVariable(editorVariableIndex);
+
+				ImGui::PushID(componentVariableIndex++); 
+				drawComponentVariableGui(publicVariable);
+				ImGui::PopID();
+
+				ImGui::Spacing();
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+
+		ImGui::SameLine(50);
+		if(ImGui::Button("Add Component", ImVec2(-50, 25))) {
+			ImGui::OpenPopup("AddComponentPopup");
+		}
+
+		if(ImGui::BeginPopup("AddComponentPopup")) {
+			std::vector<const char*> addComponentEnabled, addComponentDisabled;
+			for(const char* component : componentList::s_components) {
+				bool disabled = false;
+				if(component == "Transform") disabled = true;
+
+				if(disabled) addComponentDisabled.push_back(component);
+				else addComponentEnabled.push_back(component);
+			}
+
+			for(const char* component : addComponentEnabled) {
+				if(ImGui::Button(component)) {
+					std::string componentStr = std::string(component);
+					std::shared_ptr<Component> newComponent = selectedObj->addComponent(componentStr);
+					m_editor->actionManager.addCreateComponentAction(newComponent);
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			for(const char* component : addComponentDisabled) {
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.25);
+				ImGui::Button(component);
+				ImGui::PopStyleVar();
+			}
+
+			ImGui::EndPopup();
 		}
 	}
 

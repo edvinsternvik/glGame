@@ -50,14 +50,16 @@ namespace glGame {
 		}
 		ImGui::Separator();
 
-		GameObject* current = m_scene->getSelectedGameObject().get();
+		GameObject* current = nullptr;
+		if(!m_editor->getSelectedItem<GameObject>().expired()) current = m_editor->getSelectedItem<GameObject>().lock().get();
 		
 		int gameObjects = m_scene->getGameObjectCount();
 		for (int i = 0; i < gameObjects; ++i) {
 			bool selected = (current == m_scene->getGameObject(i));
 			ImGui::PushID(i);
 			if (ImGui::Selectable(m_scene->getGameObject(i)->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
-				m_scene->selectGameObject(i);
+				std::weak_ptr<GameObject> gameObjectWeak = m_scene->getGameObjectShared(i);
+				m_editor->selectItem(gameObjectWeak);
 			}
 			ImGui::PopID();
 		}

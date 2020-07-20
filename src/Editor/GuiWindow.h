@@ -9,6 +9,7 @@ namespace glGame {
 	class Scene;
 	class PublicVariable;
 	class AssetManager;
+	class GameObject;
 	class Editor;
 
 	class GuiWindow {
@@ -67,6 +68,8 @@ namespace glGame {
 		virtual void renderWindow() override;
 
 	private:
+		void drawGameObjectPropertiesWindow(std::shared_ptr<GameObject> selectedObj);
+		// void drawAssetPropertiesWindow(std::shared_ptr<assetInternal::AssetT> asset);
 		void drawComponentVariableGui(const PublicVariable* editorVariable);
 
 	private:

@@ -27,7 +27,6 @@ namespace glGame {
 	void Scene::deleteGameObject(GameObject* gameObject) {
 		for(int i = 0; i < m_gameObjects.size(); ++i) {
 			if(m_gameObjects[i].get() == gameObject) {
-				if(m_selectedGameObject.lock().get() == gameObject) m_selectedGameObject = std::weak_ptr<GameObject>();
 				m_gameObjects.erase(m_gameObjects.begin() + i);
 				return;
 			}
@@ -42,12 +41,12 @@ namespace glGame {
 		return m_gameObjects[index].get();
 	}
 
-	void Scene::selectGameObject(int index) {
+	std::shared_ptr<GameObject> Scene::getGameObjectShared(int index) {
 		if (index < 0 || index > m_gameObjects.size()) {
-			return;
+			return nullptr;
 		}
 
-		m_selectedGameObject = m_gameObjects[index];
+		return m_gameObjects[index];
 	}
 
 	void Scene::init() {
