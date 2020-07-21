@@ -67,6 +67,14 @@ namespace glGame {
 		// case PublicVariableType::Color:
 		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 		// 	break;
+		case toInt(PublicVariableType::PublicVariableEnum): {
+			PublicVariableEnum* pVarEnum = std::get<PublicVariableEnum*>(editorVariable->data);
+			if(ImGui::Combo(editorVariable->name.c_str(), &pVarEnum->selection, pVarEnum->options.data(), pVarEnum->options.size())) {
+				m_editor->actionManager.endChangePublicVariableAction<PublicVariableEnum>(pVarEnum, *pVarEnum);
+			}
+			if(ImGui::IsItemActivated()) m_editor->actionManager.beginChangePublicVariableAction<PublicVariableEnum>(pVarEnum, *pVarEnum);
+			break;
+		}
 		case toInt(PublicVariableType::Model): {
 			Asset<Model> model = *std::get<Asset<Model>*>(editorVariable->data);
 			std::string modelName = model.get() != nullptr ? model.getPath() : "";

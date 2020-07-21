@@ -9,6 +9,34 @@
 
 namespace glGame {
 
+    PublicVariableEnum::PublicVariableEnum() : selection(0) {
+    }
+
+    PublicVariableEnum::PublicVariableEnum(int selection, const std::vector<const char*>& options) {
+        for(int i = 0; i < options.size(); ++i) {
+            int stringlength = std::strlen(options[i]);
+            this->options.push_back(new char[stringlength + 1]);
+            std::strcpy(this->options[i], options[i]);
+            this->options[i][stringlength] = '\0';
+        }
+    }
+
+    PublicVariableEnum::PublicVariableEnum(const PublicVariableEnum& other) {
+        selection = other.selection;
+    }
+
+    PublicVariableEnum::~PublicVariableEnum() {
+        if(options.size() > 0) {
+            for(int i = 0; i < options.size(); ++i) delete options[i];
+            options.clear();
+        }
+    }
+
+    PublicVariableEnum& PublicVariableEnum::operator=(const PublicVariableEnum& other)  {
+        selection = other.selection;
+        return *this;
+    }
+
     PublicVariable::PublicVariable(PublicVarVariant data, std::string name)
     : data(data), name(name), editor_sliderSpeed(1.0f) {
 
@@ -31,6 +59,7 @@ namespace glGame {
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
+        case toInt(PublicVariableType::PublicVariableEnum): std::get<PublicVariableEnum*>(data)->selection = std::stoi(str); return;
         case toInt(PublicVariableType::Model): *std::get<Asset<Model>*>(data) = AssetManager::Get().getAsset<Model>(str); return;
         case toInt(PublicVariableType::Script): *std::get<Asset<Script>*>(data) = AssetManager::Get().getAsset<Script>(str); return;
         case toInt(PublicVariableType::Texture): *std::get<Asset<Texture>*>(data) = AssetManager::Get().getAsset<Texture>(str); return;

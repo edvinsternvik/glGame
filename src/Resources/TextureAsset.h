@@ -10,7 +10,7 @@ namespace glGame {
         template<>
         class Asset<Texture> : public AssetT {
         public:
-            Asset(const char* filepath) : AssetT(filepath) {
+            Asset(const char* filepath) : AssetT(filepath), textureType(0, { "sRGB", "RGB" }) {
                 addPublicVariable(&textureType, "TextureType");
                 asset = std::make_unique<Texture>(filepath, TextureType::sRGB);
             }
@@ -23,7 +23,7 @@ namespace glGame {
         private:
             std::unique_ptr<Texture> asset;
 
-            int textureType = TextureType::sRGB;
+            PublicVariableEnum textureType;
         };
 
     }

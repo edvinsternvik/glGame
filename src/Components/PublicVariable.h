@@ -3,6 +3,8 @@
 #include <string>
 #include <variant>
 #include <memory>
+#include <cstring>
+#include <vector>
 
 namespace glGame {
 	
@@ -17,11 +19,23 @@ namespace glGame {
     class Script;
     class Shader;
 
-	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>;
+	class PublicVariableEnum {
+	public:
+		PublicVariableEnum();
+		PublicVariableEnum(int selection, const std::vector<const char*>& options);
+		PublicVariableEnum(const PublicVariableEnum& other);
+		~PublicVariableEnum();
+		PublicVariableEnum& operator=(const PublicVariableEnum& other);
+
+		int selection = 0;
+		std::vector<char*> options;
+	};
+
+	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, PublicVariableEnum*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>;
 
     enum class PublicVariableType {
 		Int=0, Float, Double, Char, String, Vec2, Vec3, 
-		GameObject, Component, Color,
+		GameObject, Component, Color, PublicVariableEnum,
 		Model, Script, Texture, Shader,
 		None
 	};
