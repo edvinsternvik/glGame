@@ -16,6 +16,7 @@ namespace glGame {
             AssetT(const char* filepath) : filepath(filepath) {}
 
             virtual const char* getAssetTypeString() = 0;
+            virtual void reload() {}
 
         protected:
             void addPublicVariable(glGame::PublicVarVariant data, std::string name) { m_publicVariables.push_back(glGame::PublicVariable(data, name)); }
@@ -32,6 +33,7 @@ namespace glGame {
             Asset(const char* filepath) : AssetT(filepath), asset(filepath) { }
 
             virtual const char* getAssetTypeString() override { return ""; }
+            virtual void reload() override {}
             static AssetType GetAssetType() { return AssetType::None; }
 
             T* get() { return &asset; }

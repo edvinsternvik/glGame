@@ -12,10 +12,13 @@ namespace glGame {
         public:
             Asset(const char* filepath) : AssetT(filepath), textureType(0, { "sRGB", "RGB" }) {
                 addPublicVariable(&textureType, "TextureType");
-                asset = std::make_unique<Texture>(filepath, TextureType::sRGB);
+                reload();
             }
 
             virtual const char* getAssetTypeString() override { return "Texture"; }
+            virtual void reload() override {
+                asset = std::make_unique<Texture>(filepath.c_str(), (TextureType)textureType.selection);
+            }
             static AssetType GetAssetType() { return AssetType::Texture; }
 
             Texture* get() { return asset.get(); }

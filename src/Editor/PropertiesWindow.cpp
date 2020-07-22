@@ -259,6 +259,7 @@ namespace glGame {
 		float nextSize = titleSize + ImGui::CalcTextSize("Refresh").x + style.ItemSpacing.x;
 		if(nextSize < window_visible) ImGui::SameLine();
 		if(ImGui::SmallButton("Refresh##ID")) {
+			selectedAsset->reload();
 		}
 
 		ImGui::Spacing();
