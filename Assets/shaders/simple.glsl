@@ -56,4 +56,5 @@ void main() {
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
 
 	FragColor = texture(textureSampler, TextureCoordinates) * (ambient + diffuse + specular);
+	FragColor.xyz = pow(FragColor.xyz, vec3(1.0 / 2.2));
 }
