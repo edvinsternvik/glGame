@@ -14,6 +14,7 @@ namespace glGame {
 	class Camera;
 	class Material;
 	class Cubemap;
+	class Light;
 
 	struct ObjectRenderData {
 	public:
@@ -41,6 +42,7 @@ namespace glGame {
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
 		void submit(Cubemap* cubemap, Shader* shader);
+		void submit(Light* light);
 		void setMaterial(Material* material);
 
 		void beginRender();
@@ -52,6 +54,7 @@ namespace glGame {
 
 	private:
 		void initGLEW();
+		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
 
 	private:
@@ -64,6 +67,7 @@ namespace glGame {
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
+		unsigned int m_lightCount;
 		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};

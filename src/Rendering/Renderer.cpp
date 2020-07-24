@@ -5,6 +5,7 @@
 #include "../Components/Transform.h"
 #include "Cubemap.h"
 #include "Material.h"
+#include "Light.h"
 
 #include <iostream>
 
@@ -30,6 +31,10 @@ namespace glGame {
 		m_skyboxRenderData = SkyboxRenderData(cubemap, shader);
 	}
 
+	void Renderer::submit(Light* light) {
+		// Todo global uniform for lights
+	}
+
 	void Renderer::setMaterial(Material* material) {
 		m_objectRenderData.material = material;
 	}
@@ -52,6 +57,9 @@ namespace glGame {
 		const glm::mat4& viewMatrix = scene->activeCamera.lock()->getViewMatrix();
 		
 		//Render scene
+		unsigned int lightCountLastFrame = m_lightCount;
+		m_lightCount = 0;
+		std::vector<ObjectRenderData> frameRenderData;
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i);
 
@@ -61,17 +69,22 @@ namespace glGame {
 				gameObject->getComponent(j)->onRender();
 			}
 
-			if(m_objectRenderData.vao) {
-				if(m_objectRenderData.material && !m_objectRenderData.material->texture.expired() && !m_objectRenderData.material->shader.expired()) {
-					m_objectRenderData.material->shader->useShader();
-					m_objectRenderData.material->shader->setUniformMat4("u_projection", &(projectionMatrix[0][0]));
-					m_objectRenderData.material->shader->setUniformMat4("u_view", &(viewMatrix[0][0]));
+			processRenderData(frameRenderData);
+		}
 
-					m_objectRenderData.material->texture->bind();
+		
+		for(ObjectRenderData& objRenderData : frameRenderData) {
+			if(objRenderData.vao) {
+				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+					objRenderData.material->shader->useShader();
+					objRenderData.material->shader->setUniformMat4("u_projection", &(projectionMatrix[0][0]));
+					objRenderData.material->shader->setUniformMat4("u_view", &(viewMatrix[0][0]));
+
+					objRenderData.material->texture->bind();
 					
-					m_objectRenderData.vao->bind();
-					m_objectRenderData.material->shader->setUniformMat4("u_model", &(m_objectRenderData.modelMatrix[0][0]));
-					glDrawArrays(GL_TRIANGLES, 0, m_objectRenderData.verticies);
+					objRenderData.vao->bind();
+					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+					glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
 				}
 
 			}
@@ -115,6 +128,10 @@ namespace glGame {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
+	}
+
+	void Renderer::processRenderData(std::vector<ObjectRenderData>& frameRenderData) {
+		frameRenderData.push_back(m_objectRenderData);
 	}
 
 	void Renderer::clearScreen() {
