@@ -16,25 +16,6 @@ namespace glGame {
 	class Cubemap;
 	class Light;
 
-	struct ObjectRenderData {
-	public:
-		ObjectRenderData() {}
-		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
-			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
-
-		VertexArray* vao;
-		unsigned int verticies;
-		Material* material;
-		glm::mat4 modelMatrix;
-	};
-
-	struct SkyboxRenderData {
-		SkyboxRenderData() : cubemap(nullptr), shader(nullptr) {}
-		SkyboxRenderData(Cubemap* cubemap, Shader* shader) : cubemap(cubemap), shader(shader) {}
-		Cubemap* cubemap;
-		Shader* shader;
-	};
-
 	class Renderer {
 	public:
 		void init();
@@ -53,22 +34,34 @@ namespace glGame {
 		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
 
 	private:
+		struct ObjectRenderData {
+		public:
+			ObjectRenderData() {}
+			ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
+				: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
+
+			VertexArray* vao;
+			unsigned int verticies;
+			Material* material;
+			glm::mat4 modelMatrix;
+		};
+
+		struct SkyboxRenderData {
+			SkyboxRenderData() : cubemap(nullptr), shader(nullptr) {}
+			SkyboxRenderData(Cubemap* cubemap, Shader* shader) : cubemap(cubemap), shader(shader) {}
+			Cubemap* cubemap;
+			Shader* shader;
+		};
+
 		void initGLEW();
 		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
 
 	private:
-
-		float m_renderQuadVerticies[12] = {
-			-1.0, -1.0, 1.0, -1.0, 1.0, 1.0,	 1.0, 1.0, -1.0, 1.0, -1.0, -1.0  
-		};
-
-		// std::unique_ptr<Model> m_renderQuad;
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
 		unsigned int m_lightCount;
-		// std::unique_ptr<Shader> m_postProcessingShader;
 
 	};
 }
