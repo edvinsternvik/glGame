@@ -35,6 +35,10 @@ namespace glGame {
 		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
 	}
 
+	void Shader::setUniformBlockBinding(const char* name, const unsigned int& bindingPoint) {
+		glUniformBlockBinding(m_shaderProgramID, getUniformBlockIndex(name), bindingPoint);
+	}
+
 	std::unordered_map<int, std::string> Shader::getShaderSourcesFromFile(const std::string& filepath) {
 		std::unordered_map<int, std::string> shaderSources;
 
@@ -122,6 +126,18 @@ namespace glGame {
 		m_uniformLocations.insert(std::pair<const char*, int>(name, uniformLocation));
 
 		return uniformLocation;
+	}
+
+	int Shader::getUniformBlockIndex(const char* name) {
+		auto search = m_uniformBlockIndicies.find(name);
+		if(search != m_uniformBlockIndicies.end()) {
+			return search->second;
+		}
+		
+		int uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgramID, name);
+		m_uniformBlockIndicies.insert(std::pair<const char*, int>(name, uniformBlockIndex));
+
+		return uniformBlockIndex;
 	}
 
 }
