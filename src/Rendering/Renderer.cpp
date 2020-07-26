@@ -6,6 +6,7 @@
 #include "Cubemap.h"
 #include "Material.h"
 #include "Light.h"
+#include "UniformBuffer.h"
 
 #include <iostream>
 
@@ -17,6 +18,11 @@ namespace glGame {
 		#ifdef GL_GAME_EDITOR
 		m_editorFramebuffer = std::make_unique<FrameBuffer>();
 		#endif
+
+		m_cameraUniformBuffer = std::make_unique<UniformBuffer>(128);
+		m_cameraUniformBuffer->addData(64, NULL);
+		m_cameraUniformBuffer->addData(64, NULL);
+		m_cameraUniformBuffer->bindingPoint(0);
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
@@ -55,6 +61,9 @@ namespace glGame {
 
 		const glm::mat4& projectionMatrix = scene->activeCamera.lock()->getProjectionMatrix();
 		const glm::mat4& viewMatrix = scene->activeCamera.lock()->getViewMatrix();
+
+		m_cameraUniformBuffer->setData(0, (void*)&(projectionMatrix[0][0]));
+		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
 		
 		//Render scene
 		unsigned int lightCountLastFrame = m_lightCount;
@@ -77,8 +86,6 @@ namespace glGame {
 			if(objRenderData.vao) {
 				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 					objRenderData.material->shader->useShader();
-					objRenderData.material->shader->setUniformMat4("u_projection", &(projectionMatrix[0][0]));
-					objRenderData.material->shader->setUniformMat4("u_view", &(viewMatrix[0][0]));
 
 					objRenderData.material->texture->bind();
 					

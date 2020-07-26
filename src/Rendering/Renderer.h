@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>
+#include "UniformBuffer.h"
 
 namespace glGame {
 
@@ -59,6 +60,7 @@ namespace glGame {
 
 	private:
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
+		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
 		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
 		unsigned int m_lightCount;

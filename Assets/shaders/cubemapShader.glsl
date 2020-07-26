@@ -3,8 +3,10 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 
-uniform mat4 u_projection;
-uniform mat4 u_view;
+layout (std140) uniform Camera {
+	mat4 u_projection;
+	mat4 u_view;
+};
 
 out vec3 TextureCoordinates;
 

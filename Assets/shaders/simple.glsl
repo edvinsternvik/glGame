@@ -5,8 +5,11 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTex;
 layout (location = 2) in vec3 aNormal;
 
-uniform mat4 u_projection;
-uniform mat4 u_view;
+layout (std140) uniform Camera {
+	mat4 u_projection;
+	mat4 u_view;
+};
+
 uniform mat4 u_model;
 
 vec4 lightPos = vec4(0.0, 0.0, -7.0, 1.0);

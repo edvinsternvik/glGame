@@ -19,6 +19,8 @@ namespace glGame {
 		m_shaderProgramID = createShaderProgram(shaderIds[GL_VERTEX_SHADER], shaderIds[GL_FRAGMENT_SHADER]);
 		
 		for(auto& shaderId : shaderIds) deleteShader(shaderId.second);
+
+		setUniformBlockBinding("Camera", 0);
 	}
 
 	void Shader::useShader() {
