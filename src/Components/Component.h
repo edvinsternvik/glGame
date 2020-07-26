@@ -16,6 +16,7 @@ namespace glGame {
 		virtual void init() {}
 		virtual void update(float deltatime) {}
 		virtual void onRender() {}
+		virtual void onDestroy() {}
 
 		inline const int getPublicVariableCount() const {
 			return m_publicVariables.size();

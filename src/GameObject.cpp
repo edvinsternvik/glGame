@@ -18,6 +18,7 @@ namespace glGame {
 	}
 
 	GameObject::~GameObject() {
+		for(auto& c : m_components) c->onDestroy();
 	}
 
 	void GameObject::onInit() {
@@ -79,6 +80,7 @@ namespace glGame {
 		if(index < 1 || index > getComponentSize()) // index < 1 because it should not remove Transform
 			return;
 
+		m_components[index]->onDestroy();
 		m_components.erase(m_components.begin() + index);
 	}
 
