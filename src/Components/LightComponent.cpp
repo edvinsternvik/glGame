@@ -9,11 +9,17 @@ namespace glGame {
     }
 
     void LightComponent::init() {
-
+        lightId = Application::Get().renderer.addLight(light);
     }
 
     void LightComponent::onRender() {
-        Application::Get().renderer.submit(&light);
+    }
+
+    void LightComponent::onDestroy() {
+        if(lightId >= 0) {
+            Application::Get().renderer.deleteLight(lightId);
+            lightId = -1;
+        }
     }
 
 }

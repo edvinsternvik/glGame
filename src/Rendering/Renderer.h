@@ -24,7 +24,9 @@ namespace glGame {
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
 		void submit(Cubemap* cubemap, Shader* shader);
-		void submit(Light* light);
+		unsigned int addLight(const Light& light);
+		void updateLight(const unsigned int& lightId, const Light& light);
+		void deleteLight(const unsigned int& lightid);
 		void setMaterial(Material* material);
 
 		void beginRender();
@@ -61,9 +63,11 @@ namespace glGame {
 	private:
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
+		std::unique_ptr<UniformBuffer> m_lightsUniformBuffer;
 		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
-		unsigned int m_lightCount;
+		unsigned int m_lightCount = 0, m_lightIdCount = 0, m_lightCountOffset;
+		std::unordered_map<unsigned int, unsigned int> m_lightOffsets;
 
 	};
 }

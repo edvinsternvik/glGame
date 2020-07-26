@@ -12,9 +12,11 @@ namespace glGame {
 
 		virtual void init() override;
 		virtual void onRender() override;
+        virtual void onDestroy() override;
 
     public:
         Light light;
+        unsigned int lightId = -1;
     };
 
 }

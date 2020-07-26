@@ -21,6 +21,7 @@ namespace glGame {
 		for(auto& shaderId : shaderIds) deleteShader(shaderId.second);
 
 		setUniformBlockBinding("Camera", 0);
+		setUniformBlockBinding("Lights", 1);
 	}
 
 	void Shader::useShader() {

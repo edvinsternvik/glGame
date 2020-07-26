@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#define UNIFORM_LIGHT_SIZE 16
+
 namespace glGame {
 
 	void Renderer::init() {
@@ -23,6 +25,13 @@ namespace glGame {
 		m_cameraUniformBuffer->addData(64, NULL);
 		m_cameraUniformBuffer->addData(64, NULL);
 		m_cameraUniformBuffer->bindingPoint(0);
+
+		unsigned int lightCount = 32;
+		m_lightCountOffset = lightCount * UNIFORM_LIGHT_SIZE;
+		m_lightsUniformBuffer = std::make_unique<UniformBuffer>(lightCount * UNIFORM_LIGHT_SIZE + 4);
+		m_lightsUniformBuffer->addData(lightCount * UNIFORM_LIGHT_SIZE, NULL);
+		m_lightsUniformBuffer->addData(4, &m_lightCount);
+		m_lightsUniformBuffer->bindingPoint(1);
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
@@ -37,8 +46,52 @@ namespace glGame {
 		m_skyboxRenderData = SkyboxRenderData(cubemap, shader);
 	}
 
-	void Renderer::submit(Light* light) {
-		// Todo global uniform for lights
+	unsigned int Renderer::addLight(const Light& light) {
+		m_lightOffsets[m_lightIdCount] = m_lightCount * UNIFORM_LIGHT_SIZE;
+
+		m_lightsUniformBuffer->bindBuffer();
+		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCount * UNIFORM_LIGHT_SIZE, UNIFORM_LIGHT_SIZE, &light.position.x);
+		++m_lightCount;
+		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &m_lightCount);
+		m_lightsUniformBuffer->unbindBuffer();
+		return m_lightIdCount++;
+	}
+
+	void Renderer::updateLight(const unsigned int& lightId, const Light& light) {
+		auto lightOffset = m_lightOffsets.find(lightId);
+		if(lightOffset == m_lightOffsets.end()) {
+			return;
+		}
+
+		m_lightsUniformBuffer->bindBuffer();
+		glBufferSubData(GL_UNIFORM_BUFFER, lightOffset->second, UNIFORM_LIGHT_SIZE, &light.position.x);
+		m_lightsUniformBuffer->unbindBuffer();
+	}
+
+	void Renderer::deleteLight(const unsigned int& lightid) {
+		auto lightOffset = m_lightOffsets.find(lightid);
+		if(lightOffset == m_lightOffsets.end()) {
+			return;
+		}
+
+		unsigned int lastLightId = -1;
+		for(auto lightOffsetIterator : m_lightOffsets) {
+			if(lightOffsetIterator.second == (m_lightCount - 1) * UNIFORM_LIGHT_SIZE) {
+				lastLightId = lightOffsetIterator.first;
+				break;
+			}
+		}
+		if(lastLightId == -1) return;
+
+		m_lightsUniformBuffer->bindBuffer();
+		glCopyBufferSubData(GL_UNIFORM_BUFFER, GL_UNIFORM_BUFFER, m_lightOffsets[lastLightId], lightOffset->second, UNIFORM_LIGHT_SIZE);
+
+		m_lightOffsets[lastLightId] = lightOffset->second;
+
+		--m_lightCount;
+		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &m_lightCount);
+		m_lightsUniformBuffer->unbindBuffer();
+		m_lightOffsets.erase(lightid);
 	}
 
 	void Renderer::setMaterial(Material* material) {
@@ -66,8 +119,6 @@ namespace glGame {
 		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
 		
 		//Render scene
-		unsigned int lightCountLastFrame = m_lightCount;
-		m_lightCount = 0;
 		std::vector<ObjectRenderData> frameRenderData;
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i);
