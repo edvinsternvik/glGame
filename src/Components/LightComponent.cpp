@@ -1,15 +1,22 @@
 #include "LightComponent.h"
 #include "../Application.h"
+#include "Transform.h"
 
 namespace glGame {
 
-    LightComponent::LightComponent() {
-        addPublicVariable(&light.position, "Position");
+    LightComponent::LightComponent() : lightId(-1) {
         addPublicVariable(&light.intensity, "Intensity");
     }
 
     void LightComponent::init() {
-        lightId = Application::Get().renderer.addLight(light);
+        light.position = getGameObject()->transform->position;
+
+        if(lightId < 0) {
+            lightId = Application::Get().renderer.addLight(light);
+        }
+        else {
+            Application::Get().renderer.updateLight((unsigned int)lightId, light);
+        }
     }
 
     void LightComponent::onRender() {

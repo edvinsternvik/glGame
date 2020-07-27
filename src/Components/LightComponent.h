@@ -16,7 +16,7 @@ namespace glGame {
 
     public:
         Light light;
-        unsigned int lightId = -1;
+        int lightId;
     };
 
 }
