@@ -17,6 +17,9 @@ namespace glGame {
     public:
         Light light;
         int lightId;
+
+    private:
+        PublicVariableEnum lightType;
     };
 
 }

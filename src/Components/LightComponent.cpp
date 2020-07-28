@@ -4,11 +4,13 @@
 
 namespace glGame {
 
-    LightComponent::LightComponent() : lightId(-1) {
+    LightComponent::LightComponent() : lightType(0, { "Point", "Directional"}), light(LightType::Point), lightId(-1) {
+        addPublicVariable(&lightType, "LightType");
         addPublicVariable(&light.intensity, "Intensity");
     }
 
     void LightComponent::init() {
+        light.lightType = (LightType)lightType.selection;
         light.position = getGameObject()->transform->position;
 
         if(lightId < 0) {

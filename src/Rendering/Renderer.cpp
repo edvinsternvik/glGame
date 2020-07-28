@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#define UNIFORM_LIGHT_SIZE 16
+#define UNIFORM_LIGHT_SIZE 32
 
 namespace glGame {
 
@@ -50,7 +50,7 @@ namespace glGame {
 		m_lightOffsets[m_lightIdCount] = m_lightCount * UNIFORM_LIGHT_SIZE;
 
 		m_lightsUniformBuffer->bindBuffer();
-		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCount * UNIFORM_LIGHT_SIZE, UNIFORM_LIGHT_SIZE, &light);
+		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCount * UNIFORM_LIGHT_SIZE, sizeof(Light), &light);
 		++m_lightCount;
 		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &m_lightCount);
 		m_lightsUniformBuffer->unbindBuffer();
@@ -64,7 +64,7 @@ namespace glGame {
 		}
 
 		m_lightsUniformBuffer->bindBuffer();
-		glBufferSubData(GL_UNIFORM_BUFFER, lightOffset->second, UNIFORM_LIGHT_SIZE, &light);
+		glBufferSubData(GL_UNIFORM_BUFFER, lightOffset->second, sizeof(Light), &light);
 		m_lightsUniformBuffer->unbindBuffer();
 	}
 

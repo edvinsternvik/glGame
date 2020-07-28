@@ -41,8 +41,16 @@ layout (std140) uniform Camera {
 	mat4 u_view;
 };
 
+struct Light {
+	vec3 position;
+	float intensity;
+	uint lightType;
+	float padding1;
+	float padding2;
+};
+
 layout (std140) uniform Lights {
-	vec3 u_lightPositions[32];
+	Light u_lights[32];
 	uint u_lightCount;
 };
 
@@ -52,10 +60,24 @@ in vec2 TextureCoordinates;
 in vec3 Normal;
 in vec3 FragmentPosition;
 
+float calculatePointLight(uint lightId);
+float calculateDirectionalLight(uint lightId);
+
+void main() {
+	float lighting = 0.0;
+	for(uint i = uint(0); i < u_lightCount; ++i) {
+		if(u_lights[i].lightType == uint(0)) lighting += calculatePointLight(i);
+		else if(u_lights[i].lightType == uint(1)) lighting += calculateDirectionalLight(i);
+	}
+
+	FragColor = texture(textureSampler, TextureCoordinates) * lighting;
+	FragColor.xyz = pow(FragColor.xyz, vec3(1.0 / 2.2));
+}
+
 float calculatePointLight(uint lightId) {
 	float ambient = 0.2;
 	
-	vec3 lightToFragmentVector = vec3(u_view * vec4(u_lightPositions[lightId], 1.0)) - FragmentPosition;
+	vec3 lightToFragmentVector = vec3(u_view * vec4(u_lights[lightId].position, 1.0)) - FragmentPosition;
 	vec3 lightDir = normalize(lightToFragmentVector);
 	float diffuse = max(dot(lightDir, Normal), 0.0) * 4.0;
 
@@ -66,15 +88,18 @@ float calculatePointLight(uint lightId) {
 	float lightToFragmentLength = length(lightToFragmentVector);
 	float attenuation = 1.0 / (lightToFragmentLength * lightToFragmentLength);
 
-	return (ambient + diffuse + specular) * attenuation;
+	return (ambient + diffuse + specular) * attenuation * u_lights[lightId].intensity;
 }
 
-void main() {
-	float lighting = 0.0;
-	for(uint i = uint(0); i < u_lightCount; ++i) {
-		lighting += calculatePointLight(i);
-	}
+float calculateDirectionalLight(uint lightId) {
+	float ambient = 0.2;
+	
+	vec3 lightDir = normalize(vec3(u_view * vec4(u_lights[lightId].position, 0.0)));
+	float diffuse = max(dot(lightDir, Normal), 0.0);
 
-	FragColor = texture(textureSampler, TextureCoordinates) * (lighting);
-	FragColor.xyz = pow(FragColor.xyz, vec3(1.0 / 2.2));
+	vec3 viewDir = normalize(-FragmentPosition);
+	vec3 halfwayDir = normalize(lightDir + viewDir);
+	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
+
+	return (ambient + diffuse + specular) * u_lights[lightId].intensity;
 }
