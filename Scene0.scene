@@ -83,7 +83,7 @@ Attribute: mass 1.000000
 Component: Material
 Attribute: Shader ./Assets/shaders/simple.glsl
 Attribute: Texture ./Assets/plywood_diff_1k.jpg
-GameObject: New GameObject
+GameObject: Object4
 Component: Transform
 Attribute: position {-1.810000,-0.790000,-9.820000}
 Attribute: scale {1.000000,1.000000,1.000000}
@@ -106,6 +106,7 @@ Attribute: position {1.480000,0.000000,-6.440000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Light
+Attribute: LightType 0
 Attribute: Intensity 1.000000
 GameObject: Light2
 Component: Transform
@@ -113,4 +114,13 @@ Attribute: position {-7.000000,-1.500000,-14.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Light
+Attribute: LightType 0
+Attribute: Intensity 1.000000
+GameObject: Sun
+Component: Transform
+Attribute: position {10.000000,4.000000,10.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {0.000000,0.000000,0.000000}
+Component: Light
+Attribute: LightType 1
 Attribute: Intensity 1.000000

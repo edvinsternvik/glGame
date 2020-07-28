@@ -175,6 +175,7 @@ namespace glGame {
 			Vector3 vec3 = *(std::get<Vector3*>(pVar.data));
 			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
 		}
+		case toInt(PublicVariableType::PublicVariableEnum): return std::to_string(std::get<PublicVariableEnum*>(pVar.data)->selection);
 		// case PublicVariableType::GameObject: return "";
 		// case PublicVariableType::Component: return "";
 		// case PublicVariableType::Color: return "";
