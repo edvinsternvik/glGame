@@ -22,7 +22,6 @@ namespace glGame {
 	private:
 		void loadScene(const char* fileName);
 
-		std::string getPublicVariableString(PublicVariable& pVar);
 		Component* addComponent(std::string& component, GameObject* gameObject);
 
 	private:

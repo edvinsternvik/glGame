@@ -25,6 +25,9 @@ namespace glGame {
             if(search == m_assets.end() || search->second.assetType != assetInternal::Asset<T>::GetAssetType()) return Asset<T>();
             if(search->second.asset.expired()) {
                 Asset<T> newAsset(assetName.c_str());
+                if(initializePublicVariables(newAsset.asset)) {
+                    newAsset.asset->reload(); // Assets with a .assetdata file currently get reloaded twice, should probably fix that..
+                }
                 search->second.asset = newAsset.asset;
 
                 return newAsset;
@@ -33,6 +36,7 @@ namespace glGame {
             return Asset<T>(search->second.asset);
         }
         void updateAssets();
+        void saveAsset(std::shared_ptr<assetInternal::AssetT> asset);
         inline int assetCount() const { return m_assets.size(); }
         inline auto getAssetsBegin() const { return m_assets.begin(); };
         inline auto getAssetsEnd() const { return m_assets.end(); };
@@ -41,6 +45,7 @@ namespace glGame {
 
     private:
         void makeEmptyAssetData(const std::string& assetName, const std::string& extension);
+        bool initializePublicVariables(std::shared_ptr<assetInternal::AssetT> asset);
 
     private:
         std::unordered_map<std::string, AssetData> m_assets;

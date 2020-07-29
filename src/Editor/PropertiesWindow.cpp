@@ -273,6 +273,15 @@ namespace glGame {
 
 			ImGui::Spacing();
 		}
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing;
+
+		if(ImGui::Button("Save asset")) {
+			AssetManager::Get().saveAsset(selectedAsset);
+		}
 	}
 
 	void InputText(const char* name, std::string& str, int maxSize) {

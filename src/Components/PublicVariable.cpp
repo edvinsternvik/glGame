@@ -68,6 +68,33 @@ namespace glGame {
         
     }
 
+    std::string PublicVariable::getPublicVariableString() {
+		switch(data.index()) {
+		case toInt(PublicVariableType::Int): return std::to_string(*(std::get<int*>(data)));
+		case toInt(PublicVariableType::Float): return std::to_string(*(std::get<float*>(data)));
+		case toInt(PublicVariableType::Double): return std::to_string(*(std::get<double*>(data)));
+		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(data)));
+		case toInt(PublicVariableType::String): return *(std::get<std::string*>(data));
+		case toInt(PublicVariableType::Vec2): {
+			Vector2 vec2 = *(std::get<Vector2*>(data));
+			return "{" + std::to_string(vec2.x) + "," + std::to_string(vec2.y) + "}";
+		}
+		case toInt(PublicVariableType::Vec3): {
+			Vector3 vec3 = *(std::get<Vector3*>(data));
+			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
+		}
+		case toInt(PublicVariableType::PublicVariableEnum): return std::to_string(std::get<PublicVariableEnum*>(data)->selection);
+		// case PublicVariableType::GameObject: return "";
+		// case PublicVariableType::Component: return "";
+		// case PublicVariableType::Color: return "";
+		case toInt(PublicVariableType::Model): return (*std::get<Asset<Model>*>(data)).getPath();
+		case toInt(PublicVariableType::Script): return (*std::get<Asset<Script>*>(data)).getPath();
+		case toInt(PublicVariableType::Texture): return (*std::get<Asset<Texture>*>(data)).getPath();
+		case toInt(PublicVariableType::Shader): return (*std::get<Asset<Shader>*>(data)).getPath();
+		}
+		return "";
+	}
+
     PublicVariableType PublicVariable::getPublicVariableType(std::string& str) {
              if(str == "int") return PublicVariableType::Int;
         else if(str == "float") return PublicVariableType::Float;

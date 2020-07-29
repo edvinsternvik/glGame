@@ -50,6 +50,7 @@ namespace glGame {
 		PublicVariable(PublicVarVariant data, std::string name, const float& sliderSpeed);
 
 		void setData(std::string& str);
+		std::string getPublicVariableString();
 
 		static PublicVariableType getPublicVariableType(std::string& str);
 
