@@ -78,7 +78,12 @@ namespace glGame {
 		case toInt(PublicVariableType::Model): {
 			Asset<Model> model = *std::get<Asset<Model>*>(editorVariable->data);
 			std::string modelName = model.get() != nullptr ? model.getPath() : "";
-			ImGui::Text(("Model: " + modelName).c_str());
+			ImGui::Text((editorVariable->name + ": " + modelName).c_str());
+			if(ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text("Model");
+				ImGui::EndTooltip();
+			}
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
 					std::string payloadData = *(std::string*)payload->Data;
@@ -94,7 +99,12 @@ namespace glGame {
 		case toInt(PublicVariableType::Script): {
 			Asset<Script> script = *std::get<Asset<Script>*>(editorVariable->data);
 			std::string scriptName = script.get() != nullptr ? script.getPath() : "";
-			ImGui::Text(("Script: " + scriptName).c_str());
+			ImGui::Text((editorVariable->name + ": " + scriptName).c_str());
+			if(ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text("Script");
+				ImGui::EndTooltip();
+			}
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Script")) {
 					std::string payloadData = *(std::string*)payload->Data;
@@ -110,7 +120,12 @@ namespace glGame {
 		case toInt(PublicVariableType::Texture): {
 			Asset<Texture> texture = *std::get<Asset<Texture>*>(editorVariable->data);
 			std::string textureName = texture.get() != nullptr ? texture.getPath() : "";
-			ImGui::Text(("Texture: " + textureName).c_str());
+			ImGui::Text((editorVariable->name + ": " + textureName).c_str());
+			if(ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text("Texture");
+				ImGui::EndTooltip();
+			}
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Texture")) {
 					std::string payloadData = *(std::string*)payload->Data;
@@ -126,7 +141,12 @@ namespace glGame {
 		case toInt(PublicVariableType::Shader): {
 			Asset<Shader> shader = *std::get<Asset<Shader>*>(editorVariable->data);
 			std::string shaderName = shader.get() != nullptr ? shader.getPath() : "";
-			ImGui::Text(("Shader: " + shaderName).c_str());
+			ImGui::Text((editorVariable->name + ": " + shaderName).c_str());
+			if(ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text("Shader");
+				ImGui::EndTooltip();
+			}
 			if(ImGui::BeginDragDropTarget()) {
 				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Shader")) {
 					std::string payloadData = *(std::string*)payload->Data;
