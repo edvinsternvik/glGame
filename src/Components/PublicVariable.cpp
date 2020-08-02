@@ -47,6 +47,36 @@ namespace glGame {
 
     }
 
+    Vector2 createVector2FromString(std::string& str) {
+        Vector2 vec2(0, 0);
+
+        std::stringstream valueBuffer;
+        valueBuffer << str.substr(1, str.size() - 2);
+        std::string tmp;
+        for(int i = 0; i < 2; ++i) {
+            std::getline(valueBuffer, tmp, ',');
+            
+            ((float*)&vec2)[i] = std::stof(tmp);
+        };
+
+        return vec2;
+    }
+
+    Vector3 createVector3FromString(std::string& str) {
+        Vector3 vec3(0, 0, 0);
+
+        std::stringstream valueBuffer;
+        valueBuffer << str.substr(1, str.size() - 2);
+        std::string tmp;
+        for(int i = 0; i < 3; ++i) {
+            std::getline(valueBuffer, tmp, ',');
+            
+            ((float*)&vec3)[i] = std::stof(tmp);
+        };
+
+        return vec3;
+    }
+
     void PublicVariable::setData(std::string& str) {
         switch(data.index()) {
 		case toInt(PublicVariableType::Int): *std::get<int*>(data) = std::stoi(str); return;
@@ -54,8 +84,8 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): *std::get<double*>(data) = std::stod(str); return;
 		case toInt(PublicVariableType::Char): *std::get<char*>(data) = str[0]; return;
 		case toInt(PublicVariableType::String): *std::get<std::string*>(data) = str; return;
-		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = Vector2(str); return;
-		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = Vector3(str); return;
+		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createVector2FromString(str); return;
+		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createVector3FromString(str); return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
