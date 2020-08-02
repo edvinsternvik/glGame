@@ -35,7 +35,7 @@ namespace glGame {
 		std::unique_ptr<Window> m_window;
 		std::unique_ptr<SceneManager> m_sceneManager;
 		std::unique_ptr<AssetManager> m_assetManager;
-		Time m_time;
+		std::unique_ptr<Time> m_time;
 		#ifdef GL_GAME_EDITOR
 		std::unique_ptr<Editor> m_editor;
 		#endif

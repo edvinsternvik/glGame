@@ -33,10 +33,12 @@ namespace glGame {
 		m_editor->setAssetManager(m_assetManager.get());
 		#endif
 
+		m_time = std::make_unique<Time>();
+
 		while(m_running) {
 			m_sceneManager->initScene();
 
-			float deltatime = m_time.getDeltatime();
+			float deltatime = m_time->getDeltatime();
 			m_sceneManager->updateScene(deltatime);
 			#ifndef GL_GAME_EDITOR
 				physics.stepSimulation(deltatime);
