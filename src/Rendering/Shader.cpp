@@ -28,6 +28,10 @@ namespace glGame {
 		glUseProgram(m_shaderProgramID);
 	}
 
+	void Shader::setUniform1i(const char* name, const int& integer) {
+		glUniform1i(getUniformLocation(name), integer);
+	}
+
 	void Shader::setUniform3f(const char* name, float v1, float v2, float v3) {
 		int uniformLocation = getUniformLocation(name);
 		glUniform3f(uniformLocation, v1, v2, v3);

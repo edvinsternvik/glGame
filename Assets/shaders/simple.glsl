@@ -55,6 +55,7 @@ layout (std140) uniform Lights {
 };
 
 uniform sampler2D textureSampler;
+uniform sampler2D specularSampler;
 
 in vec2 TextureCoordinates;
 in vec3 Normal;
@@ -84,6 +85,8 @@ float calculatePointLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 2.0;
+	vec3 specMap = texture(specularSampler, TextureCoordinates).rgb;
+	specular *= specMap.r + specMap.g + specMap.b;
 
 	float lightToFragmentLength = length(lightToFragmentVector);
 	float attenuation = 1.0 / (lightToFragmentLength * lightToFragmentLength);
@@ -100,6 +103,8 @@ float calculateDirectionalLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
+	vec3 specMap = texture(specularSampler, TextureCoordinates).rgb;
+	specular *= specMap.r + specMap.g + specMap.b;
 
 	return (ambient + diffuse + specular) * u_lights[lightId].intensity;
 }

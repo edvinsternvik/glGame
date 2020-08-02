@@ -138,7 +138,16 @@ namespace glGame {
 				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 					objRenderData.material->shader->useShader();
 
+					glActiveTexture(GL_TEXTURE0);
 					objRenderData.material->texture->bind();
+					if(objRenderData.material->specularMap.expired()) {
+						objRenderData.material->shader->setUniform1i("specularSampler", -1);
+					}
+					else {
+						objRenderData.material->shader->setUniform1i("specularSampler", 1);
+						glActiveTexture(GL_TEXTURE1);
+						objRenderData.material->specularMap->bind();
+					}
 					
 					objRenderData.vao->bind();
 					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));

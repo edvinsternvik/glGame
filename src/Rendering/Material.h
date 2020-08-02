@@ -8,6 +8,7 @@ namespace glGame {
     public:
         Asset<Shader> shader;
         Asset<Texture> texture;
+        Asset<Texture> specularMap;
     };
 
 }

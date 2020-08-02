@@ -9,6 +9,7 @@ namespace glGame {
 		Shader(const char* filepath);
 
 		void useShader();
+		void setUniform1i(const char* name, const int& integer);
 		void setUniform3f(const char* name, float v1, float v2, float v3);
 		void setUniformMat4(const char* name, const float* matrix);
 		void setUniformBlockBinding(const char* name, const unsigned int& bindingPoint);
