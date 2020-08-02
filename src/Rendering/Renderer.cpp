@@ -18,7 +18,7 @@ namespace glGame {
 		initGLEW();
 
 		#ifdef GL_GAME_EDITOR
-		m_editorFramebuffer = std::make_unique<FrameBuffer>();
+		m_editorFramebuffer = std::make_unique<FrameBuffer>(1280, 720);
 		#endif
 
 		m_cameraUniformBuffer = std::make_unique<UniformBuffer>(128);
@@ -184,6 +184,10 @@ namespace glGame {
 		#ifdef GL_GAME_EDITOR
 		m_editorFramebuffer->unbind();
 		#endif
+	}
+
+	unsigned int Renderer::getEditorFrameTexture() {
+		return m_editorFramebuffer->getTexture()->getTextureId();
 	}
 
 	void Renderer::initGLEW() {

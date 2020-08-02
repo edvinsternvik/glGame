@@ -34,7 +34,7 @@ namespace glGame {
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
 		void endRender();
 
-		inline unsigned int getEditorFrameTexture() { return m_editorFramebuffer->getTexture(); }
+		unsigned int getEditorFrameTexture();
 
 	private:
 		struct ObjectRenderData {

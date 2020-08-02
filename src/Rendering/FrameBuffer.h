@@ -1,27 +1,29 @@
 #pragma once
+#include "memory"
 
 namespace glGame {
 
-	class FrameBuffer {
+	class Texture;
 
+	class FrameBuffer {
 	public:
-		FrameBuffer();
+		FrameBuffer(const unsigned int& width, const unsigned int& height);
+		FrameBuffer(std::shared_ptr<Texture> texture);
 		~FrameBuffer();
 
 		void bind();
 		void unbind();
 
-		inline unsigned int getTexture() { return m_frameTexture; }
+		inline std::shared_ptr<Texture> getTexture() { return m_texture; }
 
 	private:
-		void genFramebuffer();
-		unsigned int genTexture(int width, int height);
-		unsigned int genRenderBuffer(int width, int height);
+		unsigned int genTexture(const unsigned int& width, const unsigned int& height);
+		unsigned int genRenderBuffer(const unsigned int& width, const unsigned int& height);
 
 	private:
 		unsigned int m_frameBuffer;
-		unsigned int m_frameTexture;
-		unsigned int m_renderBuffer;
+		std::shared_ptr<Texture> m_texture;
+		unsigned int m_renderBuffer = -1;
 
 	};
 
