@@ -52,7 +52,7 @@ namespace glGame {
 	}
 
 	using Vector2 = internal::Vector2<float>;
-	using Vector2i = internal::Vector3<int>;
+	using Vector2i = internal::Vector2<int>;
 	using Vector3 = internal::Vector3<float>;
 	using Vector3i = internal::Vector3<int>;
 
