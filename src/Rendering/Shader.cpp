@@ -9,8 +9,14 @@
 namespace glGame {
 
 	Shader::Shader(const char* filepath) {
-		std::unordered_map<int, std::string> shaderSources = getShaderSourcesFromFile(std::string(filepath));
+		if(filepath) init(getShaderSourcesFromFile(std::string(filepath)));
+	}
 
+	Shader::Shader(const char* filepath, const char* shaderSource) {
+		if(shaderSource) init(getShaderSourcesFromSource(std::string(shaderSource)));		
+	}
+
+	void Shader::init(const std::unordered_map<int, std::string>& shaderSources) {
 		std::unordered_map<int, unsigned int> shaderIds;
 		for(auto& shaderSource : shaderSources) {
 			shaderIds[shaderSource.first] = createShader(shaderSource.first, shaderSource.second);
@@ -47,29 +53,31 @@ namespace glGame {
 	}
 
 	std::unordered_map<int, std::string> Shader::getShaderSourcesFromFile(const std::string& filepath) {
-		std::unordered_map<int, std::string> shaderSources;
-
 		std::fstream filestream(filepath, std::ios::in | std::ios::binary);
 		if(!filestream.is_open()) {
 			std::cout << "Could not open file " << filepath << std::endl;
-			return shaderSources;
+			return std::unordered_map<int, std::string>();
 		}
 		std::stringstream buffer;
 		buffer << filestream.rdbuf();
 		filestream.close();
+		
+		return getShaderSourcesFromSource(buffer.str());
+	}
 
-		std::string file = buffer.str();
+	std::unordered_map<int, std::string> Shader::getShaderSourcesFromSource(const std::string& shaderSource) {
+		std::unordered_map<int, std::string> shaderSources;
 		const char* typeToken = "#type";
 		size_t typeTokenLength = std::strlen(typeToken);
-		size_t pos = file.find(typeToken, 0);
+		size_t pos = shaderSource.find(typeToken, 0);
 		while(pos != std::string::npos) {
-			size_t eol = file.find_first_of("\r\n", pos);
+			size_t eol = shaderSource.find_first_of("\r\n", pos);
 			size_t begin = pos + typeTokenLength + 1;
-			std::string typeStr = file.substr(begin, eol - begin);
-			size_t nextLinePos = file.find_first_of("\r\n", eol);
-			pos = file.find(typeToken, nextLinePos);
+			std::string typeStr = shaderSource.substr(begin, eol - begin);
+			size_t nextLinePos = shaderSource.find_first_of("\r\n", eol);
+			pos = shaderSource.find(typeToken, nextLinePos);
 
-			shaderSources[getShaderTypeFromString(typeStr)] = (pos == std::string::npos) ? file.substr(nextLinePos) : file.substr(nextLinePos, pos - nextLinePos);
+			shaderSources[getShaderTypeFromString(typeStr)] = (pos == std::string::npos) ? shaderSource.substr(nextLinePos) : shaderSource.substr(nextLinePos, pos - nextLinePos);
 		}
 
 		return shaderSources;
@@ -81,7 +89,7 @@ namespace glGame {
 		else return 0;
 	}
 
-	unsigned int Shader::createShader(unsigned int shaderType, std::string& shaderSource) {
+	unsigned int Shader::createShader(unsigned int shaderType, const std::string& shaderSource) {
 		unsigned int shaderID = glCreateShader(shaderType);
 
 		const char* shaderSourceCstr = shaderSource.c_str();
