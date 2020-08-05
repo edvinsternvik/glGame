@@ -9,7 +9,7 @@ namespace glGame {
 		glGenFramebuffers(1, &m_frameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
-		m_texture = std::make_shared<Texture>((float)width, (float)height);
+		m_texture = std::make_shared<Texture>((float)width, (float)height, TextureType::RGB);
 		m_texture->bind();
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->getTextureId(), 0);
 
@@ -24,7 +24,7 @@ namespace glGame {
 		unbind();
 	}
 
-	FrameBuffer::FrameBuffer(std::shared_ptr<Texture> texture) {
+	FrameBuffer::FrameBuffer(std::shared_ptr<Texture> texture) : m_texture(texture) {
 		glGenFramebuffers(1, &m_frameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
@@ -38,12 +38,20 @@ namespace glGame {
 			attachment = GL_DEPTH_ATTACHMENT;
 			glDrawBuffer(GL_NONE);
 			glReadBuffer(GL_NONE);
+			break;
 		default:
 			std::cout << "Error when generating framebuffer - TextureType is invalid" << std::endl;
 			break; 
 		}
 
+		texture->bind();
+
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture->getTextureId(), 0);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			std::cout << "Framebuffer not complete" << std::endl;
+		}
+
+		unbind();
 	}
 
 	FrameBuffer::~FrameBuffer() {
@@ -53,14 +61,10 @@ namespace glGame {
 
 	void FrameBuffer::bind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
-		m_texture->bind();
-		glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
 	}
 
 	void FrameBuffer::unbind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	}
 
 	unsigned int FrameBuffer::genTexture(const unsigned int& width, const unsigned int& height) {

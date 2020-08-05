@@ -11,11 +11,13 @@ layout (std140) uniform Camera {
 };
 
 uniform mat4 u_model;
+uniform mat4 u_lightSpaceMatrix;
 
 out vec2 TextureCoordinates;
 
 out vec3 Normal;
 out vec3 FragmentPosition;
+out vec4 FragPosLightSpace;
 
 void main() {
 	TextureCoordinates = aTex;
@@ -25,6 +27,7 @@ void main() {
 
 	Normal = normalize(mat3(transpose(inverse(viewModelMatrix))) * aNormal);
 	FragmentPosition = vec3(localPos);
+	FragPosLightSpace = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0);
 
 	gl_Position = u_projection * localPos;
 }
@@ -56,13 +59,16 @@ layout (std140) uniform Lights {
 
 uniform sampler2D textureSampler;
 uniform sampler2D specularSampler;
+uniform sampler2D shadowMap;
 
 in vec2 TextureCoordinates;
 in vec3 Normal;
 in vec3 FragmentPosition;
+in vec4 FragPosLightSpace;
 
 float calculatePointLight(uint lightId);
 float calculateDirectionalLight(uint lightId);
+float calculateShadow(vec4 lightSpacePos, vec3 lightDir);
 
 void main() {
 	float lighting = 0.0;
@@ -85,8 +91,7 @@ float calculatePointLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 2.0;
-	vec3 specMap = texture(specularSampler, TextureCoordinates).rgb;
-	specular *= specMap.r + specMap.g + specMap.b;
+	specular *= texture(specularSampler, TextureCoordinates).r;
 
 	float lightToFragmentLength = length(lightToFragmentVector);
 	float attenuation = 1.0 / (lightToFragmentLength * lightToFragmentLength);
@@ -95,7 +100,7 @@ float calculatePointLight(uint lightId) {
 }
 
 float calculateDirectionalLight(uint lightId) {
-	float ambient = 0.2;
+	float ambient = 0.1;
 	
 	vec3 lightDir = normalize(vec3(u_view * vec4(u_lights[lightId].position, 0.0)));
 	float diffuse = max(dot(lightDir, Normal), 0.0);
@@ -103,8 +108,21 @@ float calculateDirectionalLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
-	vec3 specMap = texture(specularSampler, TextureCoordinates).rgb;
-	specular *= specMap.r + specMap.g + specMap.b;
+	specular *= texture(specularSampler, TextureCoordinates).r;
 
-	return (ambient + diffuse + specular) * u_lights[lightId].intensity;
+	float shadow = calculateShadow(FragPosLightSpace, lightDir);
+
+	return (ambient + (1.0 - shadow) * (diffuse + specular)) * u_lights[lightId].intensity;
+}
+
+float calculateShadow(vec4 lightSpacePos, vec3 lightDir) {
+	vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
+	projCoords = projCoords * 0.5 + 0.5;
+	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	float currentDepth = projCoords.z;
+
+	float bias = max(0.005 * (1.0 - dot(lightDir, -Normal)), 0.0001);
+	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+
+	return shadow;
 }

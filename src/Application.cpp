@@ -9,13 +9,13 @@ namespace glGame {
 		s_Instance = this;
 
 		std::string title = "glGame";
-		int width = 1280, height = 720;
-		m_viewportAspectRatio = width / (float)height;
-		m_window = std::make_unique<Window>(title, width, height);
+		Vector2i viewportSize(1280, 720);
+		m_viewportAspectRatio = viewportSize.x / (float)viewportSize.y;
+		m_window = std::make_unique<Window>(title, viewportSize.x, viewportSize.y);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
 		Input::m_window = m_window.get();
 
-		renderer.init(); // Initializes glew, has to be called before any opengl code
+		renderer.init(viewportSize); // Initializes glew, has to be called before any opengl code
 
 		m_assetManager = std::make_unique<AssetManager>();
 

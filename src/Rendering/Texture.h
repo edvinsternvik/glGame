@@ -8,7 +8,7 @@ namespace glGame {
 
     class Texture {
     public:
-        Texture(float width, float height);
+        Texture(float width, float height, TextureType type);
         Texture(const char* filepath);
         Texture(const char* filepath, TextureType textureType);
         Texture(const char* filepath, TextureType textureType, float width, float height);

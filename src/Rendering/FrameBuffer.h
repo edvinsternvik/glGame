@@ -14,7 +14,7 @@ namespace glGame {
 		void bind();
 		void unbind();
 
-		inline std::shared_ptr<Texture> getTexture() { return m_texture; }
+		std::shared_ptr<Texture> getTexture() { return m_texture; }
 
 	private:
 		unsigned int genTexture(const unsigned int& width, const unsigned int& height);

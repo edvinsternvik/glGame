@@ -8,7 +8,7 @@
 
 namespace glGame {
 
-    Texture::Texture(float width, float height) : Texture(nullptr, TextureType::RGB, width, height) {
+    Texture::Texture(float width, float height, TextureType type) : Texture(nullptr, type, width, height, false) {
 
     }
 
@@ -62,7 +62,8 @@ namespace glGame {
             }
             break;
         case TextureType::DEPTH:
-            format = internalFormat = GL_DEPTH_COMPONENT;
+            format = GL_DEPTH_COMPONENT;
+            internalFormat = GL_DEPTH_COMPONENT32;
             type = GL_FLOAT;
             break;
         default:
@@ -82,10 +83,11 @@ namespace glGame {
 
     Texture::~Texture() {
         glDeleteTextures(1, &m_textureId);
+        m_textureId = -1;
     }
 
     void Texture::bind() {
-        glBindTexture(GL_TEXTURE_2D, m_textureId);
+        if(m_textureId != -1) glBindTexture(GL_TEXTURE_2D, m_textureId);
     }
 
     void Texture::unbind() {

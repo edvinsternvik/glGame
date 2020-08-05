@@ -1,12 +1,13 @@
 #pragma once
-#include <GL/glew.h>
 #include "FrameBuffer.h"
 #include "Shader.h"
 #include "Model.h"
+#include "UniformBuffer.h"
+#include "../Math/Vector.h"
+#include <GL/glew.h>
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>
-#include "UniformBuffer.h"
 
 namespace glGame {
 
@@ -19,7 +20,7 @@ namespace glGame {
 
 	class Renderer {
 	public:
-		void init();
+		void init(Vector2i viewportSize);
 
 		void submit(Model* model, const glm::mat4& modelMatrix);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
@@ -56,12 +57,19 @@ namespace glGame {
 			Shader* shader;
 		};
 
+		void renderObjects(std::vector<ObjectRenderData>& renderData);
+		void renderObjectsShadow(std::vector<ObjectRenderData>& renderData);
 		void initGLEW();
 		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
 
+	public:
+		Vector2i viewportSize;
+
 	private:
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
+		std::unique_ptr<FrameBuffer> m_shadowFramebuffer;
+		std::unique_ptr<Shader> m_shadowShader;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
 		std::unique_ptr<UniformBuffer> m_lightsUniformBuffer;
 		ObjectRenderData m_objectRenderData;

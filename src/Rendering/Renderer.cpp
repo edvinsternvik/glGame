@@ -9,17 +9,23 @@
 #include "UniformBuffer.h"
 
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
 
 #define UNIFORM_LIGHT_SIZE 32
 
 namespace glGame {
 
-	void Renderer::init() {
+	void Renderer::init(Vector2i viewportSize) {
 		initGLEW();
 
 		#ifdef GL_GAME_EDITOR
 		m_editorFramebuffer = std::make_unique<FrameBuffer>(1280, 720);
 		#endif
+		std::shared_ptr<Texture> framebufferTexture = std::make_shared<Texture>(1024, 1024, TextureType::DEPTH);
+		m_shadowFramebuffer = std::make_unique<FrameBuffer>(framebufferTexture);
+		m_shadowShader = std::make_unique<Shader>(nullptr, 
+			"#type vertex\n#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 u_lightSpaceMatrix;\nuniform mat4 u_model;\nvoid main() { gl_Position = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0); }\n\n#type fragment\n#version 330 core\nvoid main() {}"
+		);
 
 		m_cameraUniformBuffer = std::make_unique<UniformBuffer>(128);
 		m_cameraUniformBuffer->addData(64, NULL);
@@ -32,6 +38,8 @@ namespace glGame {
 		m_lightsUniformBuffer->addData(lightCount * UNIFORM_LIGHT_SIZE, NULL);
 		m_lightsUniformBuffer->addData(4, &m_lightCount);
 		m_lightsUniformBuffer->bindingPoint(1);
+
+		this->viewportSize = viewportSize;
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
@@ -132,30 +140,35 @@ namespace glGame {
 			processRenderData(frameRenderData);
 		}
 
+		glViewport(0, 0, 1024, 1024);
+		m_shadowFramebuffer->bind();
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 24.0f);
+		glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 2.0f, -1.0f), glm::vec3( 0.0f, -4.0f,  -10.0f), glm::vec3( 0.0f, 1.0f,  0.0f)); 
+		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+		m_shadowShader->useShader();
+		m_shadowShader->setUniformMat4("u_lightSpaceMatrix", &(lightSpaceMatrix[0][0]));
 		
+		glCullFace(GL_FRONT);
+		renderObjectsShadow(frameRenderData);
+		glCullFace(GL_BACK);
+
+		m_shadowFramebuffer->unbind();
+		glViewport(0, 0, viewportSize.x, viewportSize.y);
+		#ifdef GL_GAME_EDITOR
+		//Render to frame texture
+		m_editorFramebuffer->bind();
+		#endif
+
 		for(ObjectRenderData& objRenderData : frameRenderData) {
 			if(objRenderData.vao) {
 				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 					objRenderData.material->shader->useShader();
-
-					glActiveTexture(GL_TEXTURE0);
-					objRenderData.material->texture->bind();
-					if(objRenderData.material->specularMap.expired()) {
-						objRenderData.material->shader->setUniform1i("specularSampler", -1);
-					}
-					else {
-						objRenderData.material->shader->setUniform1i("specularSampler", 1);
-						glActiveTexture(GL_TEXTURE1);
-						objRenderData.material->specularMap->bind();
-					}
-					
-					objRenderData.vao->bind();
-					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
-					glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+					objRenderData.material->shader->setUniformMat4("u_lightSpaceMatrix", &(lightSpaceMatrix[0][0]));
 				}
-
 			}
 		}
+		renderObjects(frameRenderData);
 
 		if(m_skyboxRenderData.cubemap && m_skyboxRenderData.shader) {
 			glDepthMask(GL_FALSE);
@@ -188,6 +201,47 @@ namespace glGame {
 
 	unsigned int Renderer::getEditorFrameTexture() {
 		return m_editorFramebuffer->getTexture()->getTextureId();
+	}
+
+	void Renderer::renderObjects(std::vector<ObjectRenderData>& renderData) {
+		for(ObjectRenderData& objRenderData : renderData) {
+			if(objRenderData.vao) {
+				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+					objRenderData.material->shader->useShader();
+
+					glActiveTexture(GL_TEXTURE0);
+					objRenderData.material->texture->bind();
+					if(objRenderData.material->specularMap.expired()) {
+						objRenderData.material->shader->setUniform1i("specularSampler", -1);
+					}
+					else {
+						objRenderData.material->shader->setUniform1i("specularSampler", 1);
+						glActiveTexture(GL_TEXTURE1);
+						objRenderData.material->specularMap->bind();
+					}
+
+					glActiveTexture(GL_TEXTURE2);
+					objRenderData.material->shader->setUniform1i("shadowMap", 2);
+					m_shadowFramebuffer->getTexture()->bind();
+					
+					objRenderData.vao->bind();
+					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+					glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+				}
+
+			}
+		}
+	}
+
+	void Renderer::renderObjectsShadow(std::vector<ObjectRenderData>& renderData) {
+		for(ObjectRenderData& objRenderData : renderData) {
+			if(objRenderData.vao && objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+				m_shadowShader->useShader();
+				objRenderData.vao->bind();
+				m_shadowShader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+			}
+		}
 	}
 
 	void Renderer::initGLEW() {
