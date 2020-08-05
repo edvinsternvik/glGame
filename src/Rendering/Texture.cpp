@@ -32,8 +32,8 @@ namespace glGame {
         glGenTextures(1, &m_textureId);
         bind();
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         if(filepath) {
@@ -61,11 +61,19 @@ namespace glGame {
                 if(textureType == TextureType::sRGB) internalFormat = GL_SRGB;
             }
             break;
-        case TextureType::DEPTH:
+        case TextureType::DEPTH: {
             format = GL_DEPTH_COMPONENT;
             internalFormat = GL_DEPTH_COMPONENT32;
             type = GL_FLOAT;
+
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  
+
             break;
+        }
         default:
             std::cout << "Error - Invalid texture type" << std::endl;
             return;
