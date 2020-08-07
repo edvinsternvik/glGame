@@ -47,8 +47,9 @@ namespace glGame {
 
     }
 
-    Vector2 createVector2FromString(std::string& str) {
-        Vector2 vec2(0, 0);
+    template<typename T>
+    internal::Vector2<T> createVector2FromString(std::string& str, T (*strToType)(const std::string& s)) {
+        internal::Vector2<T> vec2(0, 0);
 
         std::stringstream valueBuffer;
         valueBuffer << str.substr(1, str.size() - 2);
@@ -56,14 +57,15 @@ namespace glGame {
         for(int i = 0; i < 2; ++i) {
             std::getline(valueBuffer, tmp, ',');
             
-            ((float*)&vec2)[i] = std::stof(tmp);
+            ((T*)&vec2)[i] = strToType(tmp);
         };
 
         return vec2;
     }
 
-    Vector3 createVector3FromString(std::string& str) {
-        Vector3 vec3(0, 0, 0);
+    template<typename T>
+    internal::Vector3<T> createVector3FromString(std::string& str, T (*strToType)(const std::string& s)) {
+        internal::Vector3<T> vec3(0, 0, 0);
 
         std::stringstream valueBuffer;
         valueBuffer << str.substr(1, str.size() - 2);
@@ -71,11 +73,14 @@ namespace glGame {
         for(int i = 0; i < 3; ++i) {
             std::getline(valueBuffer, tmp, ',');
             
-            ((float*)&vec3)[i] = std::stof(tmp);
+            ((T*)&vec3)[i] = strToType(tmp);
         };
 
         return vec3;
     }
+
+    float stofOverload(const std::string& str) { return std::stof(str); }
+    int stoiOverload(const std::string& str) { return std::stoi(str); }
 
     void PublicVariable::setData(std::string& str) {
         switch(data.index()) {
@@ -84,8 +89,10 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): *std::get<double*>(data) = std::stod(str); return;
 		case toInt(PublicVariableType::Char): *std::get<char*>(data) = str[0]; return;
 		case toInt(PublicVariableType::String): *std::get<std::string*>(data) = str; return;
-		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createVector2FromString(str); return;
-		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createVector3FromString(str); return;
+		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createVector2FromString<float>(str, stofOverload); return;
+        case toInt(PublicVariableType::Vec2i): *std::get<Vector2i*>(data) = createVector2FromString<int>(str, stoiOverload); return;
+		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createVector3FromString<float>(str, stofOverload); return;
+		case toInt(PublicVariableType::Vec3i): *std::get<Vector3i*>(data) = createVector3FromString<int>(str, stoiOverload); return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
@@ -105,11 +112,13 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): return std::to_string(*(std::get<double*>(data)));
 		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(data)));
 		case toInt(PublicVariableType::String): return *(std::get<std::string*>(data));
-		case toInt(PublicVariableType::Vec2): {
+		case toInt(PublicVariableType::Vec2):
+        case toInt(PublicVariableType::Vec2i): {
 			Vector2 vec2 = *(std::get<Vector2*>(data));
 			return "{" + std::to_string(vec2.x) + "," + std::to_string(vec2.y) + "}";
 		}
-		case toInt(PublicVariableType::Vec3): {
+        case toInt(PublicVariableType::Vec3):
+		case toInt(PublicVariableType::Vec3i): {
 			Vector3 vec3 = *(std::get<Vector3*>(data));
 			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
 		}
@@ -130,7 +139,9 @@ namespace glGame {
         else if(str == "float") return PublicVariableType::Float;
         else if(str == "double") return PublicVariableType::Double;
         else if(str == "Vector2") return PublicVariableType::Vec2;
+        else if(str == "Vector2i") return PublicVariableType::Vec2i;
         else if(str == "Vector3") return PublicVariableType::Vec3;
+        else if(str == "Vector3i") return PublicVariableType::Vec3i;
         else if(str == "char") return PublicVariableType::Char;
         else if(str == "string") return PublicVariableType::String;
         else if(str == "GameObject") return PublicVariableType::GameObject;

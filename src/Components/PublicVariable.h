@@ -31,10 +31,10 @@ namespace glGame {
 		std::vector<char*> options;
 	};
 
-	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector3*, GameObject*, Component*, Color*, PublicVariableEnum*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>;
+	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, Vector2*, Vector2i*, Vector3*, Vector3i*, GameObject*, Component*, Color*, PublicVariableEnum*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*>;
 
     enum class PublicVariableType {
-		Int=0, Float, Double, Char, String, Vec2, Vec3, 
+		Int=0, Float, Double, Char, String, Vec2, Vec2i, Vec3, Vec3i,
 		GameObject, Component, Color, PublicVariableEnum,
 		Model, Script, Texture, Shader,
 		None

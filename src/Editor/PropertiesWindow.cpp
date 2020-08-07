@@ -60,9 +60,17 @@ namespace glGame {
 			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)std::get<Vector2*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
 			registerChangePublicVariableAction<Vector2>(std::get<Vector2*>(editorVariable->data), &m_editor->actionManager);
 			break;
+		case toInt(PublicVariableType::Vec2i):
+			ImGui::DragInt2(editorVariable->name.c_str(), (int*)std::get<Vector2i*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector2i>(std::get<Vector2i*>(editorVariable->data), &m_editor->actionManager);
+			break;
 		case toInt(PublicVariableType::Vec3):
 			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)std::get<Vector3*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
 			registerChangePublicVariableAction<Vector3>(std::get<Vector3*>(editorVariable->data), &m_editor->actionManager);
+			break;
+		case toInt(PublicVariableType::Vec3i):
+			ImGui::DragInt3(editorVariable->name.c_str(), (int*)std::get<Vector3i*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
+			registerChangePublicVariableAction<Vector3i>(std::get<Vector3i*>(editorVariable->data), &m_editor->actionManager);
 			break;
 		// case PublicVariableType::Color:
 		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
