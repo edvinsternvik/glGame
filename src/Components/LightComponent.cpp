@@ -4,31 +4,30 @@
 
 namespace glGame {
 
-    LightComponent::LightComponent() : lightType(0, { "Point", "Directional"}), light(LightType::Point), lightId(-1) {
+    LightComponent::LightComponent() : lightType(0, { "Point", "Directional"}), light(std::make_shared<Light>(LightType::Point)), lightId(-1) {
         addPublicVariable(&lightType, "LightType");
-        addPublicVariable(&light.intensity, "Intensity");
+        addPublicVariable(&light->intensity, "Intensity");
+        addPublicVariable(&light->direction, "Direction");
+        addPublicVariable(&light->shadowmapSize, "ShadowmapSize");
+        addPublicVariable(&light->shadowSize, "ShadowSize");
+        addPublicVariable(&light->shadowNearPlane, "ShadowNearPlane");
+        addPublicVariable(&light->shadowFarPlane, "ShadowFarPlane");
     }
 
     void LightComponent::init() {
-        light.lightType = (LightType)lightType.selection;
-        light.position = getGameObject()->transform->position;
+        light->lightType = (LightType)lightType.selection;
+        light->position = getGameObject()->transform->position;
 
-        if(lightId < 0) {
-            lightId = Application::Get().renderer.addLight(light);
-        }
-        else {
-            Application::Get().renderer.updateLight((unsigned int)lightId, light);
-        }
+        light->updateLight();
+
+        Application::Get().renderer.updateLight(light);
     }
 
     void LightComponent::onRender() {
     }
 
     void LightComponent::onDestroy() {
-        if(lightId >= 0) {
-            Application::Get().renderer.deleteLight(lightId);
-            lightId = -1;
-        }
+        Application::Get().renderer.deleteLight(light->getId());
     }
 
 }

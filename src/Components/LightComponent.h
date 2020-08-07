@@ -15,7 +15,7 @@ namespace glGame {
         virtual void onDestroy() override;
 
     public:
-        Light light;
+        std::shared_ptr<Light> light;
         int lightId;
 
     private:

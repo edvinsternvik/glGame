@@ -11,7 +11,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
-#define UNIFORM_LIGHT_SIZE 32
+#define UNIFORM_LIGHT_SIZE 112
 
 namespace glGame {
 
@@ -21,9 +21,9 @@ namespace glGame {
 		#ifdef GL_GAME_EDITOR
 		m_editorFramebuffer = std::make_unique<FrameBuffer>(1280, 720);
 		#endif
-		std::shared_ptr<Texture> framebufferTexture = std::make_shared<Texture>(1024, 1024, TextureType::DEPTH);
-		m_shadowFramebuffer = std::make_unique<FrameBuffer>(framebufferTexture);
-		m_shadowShader = std::make_unique<Shader>(nullptr, 
+		// std::shared_ptr<Texture> framebufferTexture = std::make_shared<Texture>(1024, 1024, TextureType::DEPTH);
+		// m_shadowFramebuffer = std::make_unique<FrameBuffer>(framebufferTexture);
+		m_shadowmapShader = std::make_unique<Shader>(nullptr, 
 			"#type vertex\n#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 u_lightSpaceMatrix;\nuniform mat4 u_model;\nvoid main() { gl_Position = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0); }\n\n#type fragment\n#version 330 core\nvoid main() {}"
 		);
 
@@ -32,11 +32,11 @@ namespace glGame {
 		m_cameraUniformBuffer->addData(64, NULL);
 		m_cameraUniformBuffer->bindingPoint(0);
 
-		unsigned int lightCount = 32;
+		unsigned int lightCount = 32, currentLightCount = m_lights.size();
 		m_lightCountOffset = lightCount * UNIFORM_LIGHT_SIZE;
 		m_lightsUniformBuffer = std::make_unique<UniformBuffer>(lightCount * UNIFORM_LIGHT_SIZE + 4);
 		m_lightsUniformBuffer->addData(lightCount * UNIFORM_LIGHT_SIZE, NULL);
-		m_lightsUniformBuffer->addData(4, &m_lightCount);
+		m_lightsUniformBuffer->addData(4, &currentLightCount);
 		m_lightsUniformBuffer->bindingPoint(1);
 
 		this->viewportSize = viewportSize;
@@ -54,52 +54,51 @@ namespace glGame {
 		m_skyboxRenderData = SkyboxRenderData(cubemap, shader);
 	}
 
-	unsigned int Renderer::addLight(const Light& light) {
-		m_lightOffsets[m_lightIdCount] = m_lightCount * UNIFORM_LIGHT_SIZE;
+	void Renderer::updateLight(std::shared_ptr<Light> light) {
+		struct UniformLightData {
+			UniformLightData(Vector3& position, Vector3& direction, float& intensity, LightType& lightType, glm::mat4& lightSpaceMatrix)
+				: position(position), direction(direction), intensity(intensity), lightType(lightType), lightSpaceMatrix(lightSpaceMatrix) {}
+			Vector3 position;
+			float padding1;
+			Vector3 direction;
+			float intensity;
+			LightType lightType;
+			glm::mat4 lightSpaceMatrix;
+		};
+		UniformLightData uniformLightData(light->position, light->direction, light->intensity, light->lightType, light->m_lightSpaceMatrix);
+		if(light->lightType == LightType::Directional) uniformLightData.position = light->direction;
 
 		m_lightsUniformBuffer->bindBuffer();
-		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCount * UNIFORM_LIGHT_SIZE, sizeof(Light), &light);
-		++m_lightCount;
-		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &m_lightCount);
-		m_lightsUniformBuffer->unbindBuffer();
-		return m_lightIdCount++;
-	}
+		if(light->m_lightId < 0) {
+			light->m_lightId = m_lights.size();
+			m_lights.push_back(light);
 
-	void Renderer::updateLight(const unsigned int& lightId, const Light& light) {
-		auto lightOffset = m_lightOffsets.find(lightId);
-		if(lightOffset == m_lightOffsets.end()) {
-			return;
+			unsigned int currentLightCount = m_lights.size();
+			glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &currentLightCount);
 		}
 
-		m_lightsUniformBuffer->bindBuffer();
-		glBufferSubData(GL_UNIFORM_BUFFER, lightOffset->second, sizeof(Light), &light);
+		glBufferSubData(GL_UNIFORM_BUFFER, light->m_lightId * UNIFORM_LIGHT_SIZE, UNIFORM_LIGHT_SIZE, &uniformLightData);
 		m_lightsUniformBuffer->unbindBuffer();
 	}
 
 	void Renderer::deleteLight(const unsigned int& lightid) {
-		auto lightOffset = m_lightOffsets.find(lightid);
-		if(lightOffset == m_lightOffsets.end()) {
+		if(lightid > m_lights.size() - 1 || m_lights.size() < 1) {
 			return;
 		}
 
-		unsigned int lastLightId = -1;
-		for(auto lightOffsetIterator : m_lightOffsets) {
-			if(lightOffsetIterator.second == (m_lightCount - 1) * UNIFORM_LIGHT_SIZE) {
-				lastLightId = lightOffsetIterator.first;
-				break;
-			}
-		}
-		if(lastLightId == -1) return;
+		auto lightToBeDeleted = m_lights[lightid], lastLight = m_lights.back();
 
 		m_lightsUniformBuffer->bindBuffer();
-		glCopyBufferSubData(GL_UNIFORM_BUFFER, GL_UNIFORM_BUFFER, m_lightOffsets[lastLightId], lightOffset->second, UNIFORM_LIGHT_SIZE);
+		glCopyBufferSubData(GL_UNIFORM_BUFFER, GL_UNIFORM_BUFFER, lastLight->m_lightId * UNIFORM_LIGHT_SIZE, lightToBeDeleted->m_lightId * UNIFORM_LIGHT_SIZE, UNIFORM_LIGHT_SIZE);
 
-		m_lightOffsets[lastLightId] = lightOffset->second;
+		lastLight->m_lightId = lightid;
+		lightToBeDeleted->m_lightId = -1;
+		m_lights[lightid] = lastLight;
+		m_lights.pop_back();
 
-		--m_lightCount;
-		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &m_lightCount);
+		unsigned int currentLightCount = m_lights.size();
+		glBufferSubData(GL_UNIFORM_BUFFER, m_lightCountOffset, 4, &currentLightCount);
 		m_lightsUniformBuffer->unbindBuffer();
-		m_lightOffsets.erase(lightid);
 	}
 
 	void Renderer::setMaterial(Material* material) {
@@ -126,7 +125,7 @@ namespace glGame {
 		m_cameraUniformBuffer->setData(0, (void*)&(projectionMatrix[0][0]));
 		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
 		
-		//Render scene
+		// Render scene
 		std::vector<ObjectRenderData> frameRenderData;
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i);
@@ -140,34 +139,40 @@ namespace glGame {
 			processRenderData(frameRenderData);
 		}
 
-		glViewport(0, 0, 1024, 1024);
-		m_shadowFramebuffer->bind();
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 24.0f);
-		glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 2.0f, -1.0f), glm::vec3( 0.0f, -4.0f,  -10.0f), glm::vec3( 0.0f, 1.0f,  0.0f)); 
-		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-		m_shadowShader->useShader();
-		m_shadowShader->setUniformMat4("u_lightSpaceMatrix", &(lightSpaceMatrix[0][0]));
-		
-		glCullFace(GL_FRONT);
-		renderObjectsShadow(frameRenderData);
-		glCullFace(GL_BACK);
+		// Render shadowmap
+		for(auto& light : m_lights) {
+			if(light->lightType == LightType::Directional && light->castShadows) {
+				glViewport(0, 0, light->shadowmapSize.x, light->shadowmapSize.y);
+				light->m_shadowmapFramebuffer->bind();
+				glClear(GL_DEPTH_BUFFER_BIT);
+				m_shadowmapShader->useShader();
+				m_shadowmapShader->setUniformMat4("u_lightSpaceMatrix", &(light->m_lightSpaceMatrix[0][0]));
+				glActiveTexture(GL_TEXTURE2);
+				light->m_shadowmapFramebuffer->getTexture()->bind();
 
-		m_shadowFramebuffer->unbind();
+				glCullFace(GL_FRONT);
+				renderObjectsShadow(frameRenderData);
+				glCullFace(GL_BACK);
+
+				light->m_shadowmapFramebuffer->unbind();
+			}
+		}
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
 		#ifdef GL_GAME_EDITOR
 		//Render to frame texture
 		m_editorFramebuffer->bind();
 		#endif
 
+		// TEMPORARY
 		for(ObjectRenderData& objRenderData : frameRenderData) {
 			if(objRenderData.vao) {
 				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 					objRenderData.material->shader->useShader();
-					objRenderData.material->shader->setUniformMat4("u_lightSpaceMatrix", &(lightSpaceMatrix[0][0]));
+					objRenderData.material->shader->setUniformMat4("u_lightSpaceMatrix", &(m_lights[2]->m_lightSpaceMatrix[0][0]));
 				}
 			}
 		}
+		// ----
 		renderObjects(frameRenderData);
 
 		if(m_skyboxRenderData.cubemap && m_skyboxRenderData.shader) {
@@ -220,9 +225,7 @@ namespace glGame {
 						objRenderData.material->specularMap->bind();
 					}
 
-					glActiveTexture(GL_TEXTURE2);
 					objRenderData.material->shader->setUniform1i("shadowMap", 2);
-					m_shadowFramebuffer->getTexture()->bind();
 					
 					objRenderData.vao->bind();
 					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
@@ -236,9 +239,9 @@ namespace glGame {
 	void Renderer::renderObjectsShadow(std::vector<ObjectRenderData>& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
 			if(objRenderData.vao && objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
-				m_shadowShader->useShader();
+				m_shadowmapShader->useShader();
 				objRenderData.vao->bind();
-				m_shadowShader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+				m_shadowmapShader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
 				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
 			}
 		}

@@ -46,10 +46,12 @@ layout (std140) uniform Camera {
 
 struct Light {
 	vec3 position;
+	vec3 direction;
 	float intensity;
 	uint lightType;
 	float padding1;
 	float padding2;
+	mat4 lightSpaceMatrix;
 };
 
 layout (std140) uniform Lights {
@@ -102,7 +104,7 @@ float calculatePointLight(uint lightId) {
 float calculateDirectionalLight(uint lightId) {
 	float ambient = 0.1;
 	
-	vec3 lightDir = normalize(vec3(u_view * vec4(u_lights[lightId].position, 0.0)));
+	vec3 lightDir = normalize(vec3(u_view * -vec4(u_lights[lightId].direction, 0.0)));
 	float diffuse = max(dot(lightDir, Normal), 0.0);
 
 	vec3 viewDir = normalize(-FragmentPosition);
