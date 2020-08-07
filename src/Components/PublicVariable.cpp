@@ -105,6 +105,16 @@ namespace glGame {
         
     }
 
+    template<typename T>
+    std::string createStringFromVector2(const internal::Vector2<T>& vec) {
+        return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "}";
+    }
+
+    template<typename T>
+    std::string createStringFromVector3(const internal::Vector3<T>& vec) {
+        return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "," + std::to_string(vec.z) + "}";
+    }
+
     std::string PublicVariable::getPublicVariableString() {
 		switch(data.index()) {
 		case toInt(PublicVariableType::Int): return std::to_string(*(std::get<int*>(data)));
@@ -112,16 +122,10 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): return std::to_string(*(std::get<double*>(data)));
 		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(data)));
 		case toInt(PublicVariableType::String): return *(std::get<std::string*>(data));
-		case toInt(PublicVariableType::Vec2):
-        case toInt(PublicVariableType::Vec2i): {
-			Vector2 vec2 = *(std::get<Vector2*>(data));
-			return "{" + std::to_string(vec2.x) + "," + std::to_string(vec2.y) + "}";
-		}
-        case toInt(PublicVariableType::Vec3):
-		case toInt(PublicVariableType::Vec3i): {
-			Vector3 vec3 = *(std::get<Vector3*>(data));
-			return "{" + std::to_string(vec3.x) + "," + std::to_string(vec3.y) + "," + std::to_string(vec3.z) + "}";
-		}
+		case toInt(PublicVariableType::Vec2): return createStringFromVector2(*(std::get<Vector2*>(data)));
+        case toInt(PublicVariableType::Vec2i): return createStringFromVector2(*(std::get<Vector2i*>(data)));
+        case toInt(PublicVariableType::Vec3): return createStringFromVector3(*(std::get<Vector3*>(data)));
+		case toInt(PublicVariableType::Vec3i): return createStringFromVector3(*(std::get<Vector3i*>(data)));
 		case toInt(PublicVariableType::PublicVariableEnum): return std::to_string(std::get<PublicVariableEnum*>(data)->selection);
 		// case PublicVariableType::GameObject: return "";
 		// case PublicVariableType::Component: return "";
