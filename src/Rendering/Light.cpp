@@ -1,6 +1,7 @@
 #include "Light.h"
 #include "FrameBuffer.h"
 #include "Texture.h"
+#include "TextureArray.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -32,8 +33,8 @@ namespace glGame {
             m_lightSpaceMatrix = lightProjection * lightView;
 
             if(!m_shadowmapFramebuffer.get()) {
-                std::shared_ptr<Texture> framebufferTexture = std::make_shared<Texture>(shadowmapSize.x, shadowmapSize.y, TextureType::DEPTH);
-		        m_shadowmapFramebuffer = std::make_unique<FrameBuffer>(framebufferTexture);
+                std::shared_ptr<TextureArray> textureArray = std::make_shared<TextureArray>(1, 1024, 1024);
+		        m_shadowmapFramebuffer = std::make_unique<FrameBuffer>(textureArray);
             }
         }
         else if(m_shadowmapFramebuffer.get()) {

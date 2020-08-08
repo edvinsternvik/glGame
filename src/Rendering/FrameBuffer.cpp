@@ -1,5 +1,6 @@
 #include "FrameBuffer.h"
 #include "Texture.h"
+#include "TextureArray.h"
 #include <GL/glew.h>
 #include <iostream>
 
@@ -54,9 +55,25 @@ namespace glGame {
 		unbind();
 	}
 
+	FrameBuffer::FrameBuffer(std::shared_ptr<TextureArray> textureArray) : m_textureArray(textureArray) {
+		glGenFramebuffers(1, &m_frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+
+		textureArray->bind();
+		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureArray->getId(), 0, 0);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			std::cout << "Framebuffer not complete" << std::endl;
+		}
+
+		unbind();
+	}
+
 	FrameBuffer::~FrameBuffer() {
 		glDeleteFramebuffers(1, &m_frameBuffer);
-		glDeleteRenderbuffers(1, &m_renderBuffer);
+		if(m_renderBuffer > -1) glDeleteRenderbuffers(1, &m_renderBuffer);
 	}
 
 	void FrameBuffer::bind() {

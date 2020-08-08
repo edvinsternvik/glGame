@@ -61,7 +61,7 @@ layout (std140) uniform Lights {
 
 uniform sampler2D textureSampler;
 uniform sampler2D specularSampler;
-uniform sampler2D shadowMap;
+uniform sampler2DArray shadowMap;
 
 in vec2 TextureCoordinates;
 in vec3 Normal;
@@ -126,10 +126,10 @@ float calculateShadow(vec4 lightSpacePos, vec3 lightDir) {
 	float bias = max(0.005 * (1.0 - dot(lightDir, -Normal)), 0.0001);
 	float shadow = 0.0;
 
-	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0).xy;
 	for(int x = -1; x <= 1; ++x) {
 		for(int y = -1; y <= 1; ++y) {
-			float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+			float closestDepth = texture(shadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, 0.0)).r;
 			shadow += currentDepth - bias > closestDepth ? 1.0 : 0.0;
 		}	
 	}

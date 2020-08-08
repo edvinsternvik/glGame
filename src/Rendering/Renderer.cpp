@@ -7,11 +7,13 @@
 #include "Material.h"
 #include "Light.h"
 #include "UniformBuffer.h"
+#include "TextureArray.h"
 
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define UNIFORM_LIGHT_SIZE 112
+#define MAX_LIGHTS 32
 
 namespace glGame {
 
@@ -32,10 +34,10 @@ namespace glGame {
 		m_cameraUniformBuffer->addData(64, NULL);
 		m_cameraUniformBuffer->bindingPoint(0);
 
-		unsigned int lightCount = 32, currentLightCount = m_lights.size();
-		m_lightCountOffset = lightCount * UNIFORM_LIGHT_SIZE;
-		m_lightsUniformBuffer = std::make_unique<UniformBuffer>(lightCount * UNIFORM_LIGHT_SIZE + 4);
-		m_lightsUniformBuffer->addData(lightCount * UNIFORM_LIGHT_SIZE, NULL);
+		unsigned int currentLightCount = m_lights.size();
+		m_lightCountOffset = MAX_LIGHTS * UNIFORM_LIGHT_SIZE;
+		m_lightsUniformBuffer = std::make_unique<UniformBuffer>(MAX_LIGHTS * UNIFORM_LIGHT_SIZE + 4);
+		m_lightsUniformBuffer->addData(MAX_LIGHTS * UNIFORM_LIGHT_SIZE, NULL);
 		m_lightsUniformBuffer->addData(4, &currentLightCount);
 		m_lightsUniformBuffer->bindingPoint(1);
 
@@ -55,6 +57,8 @@ namespace glGame {
 	}
 
 	void Renderer::updateLight(std::shared_ptr<Light> light) {
+		if(m_lights.size() >= MAX_LIGHTS) return;
+
 		struct UniformLightData {
 			UniformLightData(Vector3& position, Vector3& direction, float& intensity, LightType& lightType, glm::mat4& lightSpaceMatrix)
 				: position(position), direction(direction), intensity(intensity), lightType(lightType), lightSpaceMatrix(lightSpaceMatrix) {}
@@ -148,7 +152,7 @@ namespace glGame {
 				m_shadowmapShader->useShader();
 				m_shadowmapShader->setUniformMat4("u_lightSpaceMatrix", &(light->m_lightSpaceMatrix[0][0]));
 				glActiveTexture(GL_TEXTURE2);
-				light->m_shadowmapFramebuffer->getTexture()->bind();
+				light->m_shadowmapFramebuffer->getTextureArray()->bind();
 
 				glCullFace(GL_FRONT);
 				renderObjectsShadow(frameRenderData);
