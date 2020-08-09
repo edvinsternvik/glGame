@@ -34,7 +34,7 @@ namespace glGame {
         float shadowNearPlane, shadowFarPlane;
 
     private:
-        int m_lightId = -1;
+        int m_lightId = -1, m_shadowmapId = -1;
         glm::mat4 m_lightSpaceMatrix;
         std::unique_ptr<FrameBuffer> m_shadowmapFramebuffer;
 

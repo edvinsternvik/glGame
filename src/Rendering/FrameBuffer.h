@@ -10,7 +10,7 @@ namespace glGame {
 	public:
 		FrameBuffer(const unsigned int& width, const unsigned int& height);
 		FrameBuffer(std::shared_ptr<Texture> texture);
-		FrameBuffer(std::shared_ptr<TextureArray> textureArray);
+		FrameBuffer(std::shared_ptr<TextureArray> textureArray, unsigned int textureNumber);
 		~FrameBuffer();
 
 		void bind();

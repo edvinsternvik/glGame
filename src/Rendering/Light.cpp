@@ -31,14 +31,6 @@ namespace glGame {
             glm::vec3 dir(direction.x, direction.y, direction.z);
             glm::mat4 lightView = glm::lookAt(pos, dir, glm::vec3( 0.0f, 1.0f,  0.0f)); 
             m_lightSpaceMatrix = lightProjection * lightView;
-
-            if(!m_shadowmapFramebuffer.get()) {
-                std::shared_ptr<TextureArray> textureArray = std::make_shared<TextureArray>(1, 1024, 1024);
-		        m_shadowmapFramebuffer = std::make_unique<FrameBuffer>(textureArray);
-            }
-        }
-        else if(m_shadowmapFramebuffer.get()) {
-            m_shadowmapFramebuffer = std::unique_ptr<FrameBuffer>();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace glGame {
 		unbind();
 	}
 
-	FrameBuffer::FrameBuffer(std::shared_ptr<TextureArray> textureArray) : m_textureArray(textureArray) {
+	FrameBuffer::FrameBuffer(std::shared_ptr<TextureArray> textureArray, unsigned int textureNumber) : m_textureArray(textureArray) {
 		glGenFramebuffers(1, &m_frameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
@@ -63,7 +63,7 @@ namespace glGame {
 		glReadBuffer(GL_NONE);
 
 		textureArray->bind();
-		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureArray->getId(), 0, 0);
+		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureArray->getId(), 0, textureNumber);
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 			std::cout << "Framebuffer not complete" << std::endl;
 		}

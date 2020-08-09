@@ -138,9 +138,22 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Light
 Attribute: LightType 1
-Attribute: Intensity 1.000000
+Attribute: Intensity 0.500000
 Attribute: Direction {-1.000000,-3.000000,-5.000000}
 Attribute: ShadowmapSize {1024,1024}
 Attribute: ShadowSize {13.270000,13.700000}
 Attribute: ShadowNearPlane 8.000000
+Attribute: ShadowFarPlane 28.000000
+GameObject: Sun2
+Component: Transform
+Attribute: position {-10.000000,5.000000,1.000000}
+Attribute: scale {1.000000,1.000000,1.000000}
+Attribute: rotation {0.000000,0.000000,0.000000}
+Component: Light
+Attribute: LightType 1
+Attribute: Intensity 0.500000
+Attribute: Direction {1.000000,-4.000000,-4.000000}
+Attribute: ShadowmapSize {1024,1024}
+Attribute: ShadowSize {15.000000,15.000000}
+Attribute: ShadowNearPlane 5.000000
 Attribute: ShadowFarPlane 28.000000

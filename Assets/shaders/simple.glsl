@@ -10,6 +10,21 @@ layout (std140) uniform Camera {
 	mat4 u_view;
 };
 
+struct Light {
+	vec3 position;
+	float intensity;
+	vec3 direction;
+	uint lightType;
+	int shadowmapId;
+	float padding2;
+	mat4 lightSpaceMatrix;
+};
+
+layout (std140) uniform Lights {
+	Light u_lights[32];
+	uint u_lightCount;
+};
+
 uniform mat4 u_model;
 uniform mat4 u_lightSpaceMatrix;
 
@@ -17,7 +32,7 @@ out vec2 TextureCoordinates;
 
 out vec3 Normal;
 out vec3 FragmentPosition;
-out vec4 FragPosLightSpace;
+out vec4 FragPosLightSpace[8];
 
 void main() {
 	TextureCoordinates = aTex;
@@ -27,7 +42,14 @@ void main() {
 
 	Normal = normalize(mat3(transpose(inverse(viewModelMatrix))) * aNormal);
 	FragmentPosition = vec3(localPos);
-	FragPosLightSpace = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0);
+
+	int n = 0;
+	for(uint i = uint(0); i < u_lightCount; ++i) {
+		if(n < 8 && u_lights[i].shadowmapId > -1) {
+			FragPosLightSpace[u_lights[i].shadowmapId] = u_lights[i].lightSpaceMatrix * u_model * vec4(aPos, 1.0);
+			n += 1;
+		}
+	}
 
 	gl_Position = u_projection * localPos;
 }
@@ -46,10 +68,10 @@ layout (std140) uniform Camera {
 
 struct Light {
 	vec3 position;
-	vec3 direction;
 	float intensity;
+	vec3 direction;
 	uint lightType;
-	float padding1;
+	int shadowmapId;
 	float padding2;
 	mat4 lightSpaceMatrix;
 };
@@ -66,11 +88,11 @@ uniform sampler2DArray shadowMap;
 in vec2 TextureCoordinates;
 in vec3 Normal;
 in vec3 FragmentPosition;
-in vec4 FragPosLightSpace;
+in vec4 FragPosLightSpace[8];
 
 float calculatePointLight(uint lightId);
 float calculateDirectionalLight(uint lightId);
-float calculateShadow(vec4 lightSpacePos, vec3 lightDir);
+float calculateShadow(uint lightId, vec4 lightSpacePos, vec3 lightDir);
 
 void main() {
 	float lighting = 0.0;
@@ -112,12 +134,15 @@ float calculateDirectionalLight(uint lightId) {
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
 	specular *= texture(specularSampler, TextureCoordinates).r;
 
-	float shadow = calculateShadow(FragPosLightSpace, lightDir);
+	float shadow = 0.0;
+	if(u_lights[lightId].shadowmapId > -1) {
+		shadow = calculateShadow(lightId, FragPosLightSpace[u_lights[lightId].shadowmapId], lightDir);
+	}
 
 	return (ambient + (1.0 - shadow) * (diffuse + specular)) * u_lights[lightId].intensity;
 }
 
-float calculateShadow(vec4 lightSpacePos, vec3 lightDir) {
+float calculateShadow(uint lightId, vec4 lightSpacePos, vec3 lightDir) {
 	vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
 	projCoords = projCoords * 0.5 + 0.5;
 	float currentDepth = projCoords.z;
@@ -129,7 +154,7 @@ float calculateShadow(vec4 lightSpacePos, vec3 lightDir) {
 	vec2 texelSize = 1.0 / textureSize(shadowMap, 0).xy;
 	for(int x = -1; x <= 1; ++x) {
 		for(int y = -1; y <= 1; ++y) {
-			float closestDepth = texture(shadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, 0.0)).r;
+			float closestDepth = texture(shadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, float(u_lights[lightId].shadowmapId))).r;
 			shadow += currentDepth - bias > closestDepth ? 1.0 : 0.0;
 		}	
 	}
