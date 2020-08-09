@@ -17,9 +17,13 @@ namespace glGame {
 	class Material;
 	class Cubemap;
 	class Light;
+	class LightManager;
 
 	class Renderer {
 	public:
+		Renderer();
+		~Renderer();
+
 		void init(Vector2i viewportSize);
 
 		void submit(Model* model, const glm::mat4& modelMatrix);
@@ -66,18 +70,10 @@ namespace glGame {
 		Vector2i viewportSize;
 
 	private:
-		static const unsigned int MAX_SHADOWMAPS = 8;
-
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
-		std::unique_ptr<Shader> m_shadowmapShader;
-		std::shared_ptr<TextureArray> m_shadowmapTextureArray;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
-		std::unique_ptr<UniformBuffer> m_lightsUniformBuffer;
+		std::unique_ptr<LightManager> m_lightManager;
 		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
-		unsigned int m_lightCountOffset;
-		std::vector<std::shared_ptr<Light>> m_lights;
-		unsigned int m_shadowmapCount = 0;
-		std::array<bool, MAX_SHADOWMAPS> m_shadowmaps;
 	};
 }

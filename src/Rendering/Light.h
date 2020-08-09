@@ -38,6 +38,7 @@ namespace glGame {
         glm::mat4 m_lightSpaceMatrix;
         std::unique_ptr<FrameBuffer> m_shadowmapFramebuffer;
 
+        friend class LightManager;
         friend class Renderer;
     };
 
