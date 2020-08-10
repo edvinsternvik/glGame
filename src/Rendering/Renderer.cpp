@@ -27,7 +27,7 @@ namespace glGame {
 		initGLEW();
 
 		#ifdef GL_GAME_EDITOR
-		m_editorFramebuffer = std::make_unique<FrameBuffer>(1280, 720);
+		m_editorFramebuffer = std::make_unique<FrameBuffer>(viewportSize.x, viewportSize.y);
 		#endif
 
 		m_lightManager = std::make_unique<LightManager>();
@@ -94,6 +94,7 @@ namespace glGame {
 			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
 				gameObject->getComponent(j)->onRender();
 			}
+			m_objectRenderData.gameObjectId = i;
 
 			processRenderData(frameRenderData);
 		}

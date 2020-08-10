@@ -29,6 +29,7 @@ namespace glGame {
 		unsigned int verticies;
 		Material* material;
 		glm::mat4 modelMatrix;
+		int gameObjectId = -1;
 	};
 
 	class Renderer {
