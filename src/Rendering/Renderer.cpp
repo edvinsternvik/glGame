@@ -85,7 +85,7 @@ namespace glGame {
 		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
 		
 		// Render scene
-		std::vector<ObjectRenderData> frameRenderData;
+		frameRenderData.clear();
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i);
 
@@ -157,35 +157,32 @@ namespace glGame {
 
 	void Renderer::renderObjects(std::vector<ObjectRenderData>& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
-			if(objRenderData.vao) {
-				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
-					objRenderData.material->shader->useShader();
+			if(!objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+				objRenderData.material->shader->useShader();
 
-					glActiveTexture(GL_TEXTURE0);
-					objRenderData.material->texture->bind();
-					if(objRenderData.material->specularMap.expired()) {
-						objRenderData.material->shader->setUniform1i("specularSampler", -1);
-					}
-					else {
-						objRenderData.material->shader->setUniform1i("specularSampler", 1);
-						glActiveTexture(GL_TEXTURE1);
-						objRenderData.material->specularMap->bind();
-					}
-
-					objRenderData.material->shader->setUniform1i("shadowMap", 2);
-					
-					objRenderData.vao->bind();
-					objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
-					glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+				glActiveTexture(GL_TEXTURE0);
+				objRenderData.material->texture->bind();
+				if(objRenderData.material->specularMap.expired()) {
+					objRenderData.material->shader->setUniform1i("specularSampler", -1);
+				}
+				else {
+					objRenderData.material->shader->setUniform1i("specularSampler", 1);
+					glActiveTexture(GL_TEXTURE1);
+					objRenderData.material->specularMap->bind();
 				}
 
+				objRenderData.material->shader->setUniform1i("shadowMap", 2);
+				
+				objRenderData.vao->bind();
+				objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
 			}
 		}
 	}
 
 	void Renderer::renderObjectsShadow(std::vector<ObjectRenderData>& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
-			if(objRenderData.vao && objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+			if(!objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 				m_lightManager->shadowmapShader->useShader();
 				objRenderData.vao->bind();
 				m_lightManager->shadowmapShader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
@@ -206,7 +203,7 @@ namespace glGame {
 	}
 
 	void Renderer::processRenderData(std::vector<ObjectRenderData>& frameRenderData) {
-		if(m_objectRenderData.vao) frameRenderData.push_back(m_objectRenderData);
+		if(m_objectRenderData.vao && m_objectRenderData.material) frameRenderData.push_back(m_objectRenderData);
 	}
 
 	void Renderer::clearScreen() {

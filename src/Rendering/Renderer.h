@@ -19,6 +19,18 @@ namespace glGame {
 	class Light;
 	class LightManager;
 
+	struct ObjectRenderData {
+	public:
+		ObjectRenderData() {}
+		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
+			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
+
+		VertexArray* vao;
+		unsigned int verticies;
+		Material* material;
+		glm::mat4 modelMatrix;
+	};
+
 	class Renderer {
 	public:
 		Renderer();
@@ -41,17 +53,6 @@ namespace glGame {
 		unsigned int getEditorFrameTexture();
 
 	private:
-		struct ObjectRenderData {
-		public:
-			ObjectRenderData() {}
-			ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
-				: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
-
-			VertexArray* vao;
-			unsigned int verticies;
-			Material* material;
-			glm::mat4 modelMatrix;
-		};
 
 		struct SkyboxRenderData {
 			SkyboxRenderData() : cubemap(nullptr), shader(nullptr) {}
@@ -68,6 +69,7 @@ namespace glGame {
 
 	public:
 		Vector2i viewportSize;
+		std::vector<ObjectRenderData> frameRenderData;
 
 	private:
 		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
