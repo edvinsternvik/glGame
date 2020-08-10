@@ -129,8 +129,6 @@ namespace glGame {
 			glDepthFunc(GL_LEQUAL);
 			
 			m_skyboxRenderData.shader->useShader();
-			m_skyboxRenderData.shader->setUniformMat4("u_projection", &(projectionMatrix[0][0]));
-			m_skyboxRenderData.shader->setUniformMat4("u_view", &(viewMatrix[0][0]));
 			m_skyboxRenderData.cubemap->bind();
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -208,7 +206,7 @@ namespace glGame {
 	}
 
 	void Renderer::processRenderData(std::vector<ObjectRenderData>& frameRenderData) {
-		frameRenderData.push_back(m_objectRenderData);
+		if(m_objectRenderData.vao) frameRenderData.push_back(m_objectRenderData);
 	}
 
 	void Renderer::clearScreen() {
