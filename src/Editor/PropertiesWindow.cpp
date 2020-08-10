@@ -56,6 +56,10 @@ namespace glGame {
 			registerChangePublicVariableAction<std::string>(std::get<std::string*>(editorVariable->data), &m_editor->actionManager);
 			break;
 		}
+		case toInt(PublicVariableType::Boolean):
+			ImGui::Checkbox(editorVariable->name.c_str(), std::get<bool*>(editorVariable->data));
+			registerChangePublicVariableAction<bool>(std::get<bool*>(editorVariable->data), &m_editor->actionManager);
+			break;
 		case toInt(PublicVariableType::Vec2):
 			ImGui::DragFloat2(editorVariable->name.c_str(), (float*)std::get<Vector2*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
 			registerChangePublicVariableAction<Vector2>(std::get<Vector2*>(editorVariable->data), &m_editor->actionManager);

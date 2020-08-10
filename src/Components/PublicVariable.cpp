@@ -89,6 +89,7 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): *std::get<double*>(data) = std::stod(str); return;
 		case toInt(PublicVariableType::Char): *std::get<char*>(data) = str[0]; return;
 		case toInt(PublicVariableType::String): *std::get<std::string*>(data) = str; return;
+        case toInt(PublicVariableType::Boolean): *std::get<bool*>(data) = (bool)std::stoi(str); return;
 		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createVector2FromString<float>(str, stofOverload); return;
         case toInt(PublicVariableType::Vec2i): *std::get<Vector2i*>(data) = createVector2FromString<int>(str, stoiOverload); return;
 		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createVector3FromString<float>(str, stofOverload); return;
@@ -122,6 +123,7 @@ namespace glGame {
 		case toInt(PublicVariableType::Double): return std::to_string(*(std::get<double*>(data)));
 		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(data)));
 		case toInt(PublicVariableType::String): return *(std::get<std::string*>(data));
+        case toInt(PublicVariableType::Boolean): return std::to_string(*(std::get<bool*>(data)));
 		case toInt(PublicVariableType::Vec2): return createStringFromVector2(*(std::get<Vector2*>(data)));
         case toInt(PublicVariableType::Vec2i): return createStringFromVector2(*(std::get<Vector2i*>(data)));
         case toInt(PublicVariableType::Vec3): return createStringFromVector3(*(std::get<Vector3*>(data)));
@@ -148,6 +150,7 @@ namespace glGame {
         else if(str == "Vector3i") return PublicVariableType::Vec3i;
         else if(str == "char") return PublicVariableType::Char;
         else if(str == "string") return PublicVariableType::String;
+        else if(str == "boolean") return PublicVariableType::Boolean;
         else if(str == "GameObject") return PublicVariableType::GameObject;
         else if(str == "Component") return PublicVariableType::Component;
         else if(str == "Color") return PublicVariableType::Color;
