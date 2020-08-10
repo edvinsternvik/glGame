@@ -57,7 +57,12 @@ namespace glGame {
 				light->m_shadowmapFramebuffer = std::make_unique<FrameBuffer>(m_shadowmapTextureArray, light->m_shadowmapId);
 			}
 		}
-		else if(light->m_shadowmapFramebuffer.get()) light->m_shadowmapFramebuffer = std::unique_ptr<FrameBuffer>();
+		else if(light->m_shadowmapFramebuffer.get()) {
+			light->m_shadowmapFramebuffer = std::unique_ptr<FrameBuffer>();
+			m_shadowmaps[light->m_shadowmapId] = false;
+			light->m_shadowmapId = -1;
+			++m_shadowmapCount;
+		}
 
 		// Define the data to send to the gpu
 		struct UniformLightData {

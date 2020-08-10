@@ -100,7 +100,7 @@ namespace glGame {
 
 		// Render shadowmaps
 		for(auto& light : m_lightManager->m_lights) {
-			if(light->lightType == LightType::Directional && light->castShadows) {
+			if(light->m_shadowmapFramebuffer.get()) {
 				light->m_shadowmapFramebuffer->bind();
 				m_lightManager->shadowmapShader->useShader();
 				m_lightManager->shadowmapShader->setUniformMat4("u_lightSpaceMatrix", &(light->m_lightSpaceMatrix[0][0]));

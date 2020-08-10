@@ -8,6 +8,7 @@ namespace glGame {
         addPublicVariable(&lightType, "LightType");
         addPublicVariable(&light->intensity, "Intensity");
         addPublicVariable(&light->direction, "Direction");
+        addPublicVariable(&light->castShadows, "CastShadows");
         addPublicVariable(&light->shadowmapSize, "ShadowmapSize");
         addPublicVariable(&light->shadowSize, "ShadowSize");
         addPublicVariable(&light->shadowNearPlane, "ShadowNearPlane");

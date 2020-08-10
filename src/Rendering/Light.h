@@ -27,7 +27,7 @@ namespace glGame {
         Vector3 position;
         float intensity;
         LightType lightType;
-        bool castShadows = true;
+        bool castShadows = false;
         Vector3 direction;
         Vector2i shadowmapSize = Vector2i(1024, 1024);
         Vector2 shadowSize;
