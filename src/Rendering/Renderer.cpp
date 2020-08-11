@@ -130,6 +130,7 @@ namespace glGame {
 			glDepthFunc(GL_LEQUAL);
 			
 			m_skyboxRenderData.shader->useShader();
+			glActiveTexture(GL_TEXTURE0);
 			m_skyboxRenderData.cubemap->bind();
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
