@@ -20,7 +20,9 @@ namespace glGame {
 
         m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject");
         m_camera = m_editorCameraGameObject->addComponent<CameraComponent>();
-        m_editorCameraGameObject->addComponent<EditorController>();
+        auto m_editorController = m_editorCameraGameObject->addComponent<EditorController>();
+        m_editorController->setEditor(this);
+        m_editorController->setViewportWindow(m_viewportWindow);
 
         m_selectedObjectGizmoObject = GameObject::Create("SelectedObjectGizmoObject");
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(1.0, 0.0, 0.0);
