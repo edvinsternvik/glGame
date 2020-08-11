@@ -12,6 +12,7 @@ namespace glGame {
 	double Input::m_xpos = 0.0, Input::m_ypos = 0.0, Input::m_prevXpos = 0.0, Input::m_prevYpos = 0.0;
 	bool Input::m_mouseKeys[MOUSE_BUTTON_LAST + 1] = { false };
 	bool Input::m_mouseKeysPrevious[MOUSE_BUTTON_LAST + 1] = { false };
+	Vector2 Input::m_viewportOffset = Vector2(0.0, 0.0);
 	Window* Input::m_window = nullptr;
 
 	Input* Input::s_instance = new Input();
@@ -55,7 +56,7 @@ namespace glGame {
 	}
 
 	Vector2 Input::GetMousePosition() {
-		return Vector2(m_xpos, m_ypos);
+		return Vector2(m_xpos, m_ypos) - m_viewportOffset;
 	}
 
 	Vector2 Input::GetMouseDelta() {
@@ -63,11 +64,11 @@ namespace glGame {
 	}
 
 	float Input::GetMouseX() {
-		return m_xpos;
+		return m_xpos + m_viewportOffset.x;
 	}
 
 	float Input::GetMouseY() {
-		return m_ypos;
+		return m_ypos + m_viewportOffset.y;
 	}
 
 	float Input::GetMouseDeltaX() {
@@ -76,6 +77,10 @@ namespace glGame {
 
 	float Input::GetMouseDeltaY() {
 		return m_ypos - m_prevYpos;
+	}
+
+	void Input::setViewportOffset(Vector2 offset) {
+		m_viewportOffset = offset;
 	}
 
 	void Input::SetCursorMode(const int& cursorMode) {

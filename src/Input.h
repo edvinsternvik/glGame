@@ -25,6 +25,7 @@ namespace glGame {
 		static float GetMouseDeltaX();
 		static float GetMouseDeltaY();
 
+		static void setViewportOffset(Vector2 offset);
 		static void SetCursorMode(const int& cursorMode);
 
 		static const void HandleEvent(Event* e);
@@ -43,6 +44,7 @@ namespace glGame {
 		static double m_prevXpos, m_prevYpos;
 		static bool m_mouseKeys[MOUSE_BUTTON_LAST + 1];
 		static bool m_mouseKeysPrevious[MOUSE_BUTTON_LAST + 1];
+		static Vector2 m_viewportOffset;
 		
 		static Window* m_window;
 		friend class Application;

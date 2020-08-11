@@ -7,6 +7,7 @@
 
 #include "../Resources/Scene.h"
 #include "Editor.h"
+#include "../Input.h"
 
 namespace glGame {
 
@@ -30,9 +31,13 @@ namespace glGame {
 			}
 		}
 
-		float width = ImGui::GetContentRegionAvail().x;
-		float height = width / m_aspectRatio;
-		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(width, height), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
+		viewportX = ImGui::GetCursorScreenPos().x;
+		viewportY = ImGui::GetCursorScreenPos().y;
+		viewportWidth = ImGui::GetContentRegionAvail().x;
+		viewportHeight = viewportWidth / m_aspectRatio;
+		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(viewportWidth, viewportHeight), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
+
+		Input::setViewportOffset(Vector2(viewportX, viewportY));
 	}
 
 	SceneWindow::SceneWindow(Scene* scene) : m_scene(scene) {

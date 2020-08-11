@@ -38,6 +38,9 @@ namespace glGame {
 		inline virtual const char* getWindowName() { return "Viewport"; }
 		virtual void renderWindow() override;
 
+	public:
+		float viewportX, viewportY, viewportWidth, viewportHeight;
+
 	private:
 		unsigned int m_texture;
 		float m_aspectRatio;
