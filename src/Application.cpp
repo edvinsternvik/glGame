@@ -20,8 +20,8 @@ namespace glGame {
 
 		m_assetManager = std::make_unique<AssetManager>();
 
-		m_sceneManager = std::make_unique<SceneManager>();
-		m_sceneManager->initializeScene();
+		sceneManager = std::make_unique<SceneManager>();
+		sceneManager->initializeScene();
 
 		#ifdef GL_GAME_EDITOR
 		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), renderer.getEditorFrameTexture(), m_viewportAspectRatio);
@@ -30,17 +30,17 @@ namespace glGame {
 
 	void Application::run() {
 		#ifdef GL_GAME_EDITOR
-		m_editor->setActiveScene(m_sceneManager->getActiveScene());
+		m_editor->setActiveScene(sceneManager->getActiveScene());
 		m_editor->setAssetManager(m_assetManager.get());
 		#endif
 
 		m_time = std::make_unique<Time>();
 
 		while(m_running) {
-			m_sceneManager->initScene();
+			sceneManager->initScene();
 
 			float deltatime = m_time->getDeltatime();
-			m_sceneManager->updateScene(deltatime);
+			sceneManager->updateScene(deltatime);
 			#ifndef GL_GAME_EDITOR
 				physics.stepSimulation(deltatime);
 			#else
@@ -49,7 +49,7 @@ namespace glGame {
 
 
 			renderer.beginRender();
-			renderer.render(m_sceneManager->getActiveScene(), &m_sceneManager->getActiveScene()->activeCamera.lock()->camera);
+			renderer.render(sceneManager->getActiveScene(), &sceneManager->getActiveScene()->activeCamera.lock()->camera);
 			
 			#ifdef GL_GAME_EDITOR
 			renderer.renderGizmos(m_editor->getGizmoObjects());
@@ -80,7 +80,7 @@ namespace glGame {
 		else if(e.isInCategory(EventCategory::Editor)) {
 			if(e.getEventType() == EventType::SaveScene) {
 				std::cout << "Scene saved" << std::endl;
-				m_sceneManager->saveActiveScene();
+				sceneManager->saveActiveScene();
 			}
 			else if(e.getEventType() == EventType::GameFocused) {
 				m_focused = true;
