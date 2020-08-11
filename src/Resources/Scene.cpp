@@ -33,12 +33,12 @@ namespace glGame {
 		}
 	}
 
-	GameObject* Scene::getGameObject(int index) {
+	std::weak_ptr<GameObject> Scene::getGameObject(int index) {
 		if (index < 0 || index > m_gameObjects.size()) {
-			return nullptr;
+			return std::weak_ptr<GameObject>();
 		}
 
-		return m_gameObjects[index].get();
+		return m_gameObjects[index];
 	}
 
 	std::shared_ptr<GameObject> Scene::getGameObjectShared(int index) {

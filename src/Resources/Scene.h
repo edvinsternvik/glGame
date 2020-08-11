@@ -15,7 +15,7 @@ namespace glGame {
 		std::shared_ptr<GameObject> createGameObject(std::string name);
 		std::shared_ptr<GameObject> createGameObject(std::shared_ptr<GameObject> gameObject);
 		void deleteGameObject(GameObject* gameObject);
-		GameObject* getGameObject(int index);
+		std::weak_ptr<GameObject> getGameObject(int index);
 		std::shared_ptr<GameObject> getGameObjectShared(int index);
 		int getGameObjectCount() { return m_gameObjects.size(); }
 

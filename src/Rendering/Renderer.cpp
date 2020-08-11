@@ -87,7 +87,7 @@ namespace glGame {
 		// Render scene
 		frameRenderData.clear();
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
-			GameObject* gameObject = scene->getGameObject(i);
+			GameObject* gameObject = scene->getGameObject(i).lock().get();
 
 			m_objectRenderData.vao = nullptr;
 			m_objectRenderData.material = nullptr;

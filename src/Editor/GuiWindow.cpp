@@ -60,9 +60,9 @@ namespace glGame {
 		
 		int gameObjects = m_scene->getGameObjectCount();
 		for (int i = 0; i < gameObjects; ++i) {
-			bool selected = (current == m_scene->getGameObject(i));
+			bool selected = (current == m_scene->getGameObject(i).lock().get());
 			ImGui::PushID(i);
-			if (ImGui::Selectable(m_scene->getGameObject(i)->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
+			if (ImGui::Selectable(m_scene->getGameObject(i).lock()->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
 				std::weak_ptr<GameObject> gameObjectWeak = m_scene->getGameObjectShared(i);
 				m_editor->selectItem(gameObjectWeak);
 			}
