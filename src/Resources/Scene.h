@@ -6,7 +6,7 @@
 
 namespace glGame {
 
-	class Camera;
+	class CameraComponent;
 
 	class Scene {
 	public:
@@ -24,7 +24,7 @@ namespace glGame {
 		void onRender();
 
 	public:
-		std::weak_ptr<Camera> activeCamera;
+		std::weak_ptr<CameraComponent> activeCamera;
 		
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;

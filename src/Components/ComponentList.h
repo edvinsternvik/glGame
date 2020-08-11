@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Transform.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
 #include "ScriptComponent.h"

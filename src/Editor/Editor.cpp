@@ -1,6 +1,6 @@
 #include "Editor.h"
 #include "../Window.h"
-#include "../Components/Camera.h"
+#include "../Components/CameraComponent.h"
 #include "EditorController.h"
 #include "../Resources/Scene.h"
 #include "../Components/LineRenderer.h"
@@ -19,7 +19,7 @@ namespace glGame {
         m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>(), this);
 
         m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject");
-        m_camera = m_editorCameraGameObject->addComponent<Camera>();
+        m_camera = m_editorCameraGameObject->addComponent<CameraComponent>();
         m_editorCameraGameObject->addComponent<EditorController>();
 
         m_selectedObjectGizmoObject = GameObject::Create("SelectedObjectGizmoObject");

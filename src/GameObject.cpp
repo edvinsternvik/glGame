@@ -51,7 +51,7 @@ namespace glGame {
 
 	std::shared_ptr<Component> GameObject::addComponent(std::string& component) {
 		if(component == "Transform") return addComponent<Transform>();
-		else if(component == "Camera") return addComponent<Camera>();
+		else if(component == "Camera") return addComponent<CameraComponent>();
 		else if(component == "MeshRenderer") return addComponent<MeshRenderer>();
 		else if(component == "LineRenderer") return addComponent<LineRenderer>();
 		else if(component == "Script") return addComponent<ScriptComponent>();

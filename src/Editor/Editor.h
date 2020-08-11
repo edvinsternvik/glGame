@@ -11,7 +11,7 @@ namespace glGame {
 
     class GameObject;
     class Scene;
-    class Camera;
+    class CameraComponent;
     class Window;
     namespace assetInternal { class AssetT; }
 
@@ -54,7 +54,7 @@ namespace glGame {
         SceneWindow* m_sceneWindow;
         PropertiesWindow* m_propertiesWindow;
         AssetWindow* m_assetWindow;
-        std::weak_ptr<Camera> m_camera;
+        std::weak_ptr<CameraComponent> m_camera;
         Scene* m_scene;
     };
 

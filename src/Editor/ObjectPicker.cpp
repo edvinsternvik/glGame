@@ -1,6 +1,6 @@
 #include "ObjectPicker.h"
 #include "../Rendering/Texture.h"
-#include "../Components/Camera.h"
+#include "../Rendering/Camera.h"
 #include "../Rendering/Renderer.h"
 
 #include <GL/glew.h>

@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Components/CameraComponent.h"
 #include <iostream>
 
 namespace glGame {
@@ -48,7 +49,7 @@ namespace glGame {
 
 
 			renderer.beginRender();
-			renderer.render(m_sceneManager->getActiveScene());
+			renderer.render(m_sceneManager->getActiveScene(), &m_sceneManager->getActiveScene()->activeCamera.lock()->camera);
 			
 			#ifdef GL_GAME_EDITOR
 			renderer.renderGizmos(m_editor->getGizmoObjects());

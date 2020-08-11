@@ -47,7 +47,7 @@ namespace glGame {
 		void setMaterial(Material* material);
 
 		void beginRender();
-		void render(Scene* scene);
+		void render(Scene* scene, Camera* camera);
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
 		void endRender();
 

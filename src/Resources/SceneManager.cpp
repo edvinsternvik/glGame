@@ -47,7 +47,7 @@ namespace glGame {
 		else {
 			if(!m_activeScene->activeCamera.expired()) {
 				std::shared_ptr<GameObject> cameraObject = m_activeScene->createGameObject("Camera");
-				m_activeScene->activeCamera = cameraObject->addComponent<Camera>();
+				m_activeScene->activeCamera = cameraObject->addComponent<CameraComponent>();
 			}	
 		}
 	}
@@ -163,7 +163,7 @@ namespace glGame {
 	Component* SceneManager::addComponent(std::string& component, GameObject* gameObject) {
 		if(component == "Transform") return gameObject->transform;
 		else if(component == "Camera") {
-			m_activeScene->activeCamera = gameObject->addComponent<Camera>();
+			m_activeScene->activeCamera = gameObject->addComponent<CameraComponent>();
 			return (Component*)m_activeScene->activeCamera.lock().get();
 		}
 

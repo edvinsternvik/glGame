@@ -1,8 +1,8 @@
 #include "Renderer.h"
 #include "../Resources/Scene.h"
-#include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
+#include "Camera.h"
 #include "Cubemap.h"
 #include "Material.h"
 #include "Light.h"
@@ -75,11 +75,11 @@ namespace glGame {
 		clearScreen();
 	}
 
-	void Renderer::render(Scene* scene) {
+	void Renderer::render(Scene* scene, Camera* camera) {
 		if(scene->activeCamera.expired()) return;
 
-		const glm::mat4& projectionMatrix = scene->activeCamera.lock()->getProjectionMatrix();
-		const glm::mat4& viewMatrix = scene->activeCamera.lock()->getViewMatrix();
+		const glm::mat4& projectionMatrix = camera->getProjectionMatrix();
+		const glm::mat4& viewMatrix = camera->getViewMatrix();
 
 		m_cameraUniformBuffer->setData(0, (void*)&(projectionMatrix[0][0]));
 		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
