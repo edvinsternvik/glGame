@@ -51,7 +51,7 @@ namespace glGame {
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
 		void endRender();
 
-		unsigned int getEditorFrameTexture();
+		void setDefaultRenderTarget(std::shared_ptr<FrameBuffer> renderTarget);
 
 	private:
 
@@ -67,13 +67,15 @@ namespace glGame {
 		void initGLEW();
 		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
+		void bindDefaultRenderTarget();
+		void unbindDefaultRenderTarget();
 
 	public:
 		Vector2i viewportSize;
 		std::vector<ObjectRenderData> frameRenderData;
 
 	private:
-		std::unique_ptr<FrameBuffer> m_editorFramebuffer;
+		std::shared_ptr<FrameBuffer> m_defaultRenderTarget;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
 		std::unique_ptr<LightManager> m_lightManager;
 		ObjectRenderData m_objectRenderData;

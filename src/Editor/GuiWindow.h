@@ -3,6 +3,7 @@
 #include <vector>
 #include <functional>
 #include "../Events/EditorEvent.h"
+#include "../Math/Vector.h"
 
 namespace glGame {
 
@@ -11,6 +12,7 @@ namespace glGame {
 	class AssetManager;
 	class GameObject;
 	class Editor;
+	class FrameBuffer;
 	namespace assetInternal { class AssetT; }
 
 	class GuiWindow {
@@ -33,7 +35,7 @@ namespace glGame {
 
 	class ViewportWindow : public GuiWindow {
 	public:
-		ViewportWindow(unsigned int texture, float aspectRatio);
+		ViewportWindow(Vector2i viewportSize);
 
 		inline virtual const char* getWindowName() { return "Viewport"; }
 		virtual void renderWindow() override;
@@ -42,8 +44,8 @@ namespace glGame {
 		float viewportX, viewportY, viewportWidth, viewportHeight;
 
 	private:
-		unsigned int m_texture;
-		float m_aspectRatio;
+		std::shared_ptr<FrameBuffer> m_viewportFrameBuffer;
+		Vector2i m_viewportSize;
 		bool m_focused;
 	};
 

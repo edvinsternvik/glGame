@@ -19,7 +19,7 @@ namespace glGame {
 
     class Editor {
     public:
-        Editor(std::function<void(Event&)> eventFunction, Window* window, unsigned int editorFrameTexture, float aspectRatio);
+        Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize);
 
         void update(const float& deltatime, const bool& viewportFocused);
         void renderEditor();

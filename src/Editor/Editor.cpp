@@ -10,10 +10,10 @@
 
 namespace glGame {
 
-    Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, unsigned int editorFrameTexture, float aspectRatio) {
+    Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize) {
         m_editorGui = std::make_unique<Gui>(window->getWindow());
         m_editorGui->setEventFunction(eventFunction);
-		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(editorFrameTexture, aspectRatio), this); // m_renderer->getEditorFrameTexture()
+		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(viewportSize), this);
 		m_sceneWindow = m_editorGui->addWindow(std::make_unique<SceneWindow>(), this);
 		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>(), this);
         m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>(), this);

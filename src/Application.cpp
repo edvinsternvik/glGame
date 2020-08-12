@@ -11,7 +11,6 @@ namespace glGame {
 
 		std::string title = "glGame";
 		Vector2i viewportSize(1280, 720);
-		m_viewportAspectRatio = viewportSize.x / (float)viewportSize.y;
 		m_window = std::make_unique<Window>(title, viewportSize.x, viewportSize.y);
 		m_window->setEventFunction(std::bind(&Application::onEvent, this, std::placeholders::_1));
 		Input::m_window = m_window.get();
@@ -24,7 +23,7 @@ namespace glGame {
 		sceneManager->initializeScene();
 
 		#ifdef GL_GAME_EDITOR
-		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), renderer.getEditorFrameTexture(), m_viewportAspectRatio);
+		m_editor = std::make_unique<Editor>(std::bind(&Application::onEvent, this, std::placeholders::_1), m_window.get(), viewportSize);
 		#endif
 	}
 

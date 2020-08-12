@@ -26,10 +26,6 @@ namespace glGame {
 	void Renderer::init(Vector2i viewportSize) {
 		initGLEW();
 
-		#ifdef GL_GAME_EDITOR
-		m_editorFramebuffer = std::make_unique<FrameBuffer>(viewportSize.x, viewportSize.y);
-		#endif
-
 		m_lightManager = std::make_unique<LightManager>();
 
 		m_cameraUniformBuffer = std::make_unique<UniformBuffer>(128);
@@ -67,10 +63,7 @@ namespace glGame {
 	void Renderer::beginRender() {
 		clearScreen();
 
-		#ifdef GL_GAME_EDITOR
-		//Render to frame texture
-		m_editorFramebuffer->bind();
-		#endif
+		bindDefaultRenderTarget();
 
 		clearScreen();
 	}
@@ -113,15 +106,11 @@ namespace glGame {
 				glCullFace(GL_BACK);
 			}
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glActiveTexture(GL_TEXTURE2);
 		m_lightManager->m_shadowmapTextureArray->bind();
 
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
-		#ifdef GL_GAME_EDITOR
-		//Render to frame texture
-		m_editorFramebuffer->bind();
-		#endif
+		bindDefaultRenderTarget();
 
 		renderObjects(frameRenderData);
 
@@ -148,13 +137,11 @@ namespace glGame {
 	}
 
 	void Renderer::endRender() {
-		#ifdef GL_GAME_EDITOR
-		m_editorFramebuffer->unbind();
-		#endif
+		unbindDefaultRenderTarget();
 	}
 
-	unsigned int Renderer::getEditorFrameTexture() {
-		return m_editorFramebuffer->getTexture()->getTextureId();
+	void Renderer::setDefaultRenderTarget(std::shared_ptr<FrameBuffer> renderTarget) {
+		m_defaultRenderTarget = renderTarget;
 	}
 
 	void Renderer::renderObjects(std::vector<ObjectRenderData>& renderData) {
@@ -212,4 +199,17 @@ namespace glGame {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	
+	void Renderer::bindDefaultRenderTarget() {
+		if(m_defaultRenderTarget.get()) {
+			m_defaultRenderTarget->bind();
+		}
+		else {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+	}
+
+	void Renderer::unbindDefaultRenderTarget() {
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 }

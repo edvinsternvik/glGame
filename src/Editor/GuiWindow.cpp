@@ -1,18 +1,21 @@
 #include "GuiWindow.h"
-#include <iostream>
+#include "../Resources/Scene.h"
+#include "Editor.h"
+#include "../Input.h"
+#include "../Application.h"
+#include "../Rendering/FrameBuffer.h"
+#include "../Rendering/Texture.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include "../Resources/Scene.h"
-#include "Editor.h"
-#include "../Input.h"
+#include <iostream>
 
 namespace glGame {
 
-	ViewportWindow::ViewportWindow(unsigned int texture, float aspectRatio) : m_texture(texture), m_aspectRatio(aspectRatio) {	
-		
+	ViewportWindow::ViewportWindow(Vector2i viewportSize) : m_viewportFrameBuffer(std::make_shared<FrameBuffer>(viewportSize.x, viewportSize.y)), m_viewportSize(viewportSize) {	
+		Application::Get().renderer.setDefaultRenderTarget(m_viewportFrameBuffer);
 	}
 
 	void ViewportWindow::renderWindow() {
@@ -31,11 +34,13 @@ namespace glGame {
 			}
 		}
 
+		float aspectRatio = (float)m_viewportSize.x / (float)m_viewportSize.y;
+
 		viewportX = ImGui::GetCursorScreenPos().x;
 		viewportY = ImGui::GetCursorScreenPos().y;
 		viewportWidth = ImGui::GetContentRegionAvail().x;
-		viewportHeight = viewportWidth / m_aspectRatio;
-		ImGui::Image((void*)(intptr_t)m_texture, ImVec2(viewportWidth, viewportHeight), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
+		viewportHeight = viewportWidth / aspectRatio;
+		ImGui::Image((void*)(intptr_t)m_viewportFrameBuffer->getTexture()->getTextureId(), ImVec2(viewportWidth, viewportHeight), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
 
 		Input::setViewportOffset(Vector2(viewportX, viewportY));
 	}
