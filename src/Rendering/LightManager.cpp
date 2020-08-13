@@ -17,7 +17,7 @@ namespace glGame {
 
     LightManager::LightManager() {
         shadowmapShader = std::make_unique<Shader>(nullptr, 
-			"#type vertex\n#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 u_lightSpaceMatrix;\nuniform mat4 u_model;\nvoid main() { gl_Position = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0); }\n\n#type fragment\n#version 330 core\nvoid main() {}"
+			"#section vertex\n#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 u_lightSpaceMatrix;\nuniform mat4 u_model;\nvoid main() { gl_Position = u_lightSpaceMatrix * u_model * vec4(aPos, 1.0); }\n\n#section fragment\n#version 330 core\nvoid main() {}"
 		);
 		m_shadowmapTextureArray = std::make_shared<TextureArray>(MAX_SHADOWMAPS, SHADOWMAP_MAX_SIZE, SHADOWMAP_MAX_SIZE);
 

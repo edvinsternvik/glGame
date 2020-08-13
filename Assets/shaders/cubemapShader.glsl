@@ -1,4 +1,4 @@
-#type vertex
+#section vertex
 
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -20,7 +20,7 @@ void main() {
 }
 
 
-#type fragment
+#section fragment
 
 #version 330 core
 out vec4 FragColor;

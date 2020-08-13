@@ -11,14 +11,14 @@ namespace glGame {
 
     ObjectPicker::ObjectPicker(Vector2i resolution) : m_resolution(resolution) {
         m_colorPickerShader = std::make_unique<Shader>(nullptr, 
-			"#type vertex\n"
+			"#section vertex\n"
             "#version 330 core\n"
             "layout (location = 0) in vec3 aPos;\n"
             "uniform mat4 u_projectionView;\n"
             "uniform mat4 u_model;\n"
             "void main() { gl_Position = u_projectionView * u_model * vec4(aPos, 1.0); }\n"
             "\n"
-            "#type fragment\n"
+            "#section fragment\n"
             "#version 330 core\n"
             "out vec4 FragColor;\n"
             "uniform vec3 u_uniqueColor;\n"
