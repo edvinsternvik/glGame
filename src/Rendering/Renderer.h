@@ -67,6 +67,7 @@ namespace glGame {
 		void initGLEW();
 		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
+		bool bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit);
 		void bindDefaultRenderTarget();
 		void unbindDefaultRenderTarget();
 

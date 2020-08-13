@@ -146,20 +146,13 @@ namespace glGame {
 
 	void Renderer::renderObjects(std::vector<ObjectRenderData>& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
-			if(!objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+			if(!objRenderData.material->shader.expired()) {
 				objRenderData.material->shader->useShader();
 
-				glActiveTexture(GL_TEXTURE0);
-				objRenderData.material->texture->bind();
-				if(objRenderData.material->specularMap.expired()) {
-					objRenderData.material->shader->setUniform1i("specularSampler", -1);
-				}
-				else {
-					objRenderData.material->shader->setUniform1i("specularSampler", 1);
-					glActiveTexture(GL_TEXTURE1);
-					objRenderData.material->specularMap->bind();
-				}
-
+				int hasTexture = bindTexture(objRenderData.material->texture.get(), objRenderData.material->shader.get(), "textureSampler", 0);
+				int hasSpecularMap = bindTexture(objRenderData.material->specularMap.get(), objRenderData.material->shader.get(), "specularSampler", 1);
+				objRenderData.material->shader->setUniform1i("u_hasTexture", hasTexture);
+				objRenderData.material->shader->setUniform1i("u_hasSpecularMap", hasSpecularMap);
 				objRenderData.material->shader->setUniform1i("shadowMap", 2);
 				
 				objRenderData.vao->bind();
@@ -197,6 +190,16 @@ namespace glGame {
 
 	void Renderer::clearScreen() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	bool Renderer::bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit) {
+		if(shader) shader->setUniform1i(samplerName, textureUnit);
+		if(texture) {
+			glActiveTexture(GL_TEXTURE0 + textureUnit);
+			texture->bind();
+			return true;
+		}
+		return false;
 	}
 	
 	void Renderer::bindDefaultRenderTarget() {

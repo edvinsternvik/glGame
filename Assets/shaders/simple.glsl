@@ -85,6 +85,9 @@ uniform sampler2D textureSampler;
 uniform sampler2D specularSampler;
 uniform sampler2DArray shadowMap;
 
+uniform int u_hasTexture;
+uniform int u_hasSpecularMap;
+
 in vec2 TextureCoordinates;
 in vec3 Normal;
 in vec3 FragmentPosition;
@@ -101,7 +104,9 @@ void main() {
 		else if(u_lights[i].lightType == uint(1)) lighting += calculateDirectionalLight(i);
 	}
 
-	FragColor = texture(textureSampler, TextureCoordinates) * lighting;
+	vec4 color = u_hasTexture != 0 ? texture(textureSampler, TextureCoordinates) : vec4(0.0, 0.0, 0.0, 1.0);
+
+	FragColor = color * lighting;
 	FragColor.xyz = pow(FragColor.xyz, vec3(1.0 / 2.2));
 }
 
@@ -115,7 +120,9 @@ float calculatePointLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 2.0;
-	specular *= texture(specularSampler, TextureCoordinates).r;
+
+	float specularMap = u_hasSpecularMap > 0 ? texture(specularSampler, TextureCoordinates).r : 1.0;
+	specular *= specularMap;
 
 	float lightToFragmentLength = length(lightToFragmentVector);
 	float attenuation = 1.0 / (lightToFragmentLength * lightToFragmentLength);
@@ -132,7 +139,9 @@ float calculateDirectionalLight(uint lightId) {
 	vec3 viewDir = normalize(-FragmentPosition);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float specular = pow(max(dot(Normal, halfwayDir), 0.0), 32) * 0.5;
-	specular *= texture(specularSampler, TextureCoordinates).r;
+
+	float specularMap = u_hasSpecularMap > 0 ? texture(specularSampler, TextureCoordinates).r : 1.0;
+	specular *= specularMap;
 
 	float shadow = 0.0;
 	if(u_lights[lightId].shadowmapId > -1) {
