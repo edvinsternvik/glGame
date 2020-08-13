@@ -12,7 +12,7 @@ namespace glGame {
 	class AssetManager;
 	class GameObject;
 	class Editor;
-	class FrameBuffer;
+	class Texture;
 	namespace assetInternal { class AssetT; }
 
 	class GuiWindow {
@@ -36,6 +36,9 @@ namespace glGame {
 	class ViewportWindow : public GuiWindow {
 	public:
 		ViewportWindow(Vector2i viewportSize);
+		~ViewportWindow();
+
+		void setTexture(std::shared_ptr<Texture> texture);
 
 		inline virtual const char* getWindowName() { return "Viewport"; }
 		virtual void renderWindow() override;
@@ -44,7 +47,7 @@ namespace glGame {
 		float viewportX, viewportY, viewportWidth, viewportHeight;
 
 	private:
-		std::shared_ptr<FrameBuffer> m_viewportFrameBuffer;
+		std::shared_ptr<Texture> m_texture;
 		Vector2i m_viewportSize;
 		bool m_focused;
 	};

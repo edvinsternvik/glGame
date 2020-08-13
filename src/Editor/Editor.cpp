@@ -5,15 +5,19 @@
 #include "../Resources/Scene.h"
 #include "../Components/LineRenderer.h"
 #include "../Components/Transform.h"
+#include "EditorRenderer.h"
 
 #include "../Input.h"
 
 namespace glGame {
 
     Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize) {
+        m_editorRenderer = std::make_unique<EditorRenderer>(viewportSize);
+
         m_editorGui = std::make_unique<Gui>(window->getWindow());
         m_editorGui->setEventFunction(eventFunction);
 		m_viewportWindow = m_editorGui->addWindow(std::make_unique<ViewportWindow>(viewportSize), this);
+        m_viewportWindow->setTexture(m_editorRenderer->getFrameTexture());
 		m_sceneWindow = m_editorGui->addWindow(std::make_unique<SceneWindow>(), this);
 		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>(), this);
         m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>(), this);
@@ -28,6 +32,10 @@ namespace glGame {
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(1.0, 0.0, 0.0);
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 1.0, 0.0);
         m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 0.0, 1.0);
+    }
+
+    Editor::~Editor() {
+
     }
 
     void Editor::update(const float& deltatime, const bool& viewportFocused) {

@@ -13,6 +13,7 @@ namespace glGame {
     class Scene;
     class CameraComponent;
     class Window;
+    class EditorRenderer;
     namespace assetInternal { class AssetT; }
 
     using selectedItemVariant = std::variant<std::weak_ptr<GameObject>, std::weak_ptr<assetInternal::AssetT>>;
@@ -20,6 +21,7 @@ namespace glGame {
     class Editor {
     public:
         Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize);
+        ~Editor();
 
         void update(const float& deltatime, const bool& viewportFocused);
         void renderEditor();
@@ -47,6 +49,7 @@ namespace glGame {
         std::unique_ptr<Gui> m_editorGui;
         std::shared_ptr<GameObject> m_editorCameraGameObject;
         std::shared_ptr<GameObject> m_selectedObjectGizmoObject;
+        std::unique_ptr<EditorRenderer> m_editorRenderer;
 
         selectedItemVariant m_selectedItem;
 
