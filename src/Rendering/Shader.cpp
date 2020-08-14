@@ -135,6 +135,11 @@ namespace glGame {
 
 			if(words.size() == 1 && words[0] == "Enable") m_stencilEnabled = true;
 			else if(words.size() == 1 && words[0] == "Disable") m_stencilEnabled = false;
+			else if(words.size() == 2 && words[0] == "StencilWrite") {
+				if(words[1] == "Enable") m_stencilWriteEnabled = true;
+				else if(words[1] == "Disable") m_stencilWriteEnabled = false;
+				else std::cout << "Error when creating shader in section stencil: \"" << words[1] << "\" is not recognized" << std::endl;
+			}
 			else if(words.size() == 2 && words[0] == "StencilFunc") {
 				if(words[1] == "Never") m_stencilFunc = StencilFunc::Never;
 				else if(words[1] == "Less") m_stencilFunc = StencilFunc::Less;
@@ -229,5 +234,36 @@ namespace glGame {
 
 		return uniformBlockIndex;
 	}
+
+	int Shader::GetOpenGLStencilFunc(const StencilFunc& stencilFunc) {
+		switch(stencilFunc) {
+		case StencilFunc::Never: return GL_NEVER;
+		case StencilFunc::Less: return GL_LESS;
+		case StencilFunc::LEqual: return GL_LEQUAL;
+		case StencilFunc::Greater: return GL_GREATER;
+		case StencilFunc::GEqual: return GL_GEQUAL;
+		case StencilFunc::Equal: return GL_EQUAL;
+		case StencilFunc::NotEqual: return GL_NOTEQUAL;
+		case StencilFunc::Always: return GL_ALWAYS;
+		default: return 0;
+		}
+		return 0;
+	}
+
+	int Shader::GetOpenGLStencilOp(const StencilOp& stencilOp) {
+		switch(stencilOp) {
+		case StencilOp::Keep: return GL_KEEP;
+		case StencilOp::Zero: return GL_ZERO;
+		case StencilOp::Replace: return GL_REPLACE;
+		case StencilOp::Incr: return GL_INCR;
+		case StencilOp::IncrWrap: return GL_INCR_WRAP;
+		case StencilOp::Decr: return GL_DECR;
+		case StencilOp::DecrWrap: return GL_DECR_WRAP;
+		case StencilOp::Invert: return GL_INVERT;
+		default: return 0;
+		}
+		return 0;
+	}
+
 
 }

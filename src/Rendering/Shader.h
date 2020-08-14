@@ -4,6 +4,9 @@
 
 namespace glGame {
 
+	enum class StencilFunc { Never, Less, LEqual, Greater, GEqual, Equal, NotEqual, Always };
+	enum class StencilOp { Keep, Zero, Replace, Incr, IncrWrap, Decr, DecrWrap, Invert };
+
 	class Shader {
 	public:
 		Shader(const char* filepath);
@@ -15,6 +18,9 @@ namespace glGame {
 		void setUniform3f(const char* name, float v1, float v2, float v3);
 		void setUniformMat4(const char* name, const float* matrix);
 		void setUniformBlockBinding(const char* name, const unsigned int& bindingPoint);
+
+		static int GetOpenGLStencilFunc(const StencilFunc& stencilFunc);
+		static int GetOpenGLStencilOp(const StencilOp& stencilOp);
 
 	private:
 		void init(const std::string& source);
@@ -37,10 +43,9 @@ namespace glGame {
 		std::unordered_map<const char*, int> m_uniformLocations;
 		std::unordered_map<const char*, int> m_uniformBlockIndicies;
 
-		enum class StencilFunc { Never, Less, LEqual, Greater, GEqual, Equal, NotEqual, Always };
-		enum class StencilOp { Keep, Zero, Replace, Incr, IncrWrap, Decr, DecrWrap, Invert };
 
 		bool m_stencilEnabled = false;
+		bool m_stencilWriteEnabled = true;
 		StencilFunc m_stencilFunc = StencilFunc::Always;
 		int m_stencilFuncRef = 1;
 		StencilOp m_stencilOpSFail = StencilOp::Keep;

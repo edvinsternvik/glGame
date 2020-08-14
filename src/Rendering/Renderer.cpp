@@ -154,10 +154,14 @@ namespace glGame {
 				objRenderData.material->shader->setUniform1i("u_hasTexture", hasTexture);
 				objRenderData.material->shader->setUniform1i("u_hasSpecularMap", hasSpecularMap);
 				objRenderData.material->shader->setUniform1i("shadowMap", 2);
+
+				prepareRenderingConfiguration(objRenderData.material->shader.get());
 				
 				objRenderData.vao->bind();
 				objRenderData.material->shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
 				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+
+				revertRenderingConfiguration(objRenderData.material->shader.get());
 			}
 		}
 	}
@@ -189,7 +193,7 @@ namespace glGame {
 	}
 
 	void Renderer::clearScreen() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	bool Renderer::bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit) {
@@ -201,6 +205,23 @@ namespace glGame {
 		}
 		return false;
 	}
+
+	void Renderer::prepareRenderingConfiguration(Shader* shader) {
+		if(!shader->m_depthTestingEnabled) glDepthFunc(GL_ALWAYS);
+		if(shader->m_stencilEnabled) {
+			glEnable(GL_STENCIL_TEST);
+			if(shader->m_stencilWriteEnabled) glStencilMask(0xFF);
+			else glStencilMask(0x00);
+			glStencilFunc(Shader::GetOpenGLStencilFunc(shader->m_stencilFunc), shader->m_stencilFuncRef, 0xFF);
+			glStencilOp(Shader::GetOpenGLStencilOp(shader->m_stencilOpSFail), Shader::GetOpenGLStencilOp(shader->m_stencilOpDPFail), Shader::GetOpenGLStencilOp(shader->m_stencilOpDPPass));
+		}
+	}
+
+	void Renderer::revertRenderingConfiguration(Shader* shader) {
+		if(!shader->m_depthTestingEnabled) glDepthFunc(GL_LESS);
+		if(shader->m_stencilEnabled) glDisable(GL_STENCIL_TEST);
+	}
+
 	
 	void Renderer::bindDefaultRenderTarget() {
 		if(m_defaultRenderTarget.get()) {
