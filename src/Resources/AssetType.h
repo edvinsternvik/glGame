@@ -16,6 +16,7 @@ namespace glGame {
             AssetT(const char* filepath) : filepath(filepath) {}
 
             virtual const char* getAssetTypeString() = 0;
+            virtual bool hasData() = 0;
             virtual void reload() {}
 
             const int getPublicVariableCount() const {

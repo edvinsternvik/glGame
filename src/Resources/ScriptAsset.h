@@ -12,6 +12,7 @@ namespace glGame {
 
             virtual const char* getAssetTypeString() override { return "Script"; }
             static AssetType GetAssetType() { return AssetType::Script; }
+            virtual bool hasData() { return true; }
 
             Script* get() { return &asset; }
             Script* operator->() { return &asset; }

@@ -20,6 +20,7 @@ namespace glGame {
                 asset = std::make_unique<Texture>(filepath.c_str(), (TextureType)textureType.selection);
             }
             static AssetType GetAssetType() { return AssetType::Texture; }
+            virtual bool hasData() { return true; }
 
             Texture* get() { return asset.get(); }
             Texture* operator->() { return asset.get(); }

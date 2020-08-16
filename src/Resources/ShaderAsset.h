@@ -12,6 +12,7 @@ namespace glGame {
 
             virtual const char* getAssetTypeString() override { return "Shader"; }
             static AssetType GetAssetType() { return AssetType::Shader; }
+            virtual bool hasData() { return true; }
 
             Shader* get() { return &asset; }
             Shader* operator->() { return &asset; }

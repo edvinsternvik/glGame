@@ -46,6 +46,7 @@ namespace glGame {
     private:
         void makeEmptyAssetData(const std::string& assetName, const std::string& extension);
         bool initializePublicVariables(std::shared_ptr<assetInternal::AssetT> asset);
+        std::string getAssetDataPath(std::shared_ptr<assetInternal::AssetT>& asset, bool createPath);
 
     private:
         std::unordered_map<std::string, AssetData> m_assets;

@@ -35,23 +35,7 @@ namespace glGame {
     void AssetManager::saveAsset(std::shared_ptr<assetInternal::AssetT> asset) {
         if(asset->m_publicVariables.size() < 1) return;
 
-        std::filesystem::path assetPath(asset->filepath);
-        if(!std::filesystem::exists(assetPath) || !std::filesystem::is_regular_file(assetPath)) {
-            return;
-        }
-
-        std::filesystem::path assetdataFolderPath = "./Assets/.assetdata";
-        if(!std::filesystem::exists(assetdataFolderPath) || !std::filesystem::is_directory(assetdataFolderPath)) {
-            std::filesystem::create_directory(assetdataFolderPath);
-        }
-        
-        std::filesystem::path assetdataPath = assetdataFolderPath / std::filesystem::relative(assetPath, std::filesystem::path("./Assets"));
-        std::filesystem::path assetdataParentFolderPath = assetdataPath.parent_path();
-        if(!std::filesystem::exists(assetdataParentFolderPath) || !std::filesystem::is_directory(assetdataParentFolderPath)) {
-            std::filesystem::create_directories(assetdataParentFolderPath);
-        }
-
-        std::string assetdataPathString = assetdataPath.string() + ".assetdata";
+        std::string assetdataPathString = getAssetDataPath(asset, true);
 
         std::fstream assetdataFileStream;
         assetdataFileStream.open(assetdataPathString, std::ios::out);
@@ -85,11 +69,7 @@ namespace glGame {
     }
 
     bool AssetManager::initializePublicVariables(std::shared_ptr<assetInternal::AssetT> asset) {
-        std::filesystem::path assetPath(asset->filepath);
-        std::filesystem::path assetdataFolderPath("./Assets/.assetdata");
-        std::filesystem::path assetdataPath = assetdataFolderPath / std::filesystem::relative(assetPath, std::filesystem::path("./Assets"));
-
-        std::string assetdataPathString = assetdataPath.string() + ".assetdata";
+        std::string assetdataPathString = getAssetDataPath(asset, false);
         
         std::fstream assetdataFileStream;
         assetdataFileStream.open(assetdataPathString, std::ios::in);
@@ -127,5 +107,27 @@ namespace glGame {
 
         assetdataFileStream.close();
         return changedVariable;
+    }
+
+    std::string AssetManager::getAssetDataPath(std::shared_ptr<assetInternal::AssetT>& asset, bool createPath) {
+        if(!asset->hasData()) return asset->filepath;
+        
+        std::filesystem::path assetPath(asset->filepath);
+        if(!std::filesystem::exists(assetPath) || !std::filesystem::is_regular_file(assetPath)) {
+            return "";
+        }
+
+        std::filesystem::path assetdataFolderPath = "./Assets/.assetdata";
+        if(createPath && (!std::filesystem::exists(assetdataFolderPath) || !std::filesystem::is_directory(assetdataFolderPath))) {
+            std::filesystem::create_directory(assetdataFolderPath);
+        }
+        
+        std::filesystem::path assetdataPath = assetdataFolderPath / std::filesystem::relative(assetPath, std::filesystem::path("./Assets"));
+        std::filesystem::path assetdataParentFolderPath = assetdataPath.parent_path();
+        if(createPath && (!std::filesystem::exists(assetdataParentFolderPath) || !std::filesystem::is_directory(assetdataParentFolderPath))) {
+            std::filesystem::create_directories(assetdataParentFolderPath);
+        }
+
+        return assetdataPath.string() + ".assetdata";
     }
 }
