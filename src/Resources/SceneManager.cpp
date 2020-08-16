@@ -111,7 +111,7 @@ namespace glGame {
 			if(strings[0] == "GameObject:") {
 				if(strings.size() < 2) {
 					std::cout << "Error formating in file: " << fileName << " on line: " << line << std::endl;
-					break;
+					continue;
 				}
 
 				std::string gameObjectName = strings[1];
@@ -122,25 +122,24 @@ namespace glGame {
 			else if(strings[0] == "Component:") {
 				if(strings.size() != 2) {
 					std::cout << "Error formating in file: " << fileName << " on line: " << line << std::endl;
-					break;
+					continue;
 				}
 
 				if(activeGameObject == nullptr) {
 					std::cout << "Error loading Component in file: " << fileName << ". No GameObject selected" << std::endl;
-					break;
+					continue;
 				}
 
 				activeComponent = addComponent(strings[1], activeGameObject);
 			}
 			else if(strings[0] == "Attribute:") {
 				if(strings.size() < 3) {
-					std::cout << "Error formating in file: " << fileName << " on line: " << line << std::endl;
-					break;
+					continue;
 				}
 
 				if(activeComponent == nullptr) {
 					std::cout << "Error loading Attribute in file: " << fileName << ". No Component selected" << std::endl;
-					break;
+					continue;
 				}
 
 				std::string pVarName = strings[1]; // Combine all the strings except the last one
