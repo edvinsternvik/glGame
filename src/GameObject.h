@@ -42,6 +42,15 @@ namespace glGame{
 		void removeComponent(int index);
 		void removeComponent(Component* component);
 
+		template<class T>
+		std::weak_ptr<T> getComponent() {
+			for(auto& component : m_components) {
+				if(std::shared_ptr<T> c = std::dynamic_pointer_cast<T>(component)) {
+					return c;
+				}
+			}
+			return std::weak_ptr<T>();
+		}
 		const std::shared_ptr<Component> getComponent(int index) const;
 		const Component* const getComponent(const std::string& componentName) const;
 		int getComponentSize() const { return m_components.size(); }
