@@ -4,6 +4,10 @@ Attribute: position {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: Camera
+Attribute: Fov 45.000000
+Attribute: AspectRatio 1.777778
+Attribute: NearPlane 0.100000
+Attribute: FarPlane 100.000000
 Component: Script
 Attribute: Script ./Assets/camera.as
 Attribute: float speed 5.000000
@@ -29,10 +33,6 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
-Component: Material
-Attribute: Shader ./Assets/shaders/simple.glsl
-Attribute: Texture ./Assets/crate.jpg
-Attribute: SpecularMap ./Assets/crate_specular.jpg
 GameObject: Object2
 Component: Transform
 Attribute: position {-2.810000,5.190000,-9.780000}
@@ -47,10 +47,6 @@ Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Component: Material
-Attribute: Shader ./Assets/shaders/simple.glsl
-Attribute: Texture ./Assets/crate.jpg
-Attribute: SpecularMap ./Assets/crate_specular.jpg
 GameObject: Ground
 Component: Transform
 Attribute: position {0.000000,-12.774000,-14.320000}
@@ -58,17 +54,12 @@ Attribute: scale {10.000000,10.000000,10.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
-Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {10.000000,10.000000,10.000000}
 Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
-Component: Material
-Attribute: Shader ./Assets/shaders/simple.glsl
-Attribute: Texture ./Assets/crate.jpg
-Attribute: SpecularMap ./Assets/crate_specular.jpg
 GameObject: Object3
 Component: Transform
 Attribute: position {2.510000,5.130000,-11.320000}
@@ -83,10 +74,6 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
-Component: Material
-Attribute: Shader ./Assets/shaders/simple.glsl
-Attribute: Texture ./Assets/crate.jpg
-Attribute: SpecularMap ./Assets/crate_specular.jpg
 GameObject: Object4
 Component: Transform
 Attribute: position {-1.810000,-0.790000,-9.820000}
@@ -101,10 +88,6 @@ Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
 Attribute: scale {1.000000,1.000000,1.000000}
-Component: Material
-Attribute: Shader ./Assets/shaders/simple.glsl
-Attribute: Texture ./Assets/crate.jpg
-Attribute: SpecularMap ./Assets/crate_specular.jpg
 GameObject: Light1
 Component: Transform
 Attribute: position {1.480000,0.000000,-6.440000}
