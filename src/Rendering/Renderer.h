@@ -24,10 +24,13 @@ namespace glGame {
 		ObjectRenderData() {}
 		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
 			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
+		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix)
+			: vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix) {}
 
-		VertexArray* vao;
-		unsigned int verticies;
-		Material* material;
+		VertexArray* vao = nullptr;
+		unsigned int verticies = 0;
+		Material* material = nullptr;
+		Shader* shader = nullptr;
 		glm::mat4 modelMatrix;
 		int gameObjectId = -1;
 	};
@@ -41,6 +44,8 @@ namespace glGame {
 
 		void submit(Model* model, const glm::mat4& modelMatrix, Material* material);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material);
+		void submit(Model* model, const glm::mat4& modelMatrix, Shader* shader);
+		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader);
 		void submit(Cubemap* cubemap, Shader* shader);
 		void updateLight(std::shared_ptr<Light> light);
 		void deleteLight(const unsigned int& lightid);
@@ -73,12 +78,13 @@ namespace glGame {
 
 	public:
 		Vector2i viewportSize;
-		std::vector<ObjectRenderData> frameRenderData;
+		std::vector<ObjectRenderData> previousFrameRenderData;
 
 	private:
 		std::shared_ptr<FrameBuffer> m_defaultRenderTarget;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
 		std::unique_ptr<LightManager> m_lightManager;
+		std::vector<ObjectRenderData> m_frameRenderData;
 		SkyboxRenderData m_skyboxRenderData;
 	};
 }

@@ -40,7 +40,7 @@ namespace glGame {
 
         if(Input::GetMouseKeyDown(MOUSE_BUTTON_LEFT)) {
             if(m_editor && m_viewportWindow) {
-                m_objectPicker.renderColorPickerTexture(&Application::Get().renderer.frameRenderData, &Application::Get().sceneManager->getActiveScene()->activeCamera.lock()->camera);
+                m_objectPicker.renderColorPickerTexture(&Application::Get().renderer.previousFrameRenderData, &Application::Get().sceneManager->getActiveScene()->activeCamera.lock()->camera);
                 Vector2 screenPos = Input::GetMousePosition();
                 int objectId = m_objectPicker.getGameObjectIdFromScreen(Vector2(screenPos.x / m_viewportWindow->viewportWidth, screenPos.y / m_viewportWindow->viewportHeight));
                 m_editor->selectItem(Application::Get().sceneManager->getActiveScene()->getGameObject(objectId));
