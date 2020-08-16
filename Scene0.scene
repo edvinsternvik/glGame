@@ -60,6 +60,10 @@ Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
+Component: BoxCollider
+Attribute: localPosition {0.000000,0.000000,0.000000}
+Attribute: localRotation {0.000000,0.000000,0.000000}
+Attribute: scale {10.000000,10.000000,10.000000}
 GameObject: Object3
 Component: Transform
 Attribute: position {2.510000,5.130000,-11.320000}

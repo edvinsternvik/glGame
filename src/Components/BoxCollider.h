@@ -20,7 +20,7 @@ namespace glGame {
         Vector3 localPosition, localRotation, scale;
 
     private:
-        redPhysics3d::CollisionBox* m_collisionBox;
+        redPhysics3d::CollisionBox* m_collisionBox = nullptr;
         friend class RigidBody;
     };
 
