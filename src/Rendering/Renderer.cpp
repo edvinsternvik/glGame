@@ -217,18 +217,27 @@ namespace glGame {
 	}
 
 	void Renderer::prepareRenderingConfiguration(Shader* shader) {
-		if(!shader->m_depthTestingEnabled) glDepthFunc(GL_ALWAYS);
+		if(!shader->m_colorEnabled) glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		if(!shader->m_depthTestingEnabled) {
+			glDisable(GL_DEPTH_TEST);
+			std::cout << "EEH" << std::endl;
+		}
+		if(!shader->m_depthTestWriteEnabled) glDepthMask(GL_FALSE);
+		if(shader->m_depthTestFunc != CompareFunc::Less) glDepthFunc(Shader::GetOpenGLCompareFunc(shader->m_depthTestFunc));
 		if(shader->m_stencilEnabled) {
 			glEnable(GL_STENCIL_TEST);
 			if(shader->m_stencilWriteEnabled) glStencilMask(0xFF);
 			else glStencilMask(0x00);
-			glStencilFunc(Shader::GetOpenGLStencilFunc(shader->m_stencilFunc), shader->m_stencilFuncRef, 0xFF);
+			glStencilFunc(Shader::GetOpenGLCompareFunc(shader->m_stencilFunc), shader->m_stencilFuncRef, 0xFF);
 			glStencilOp(Shader::GetOpenGLStencilOp(shader->m_stencilOpSFail), Shader::GetOpenGLStencilOp(shader->m_stencilOpDPFail), Shader::GetOpenGLStencilOp(shader->m_stencilOpDPPass));
 		}
 	}
 
 	void Renderer::revertRenderingConfiguration(Shader* shader) {
-		if(!shader->m_depthTestingEnabled) glDepthFunc(GL_LESS);
+		if(!shader->m_colorEnabled) glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+		if(!shader->m_depthTestingEnabled) glEnable(GL_DEPTH_TEST);
+		if(!shader->m_depthTestWriteEnabled) glDepthMask(GL_TRUE);
+		if(shader->m_depthTestFunc != CompareFunc::Less) glDepthFunc(GL_LESS);
 		if(shader->m_stencilEnabled) glDisable(GL_STENCIL_TEST);
 	}
 

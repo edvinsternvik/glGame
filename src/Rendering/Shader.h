@@ -4,7 +4,7 @@
 
 namespace glGame {
 
-	enum class StencilFunc { Never, Less, LEqual, Greater, GEqual, Equal, NotEqual, Always };
+	enum class CompareFunc { Never, Less, LEqual, Greater, GEqual, Equal, NotEqual, Always };
 	enum class StencilOp { Keep, Zero, Replace, Incr, IncrWrap, Decr, DecrWrap, Invert };
 
 	class Shader {
@@ -19,7 +19,7 @@ namespace glGame {
 		void setUniformMat4(const char* name, const float* matrix);
 		void setUniformBlockBinding(const char* name, const unsigned int& bindingPoint);
 
-		static int GetOpenGLStencilFunc(const StencilFunc& stencilFunc);
+		static int GetOpenGLCompareFunc(const CompareFunc& compareFunc);
 		static int GetOpenGLStencilOp(const StencilOp& stencilOp);
 
 	private:
@@ -29,8 +29,10 @@ namespace glGame {
 		int getShaderTypeFromString(const std::string& typeString);
 		unsigned int createShader(unsigned int shaderType, const std::string& shaderSource);
 		void deleteShader(unsigned int shaderID);
+		void updateColorData(const std::string& str);
 		void updateStencilData(const std::string& str);
 		void updateDepthTestData(const std::string& str);
+		bool updateCompareFunc(CompareFunc& func, const std::string& str);
 
 		unsigned int createShaderProgram(unsigned int vertexShader, unsigned int fragmentShader);
 		int getUniformLocation(const char* name);
@@ -43,16 +45,18 @@ namespace glGame {
 		std::unordered_map<const char*, int> m_uniformLocations;
 		std::unordered_map<const char*, int> m_uniformBlockIndicies;
 
-
+		bool m_colorEnabled = true;
 		bool m_stencilEnabled = false;
 		bool m_stencilWriteEnabled = true;
-		StencilFunc m_stencilFunc = StencilFunc::Always;
+		CompareFunc m_stencilFunc = CompareFunc::Always;
 		int m_stencilFuncRef = 1;
 		StencilOp m_stencilOpSFail = StencilOp::Keep;
 		StencilOp m_stencilOpDPFail = StencilOp::Keep;
 		StencilOp m_stencilOpDPPass = StencilOp::Keep;
 
 		bool m_depthTestingEnabled = true;
+		bool m_depthTestWriteEnabled = true;
+		CompareFunc m_depthTestFunc = CompareFunc::Less;
 
 		friend class Renderer;
 	};
