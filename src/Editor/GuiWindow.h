@@ -80,6 +80,7 @@ namespace glGame {
 		void drawGameObjectPropertiesWindow(std::shared_ptr<GameObject> selectedObj);
 		void drawAssetPropertiesWindow(std::shared_ptr<assetInternal::AssetT> selectedAsset);
 		void drawComponentVariableGui(const PublicVariable* editorVariable);
+		template<class T>void drawAssetVariableGui(const PublicVariable* editorVariable, const char* payloadTarget);
 
 	private:
 		Scene* m_scene;

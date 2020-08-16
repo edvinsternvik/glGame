@@ -14,9 +14,8 @@
 namespace glGame {
 
 	void InputText(const char* name, std::string& str, int maxSize);
-
-	template<typename T>
-	void registerChangePublicVariableAction(T* data, ActionManager* actionManager);
+	template<typename T> void registerChangePublicVariableAction(T* data, ActionManager* actionManager);
+	template<class T> void drawAssetVariableGui(const PublicVariable* editorVariable, const char* payloadTarget);
 
 	PropertiesWindow::PropertiesWindow(Scene* scene) : m_scene(scene) {
 	}
@@ -87,90 +86,10 @@ namespace glGame {
 			if(ImGui::IsItemActivated()) m_editor->actionManager.beginChangePublicVariableAction<PublicVariableEnum>(pVarEnum, *pVarEnum);
 			break;
 		}
-		case toInt(PublicVariableType::Model): {
-			Asset<Model> model = *std::get<Asset<Model>*>(editorVariable->data);
-			std::string modelName = model.get() != nullptr ? model.getPath() : "";
-			ImGui::Text((editorVariable->name + ": " + modelName).c_str());
-			if(ImGui::IsItemHovered()) {
-				ImGui::BeginTooltip();
-				ImGui::Text("Model");
-				ImGui::EndTooltip();
-			}
-			if(ImGui::BeginDragDropTarget()) {
-				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Model")) {
-					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<Asset<Model>>(std::get<Asset<Model>*>(editorVariable->data), *std::get<Asset<Model>*>(editorVariable->data));
-					*std::get<Asset<Model>*>(editorVariable->data) = AssetManager::Get().getAsset<Model>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<Asset<Model>>(std::get<Asset<Model>*>(editorVariable->data), *std::get<Asset<Model>*>(editorVariable->data));
-				}
-
-				ImGui::EndDragDropTarget();
-			}
-			break;
-		}
-		case toInt(PublicVariableType::Script): {
-			Asset<Script> script = *std::get<Asset<Script>*>(editorVariable->data);
-			std::string scriptName = script.get() != nullptr ? script.getPath() : "";
-			ImGui::Text((editorVariable->name + ": " + scriptName).c_str());
-			if(ImGui::IsItemHovered()) {
-				ImGui::BeginTooltip();
-				ImGui::Text("Script");
-				ImGui::EndTooltip();
-			}
-			if(ImGui::BeginDragDropTarget()) {
-				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Script")) {
-					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<Asset<Script>>(std::get<Asset<Script>*>(editorVariable->data), *std::get<Asset<Script>*>(editorVariable->data));
-					*std::get<Asset<Script>*>(editorVariable->data) = AssetManager::Get().getAsset<Script>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<Asset<Script>>(std::get<Asset<Script>*>(editorVariable->data), *std::get<Asset<Script>*>(editorVariable->data));
-				}
-
-				ImGui::EndDragDropTarget();
-			}
-			break;
-		}
-		case toInt(PublicVariableType::Texture): {
-			Asset<Texture> texture = *std::get<Asset<Texture>*>(editorVariable->data);
-			std::string textureName = texture.get() != nullptr ? texture.getPath() : "";
-			ImGui::Text((editorVariable->name + ": " + textureName).c_str());
-			if(ImGui::IsItemHovered()) {
-				ImGui::BeginTooltip();
-				ImGui::Text("Texture");
-				ImGui::EndTooltip();
-			}
-			if(ImGui::BeginDragDropTarget()) {
-				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Texture")) {
-					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
-					*std::get<Asset<Texture>*>(editorVariable->data) = AssetManager::Get().getAsset<Texture>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<Asset<Texture>>(std::get<Asset<Texture>*>(editorVariable->data), *std::get<Asset<Texture>*>(editorVariable->data));
-				}
-
-				ImGui::EndDragDropTarget();
-			}
-			break;
-		}
-		case toInt(PublicVariableType::Shader): {
-			Asset<Shader> shader = *std::get<Asset<Shader>*>(editorVariable->data);
-			std::string shaderName = shader.get() != nullptr ? shader.getPath() : "";
-			ImGui::Text((editorVariable->name + ": " + shaderName).c_str());
-			if(ImGui::IsItemHovered()) {
-				ImGui::BeginTooltip();
-				ImGui::Text("Shader");
-				ImGui::EndTooltip();
-			}
-			if(ImGui::BeginDragDropTarget()) {
-				if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Shader")) {
-					std::string payloadData = *(std::string*)payload->Data;
-					m_editor->actionManager.beginChangePublicVariableAction<Asset<Shader>>(std::get<Asset<Shader>*>(editorVariable->data), *std::get<Asset<Shader>*>(editorVariable->data));
-					*std::get<Asset<Shader>*>(editorVariable->data) = AssetManager::Get().getAsset<Shader>(payloadData);
-					m_editor->actionManager.endChangePublicVariableAction<Asset<Shader>>(std::get<Asset<Shader>*>(editorVariable->data), *std::get<Asset<Shader>*>(editorVariable->data));
-				}
-
-				ImGui::EndDragDropTarget();
-			}
-			break;
-		}
+		case toInt(PublicVariableType::Model): drawAssetVariableGui<Model>(editorVariable, "Model"); break;
+		case toInt(PublicVariableType::Script): drawAssetVariableGui<Script>(editorVariable, "Script"); break;
+		case toInt(PublicVariableType::Texture): drawAssetVariableGui<Texture>(editorVariable, "Texture"); break;
+		case toInt(PublicVariableType::Shader): drawAssetVariableGui<Shader>(editorVariable, "Shader"); break;
 		}
 	}
 
@@ -324,6 +243,28 @@ namespace glGame {
 			if(charBuffer[0] != 0 && strcmp(str.c_str(), charBuffer.data()) != 0) {
 				str.assign(charBuffer.data());
 			}
+		}
+	}
+
+	template<class T>
+	void PropertiesWindow::drawAssetVariableGui(const PublicVariable* editorVariable, const char* payloadTarget) {
+		Asset<T> asset = *std::get<Asset<T>*>(editorVariable->data);
+		std::string assetName = asset.get() != nullptr ? asset.getPath() : "";
+		ImGui::Text((editorVariable->name + ": " + assetName).c_str());
+		if(ImGui::IsItemHovered()) {
+			ImGui::BeginTooltip();
+			ImGui::Text(payloadTarget);
+			ImGui::EndTooltip();
+		}
+		if(ImGui::BeginDragDropTarget()) {
+			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(payloadTarget)) {
+				std::string payloadData = *(std::string*)payload->Data;
+				m_editor->actionManager.beginChangePublicVariableAction<Asset<T>>(std::get<Asset<T>*>(editorVariable->data), *std::get<Asset<T>*>(editorVariable->data));
+				*std::get<Asset<T>*>(editorVariable->data) = AssetManager::Get().getAsset<T>(payloadData);
+				m_editor->actionManager.endChangePublicVariableAction<Asset<T>>(std::get<Asset<T>*>(editorVariable->data), *std::get<Asset<T>*>(editorVariable->data));
+			}
+
+			ImGui::EndDragDropTarget();
 		}
 	}
 
