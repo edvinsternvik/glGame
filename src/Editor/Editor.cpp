@@ -12,7 +12,7 @@
 namespace glGame {
 
     Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize) {
-        m_editorRenderer = std::make_unique<EditorRenderer>(viewportSize);
+        m_editorRenderer = std::make_unique<EditorRenderer>(viewportSize, this);
 
         m_editorGui = std::make_unique<Gui>(window->getWindow());
         m_editorGui->setEventFunction(eventFunction);
@@ -58,6 +58,7 @@ namespace glGame {
             m_selectedObjectGizmoObject->onRender();
         }
         m_editorGui->OnGuiRender();
+        m_editorRenderer->renderEditorGizmos();
     }
 
     std::vector<GameObject*> Editor::getGizmoObjects() const {
