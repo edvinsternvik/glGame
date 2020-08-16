@@ -5,6 +5,7 @@
 #include "../Resources/ScriptAsset.h"
 #include "../Resources/TextureAsset.h"
 #include "../Resources/ShaderAsset.h"
+#include "../Resources/MaterialAsset.h"
 #include <sstream>
 
 namespace glGame {
@@ -102,6 +103,7 @@ namespace glGame {
         case toInt(PublicVariableType::Script): *std::get<Asset<Script>*>(data) = AssetManager::Get().getAsset<Script>(str); return;
         case toInt(PublicVariableType::Texture): *std::get<Asset<Texture>*>(data) = AssetManager::Get().getAsset<Texture>(str); return;
         case toInt(PublicVariableType::Shader): *std::get<Asset<Shader>*>(data) = AssetManager::Get().getAsset<Shader>(str); return;
+        case toInt(PublicVariableType::Material): *std::get<Asset<Material>*>(data) = AssetManager::Get().getAsset<Material>(str); return;
 		}
         
     }
@@ -136,6 +138,7 @@ namespace glGame {
 		case toInt(PublicVariableType::Script): return (*std::get<Asset<Script>*>(data)).getPath();
 		case toInt(PublicVariableType::Texture): return (*std::get<Asset<Texture>*>(data)).getPath();
 		case toInt(PublicVariableType::Shader): return (*std::get<Asset<Shader>*>(data)).getPath();
+        case toInt(PublicVariableType::Material): return (*std::get<Asset<Material>*>(data)).getPath();
 		}
 		return "";
 	}
@@ -158,6 +161,7 @@ namespace glGame {
         else if(str == "Script") return PublicVariableType::Script;
         else if(str == "Texture") return PublicVariableType::Texture;
         else if(str == "Shader") return PublicVariableType::Shader;
+        else if(str == "Material") return PublicVariableType::Material;
 
         return PublicVariableType::None;
     }

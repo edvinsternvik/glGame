@@ -6,7 +6,7 @@
 namespace glGame {
 
     enum class AssetType {
-        Model, Texture, Script, Shader,
+        Model, Texture, Script, Shader, Material,
         None
     };
 

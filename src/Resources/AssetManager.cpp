@@ -61,6 +61,8 @@ namespace glGame {
             assetData = AssetData(AssetType::Texture, "Texture");
         else if(extension == ".glsl" || extension == ".shader")
             assetData = AssetData(AssetType::Shader, "Shader");
+        else if(extension == ".material")
+            assetData = AssetData(AssetType::Material, "Material");
         else {
             return;
         }

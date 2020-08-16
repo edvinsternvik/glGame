@@ -90,6 +90,7 @@ namespace glGame {
 		case toInt(PublicVariableType::Script): drawAssetVariableGui<Script>(editorVariable, "Script"); break;
 		case toInt(PublicVariableType::Texture): drawAssetVariableGui<Texture>(editorVariable, "Texture"); break;
 		case toInt(PublicVariableType::Shader): drawAssetVariableGui<Shader>(editorVariable, "Shader"); break;
+		case toInt(PublicVariableType::Material): drawAssetVariableGui<Material>(editorVariable, "Material"); break;
 		}
 	}
 
