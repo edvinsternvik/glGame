@@ -3,6 +3,7 @@
 #include "RendererComponent.h"
 #include <glm/glm.hpp>
 #include "../Resources/ModelAsset.h"
+#include "../Resources/MaterialAsset.h"
 
 namespace glGame {
 	
@@ -17,6 +18,7 @@ namespace glGame {
 
 	public:
 		Asset<Model> model;
+		Asset<Material> material;
 	};
 
 }

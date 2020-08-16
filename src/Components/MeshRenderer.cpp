@@ -9,6 +9,7 @@ namespace glGame {
 
 	MeshRenderer::MeshRenderer() {
 		addPublicVariable(&model, "Model");
+		addPublicVariable(&material, "Material");
 	}
 
 	void MeshRenderer::init() {
@@ -16,9 +17,9 @@ namespace glGame {
 	}
 
 	void MeshRenderer::onRender() {
-		if(!model.expired()) {
+		if(!model.expired() && !material.expired()) {
 			updateModelMatrix();
-			Application::Get().renderer.submit(model.get(), modelMatrix);
+			Application::Get().renderer.submit(model.get(), modelMatrix, material.get());
 		}
 	}
 

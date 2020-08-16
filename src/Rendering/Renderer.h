@@ -39,12 +39,11 @@ namespace glGame {
 
 		void init(Vector2i viewportSize);
 
-		void submit(Model* model, const glm::mat4& modelMatrix);
-		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix);
+		void submit(Model* model, const glm::mat4& modelMatrix, Material* material);
+		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material);
 		void submit(Cubemap* cubemap, Shader* shader);
 		void updateLight(std::shared_ptr<Light> light);
 		void deleteLight(const unsigned int& lightid);
-		void setMaterial(Material* material);
 
 		void beginRender();
 		void render(Scene* scene, Camera* camera);
@@ -65,7 +64,6 @@ namespace glGame {
 		void renderObjects(std::vector<ObjectRenderData>& renderData);
 		void renderObjectsShadow(std::vector<ObjectRenderData>& renderData);
 		void initGLEW();
-		void processRenderData(std::vector<ObjectRenderData>& frameRenderData);
 		void clearScreen();
 		bool bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit);
 		void prepareRenderingConfiguration(Shader* shader);
@@ -81,7 +79,6 @@ namespace glGame {
 		std::shared_ptr<FrameBuffer> m_defaultRenderTarget;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
 		std::unique_ptr<LightManager> m_lightManager;
-		ObjectRenderData m_objectRenderData;
 		SkyboxRenderData m_skyboxRenderData;
 	};
 }

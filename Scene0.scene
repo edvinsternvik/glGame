@@ -26,6 +26,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {17.100000,24.299999,18.700001}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
+Attribute: Material ./Assets/materials/mat1.material
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -40,6 +41,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {37.900002,24.600000,23.000000}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
+Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
@@ -54,9 +56,7 @@ Attribute: scale {10.000000,10.000000,10.000000}
 Attribute: rotation {0.000000,0.000000,0.000000}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
-Attribute: localPosition {0.000000,0.000000,0.000000}
-Attribute: localRotation {0.000000,0.000000,0.000000}
-Attribute: scale {10.000000,10.000000,10.000000}
+Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
@@ -67,6 +67,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {9.000000,20.200001,22.500000}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
+Attribute: Material ./Assets/materials/mat1.material
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -81,6 +82,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Attribute: rotation {-27.600000,-13.800000,4.300000}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
+Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000

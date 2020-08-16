@@ -36,12 +36,12 @@ namespace glGame {
 		this->viewportSize = viewportSize;
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix) {
-		m_objectRenderData = ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), m_objectRenderData.material, modelMatrix);
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material) {
+		frameRenderData.push_back(ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix));
 	}
 
-	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix) {
-		m_objectRenderData = ObjectRenderData(vertexArray, verticies, m_objectRenderData.material, modelMatrix);
+	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material) {
+		frameRenderData.push_back(ObjectRenderData(vertexArray, verticies, material, modelMatrix));
 	}
 
 	void Renderer::submit(Cubemap* cubemap, Shader* shader) {
@@ -54,10 +54,6 @@ namespace glGame {
 
 	void Renderer::deleteLight(const unsigned int& lightid) {
 		m_lightManager->deleteLight(lightid);
-	}
-
-	void Renderer::setMaterial(Material* material) {
-		m_objectRenderData.material = material;
 	}
 
 	void Renderer::beginRender() {
@@ -82,14 +78,11 @@ namespace glGame {
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i).lock().get();
 
-			m_objectRenderData.vao = nullptr;
-			m_objectRenderData.material = nullptr;
+			int frameRenderDataSize = frameRenderData.size();
 			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
 				gameObject->getComponent(j)->onRender();
+				if(frameRenderDataSize < frameRenderData.size()) frameRenderData.back().gameObjectId = i;
 			}
-			m_objectRenderData.gameObjectId = i;
-
-			processRenderData(frameRenderData);
 		}
 
 		// Render shadowmaps
@@ -186,10 +179,6 @@ namespace glGame {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
-	}
-
-	void Renderer::processRenderData(std::vector<ObjectRenderData>& frameRenderData) {
-		if(m_objectRenderData.vao && m_objectRenderData.material) frameRenderData.push_back(m_objectRenderData);
 	}
 
 	void Renderer::clearScreen() {
