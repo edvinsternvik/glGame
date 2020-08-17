@@ -57,9 +57,12 @@ namespace glGame {
             "void main() {\n"
             "   vec3 scaledPos = aPos * u_scale;\n"
             "   float distSquare = scaledPos.x * scaledPos.x + scaledPos.y * scaledPos.y + scaledPos.z * scaledPos.z;\n"
-            "   float scale = 1.0;\n"
-            "   if(distSquare > 0.0) scale = 1.0 + sqrt(0.05 / distSquare);"
-            "   gl_Position = u_projection * u_view * u_model * vec4(aPos * scale, 1.0); }\n"
+            "   float scale = 0.0;\n"
+            "   if(distSquare > 0.0) scale = sqrt(0.0025 / distSquare);\n"
+            "   float dist = (u_projection * u_view * u_model * vec4(aPos, 1.0)).w;\n"
+            "   if(dist <= 0) dist = 0.001;\n" 
+            "   scale *= sqrt(dist);\n"
+            "   gl_Position = u_projection * u_view * u_model * vec4(aPos * (1.0 + scale), 1.0); }\n"
             "\n"
             "#section fragment\n"
             "#version 330 core\n"
@@ -82,8 +85,8 @@ namespace glGame {
             m_selectedMeshRenderer = selectedObj.lock()->getComponent<MeshRenderer>();
         }
         
-        if(!m_selectedMeshRenderer.expired()) {
-            MeshRenderer* meshRenderer = m_selectedMeshRenderer.lock().get();
+        MeshRenderer* meshRenderer = m_selectedMeshRenderer.lock().get();
+        if(meshRenderer && !meshRenderer->model.expired()) {
             glm::mat4 transformMatrix = meshRenderer->getGameObject()->transform->getTransformMatrix();
             Vector3 scale = meshRenderer->getGameObject()->transform->scale;
 
