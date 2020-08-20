@@ -34,6 +34,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Attribute: lockRotation 0
 GameObject: Object2
 Component: Transform
 Attribute: position {-2.810000,5.190000,-9.780000}
@@ -45,6 +46,7 @@ Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -60,6 +62,7 @@ Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 0.000000
 Attribute: mass 100000.000000
+Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}
@@ -79,6 +82,7 @@ Attribute: scale {1.000000,1.000000,1.000000}
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Attribute: lockRotation 0
 GameObject: Object4
 Component: Transform
 Attribute: position {-1.810000,-0.790000,-9.820000}
@@ -90,6 +94,7 @@ Attribute: Material ./Assets/materials/mat1.material
 Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
+Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0.000000,0.000000,0.000000}
 Attribute: localRotation {0.000000,0.000000,0.000000}

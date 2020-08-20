@@ -21,6 +21,7 @@ namespace glGame {
 
     public:
         float gravityScale = 1.0, mass = 1.0;
+        bool lockRotation = false;
 
     private:
         redPhysics3d::RigidBody* m_rigidBody = nullptr;
