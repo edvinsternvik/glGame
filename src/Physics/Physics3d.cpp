@@ -17,19 +17,19 @@ namespace glGame {
     void Physics3d::stepSimulation(float deltaTime) {
         for(auto& rb : m_rigidBodies) {
             Vector3& position = rb->getGameObject()->transform->position;
-            Vector3& rot = rb->getGameObject()->transform->rotation;
+            Quaternion& orientation = rb->getGameObject()->transform->orientation;
 
             rb->m_rigidBody->position = redPhysics3d::Vector3(position.x, position.y, position.z);
-            rb->m_rigidBody->orientation = redPhysics3d::Quaternion(glm::radians(rot.x), glm::radians(rot.y), glm::radians(rot.z));
+            rb->m_rigidBody->orientation = redPhysics3d::Quaternion(orientation.w, orientation.x, orientation.y, orientation.z);
         }
 
         m_physicsWorld.stepSimulation(deltaTime);
 
         for(auto& rb : m_rigidBodies) {
-            redPhysics3d::Vector3 rot = rb->m_rigidBody->orientation.toEuler();
+            redPhysics3d::Quaternion orientation = rb->m_rigidBody->orientation;
             redPhysics3d::Vector3& pos = rb->m_rigidBody->position;
             rb->getGameObject()->transform->position = Vector3(pos.x, pos.y, pos.z);
-            rb->getGameObject()->transform->rotation = Vector3(glm::degrees(rot.x), glm::degrees(rot.y), glm::degrees(rot.z));
+            rb->getGameObject()->transform->orientation = Quaternion(orientation.w, orientation.x, orientation.y, orientation.z);
         }
     }
 
@@ -42,10 +42,10 @@ namespace glGame {
         rigidbody->m_rigidBody = newRigidBody;
 
         Vector3& position = rigidbody->getGameObject()->transform->position;
-        Vector3& rot = rigidbody->getGameObject()->transform->rotation;
+        Quaternion& orientation = rigidbody->getGameObject()->transform->orientation;
 
         newRigidBody->position = redPhysics3d::Vector3(position.x, position.y, position.z);
-        newRigidBody->orientation = redPhysics3d::Quaternion(glm::radians(rot.x), glm::radians(rot.y), glm::radians(rot.z));
+        newRigidBody->orientation = redPhysics3d::Quaternion(orientation.w, orientation.x, orientation.y, orientation.z);
     }
 
     void Physics3d::removeRigidBody(RigidBody* rigidbody) {

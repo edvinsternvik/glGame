@@ -21,6 +21,16 @@ namespace glGame {
     void Vector2DefConstructor(void* memory) { new(memory) Vector2(0, 0); }
     void Vector2Constructor(void* memory, float x, float y) { new(memory) Vector2(x, y); }
     void Vector2Destructor(void* memory) { ((Vector2*)memory)->~Vector2(); }
+    void QuaternionConstructor(void* memory, float w, float x, float y, float z) { new(memory) Quaternion(w, x, y, z); }
+    void QuaternionDefConstructor(void* memory) { new(memory) Quaternion(); }
+    void QuaternionEulerConstructor(void* memory, Vector3 eulerAngles) { new(memory) Quaternion(glm::vec3(eulerAngles.x, eulerAngles.y, eulerAngles.z)); }
+    void QuaternionDestructor(void* memory) { ((Quaternion*)memory)->~Quaternion(); }
+
+    Vector3 test(const Quaternion& quat, const Vector3& vec) {
+        glm::vec3 v(vec.x, vec.y, vec.z);
+        glm::vec3 res = quat * v;
+        return Vector3(res.x, res.y, res.z);
+    }
 
     void MessageCallback(const asSMessageInfo *msg, void *param) {
         const char *type = "ERR ";
@@ -54,18 +64,31 @@ namespace glGame {
         scriptEngine->RegisterObjectMethod("Vector3", "Vector3& opAssign(const Vector3& in)", asMETHODPR(Vector3, operator=, (const Vector3&), Vector3&), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opAdd(const Vector3& in)", asMETHODPR(Vector3, operator+, (const Vector3&), Vector3), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opSub(const Vector3& in)", asMETHODPR(Vector3, operator-, (const Vector3&), Vector3), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opMul(const float& in)", asMETHODPR(Vector3, operator*, (const float&), Vector3), asCALL_THISCALL);
         scriptEngine->RegisterObjectProperty("Vector3", "float x", asOFFSET(Vector3, Vector3::x));
         scriptEngine->RegisterObjectProperty("Vector3", "float y", asOFFSET(Vector3, Vector3::y));
         scriptEngine->RegisterObjectProperty("Vector3", "float z", asOFFSET(Vector3, Vector3::z));
+
+        scriptEngine->RegisterObjectType("Quaternion", sizeof(Quaternion), asOBJ_VALUE | asGetTypeTraits<Quaternion>());
+        scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion(float w, float x, float y, float z)", asFUNCTION(QuaternionConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion(Vector3 eulerAngles)", asFUNCTION(QuaternionEulerConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion()", asFUNCTION(QuaternionDefConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_DESTRUCT, "void Quaternion()", asFUNCTION(QuaternionDestructor), asCALL_CDECL_OBJLAST);
+        scriptEngine->RegisterObjectMethod("Quaternion", "Quaternion& opAssign(const Quaternion& in)", asMETHODPR(Quaternion, operator=, (const Quaternion&), Quaternion&), asCALL_THISCALL);
+        scriptEngine->RegisterObjectProperty("Quaternion", "float w", asOFFSET(Quaternion, Quaternion::w));
+        scriptEngine->RegisterObjectProperty("Quaternion", "float x", asOFFSET(Quaternion, Quaternion::x));
+        scriptEngine->RegisterObjectProperty("Quaternion", "float y", asOFFSET(Quaternion, Quaternion::y));
+        scriptEngine->RegisterObjectProperty("Quaternion", "float z", asOFFSET(Quaternion, Quaternion::z));
 
         scriptEngine->RegisterObjectType("Transform", sizeof(Transform), asOBJ_REF | asOBJ_NOCOUNT);
         scriptEngine->RegisterObjectMethod("Transform", "void move(const Vector3 &in vector)", asMETHODPR(Transform, Transform::move, (const Vector3&), void), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Transform", "void move(const float &in x, const float &in y, const float &in z)", asMETHODPR(Transform, Transform::move, (const float&, const float&, const float&), void), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Transform", "void rotate(const Vector3 &in vector)", asMETHODPR(Transform, Transform::rotate, (const Vector3&), void), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Transform", "void rotate(const float &in x, const float &in y, const float &in z)", asMETHODPR(Transform, Transform::rotate, (const float&, const float&, const float&), void), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Transform", "Vector3 getEulerAngles()", asMETHOD(Transform, Transform::getEulerAngles), asCALL_THISCALL);
         scriptEngine->RegisterObjectProperty("Transform", "Vector3 position", asOFFSET(Transform, Transform::position));
         scriptEngine->RegisterObjectProperty("Transform", "Vector3 scale", asOFFSET(Transform, Transform::scale));
-        scriptEngine->RegisterObjectProperty("Transform", "Vector3 rotation", asOFFSET(Transform, Transform::rotation));
+        scriptEngine->RegisterObjectProperty("Transform", "Quaternion orientation", asOFFSET(Transform, Transform::orientation));
         
 
         
@@ -94,6 +117,8 @@ namespace glGame {
         scriptEngine->RegisterGlobalFunction("float GetMouseX()", asFUNCTION(Input::GetMouseX), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("float GetMouseY()", asFUNCTION(Input::GetMouseY), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("void SetCursorMode(const int &in cursorMode)", asFUNCTION(Input::SetCursorMode), asCALL_CDECL);
+
+        scriptEngine->RegisterGlobalFunction("Vector3 rotate(const Quaternion &in quat, const Vector3 &in vec)", asFUNCTION(test), asCALL_CDECL);
 
         const char* dNamespace = scriptEngine->GetDefaultNamespace();
         scriptEngine->SetDefaultNamespace("KEY");

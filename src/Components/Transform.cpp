@@ -3,10 +3,9 @@
 
 namespace glGame {
 
-	Transform::Transform() : Component(), position(0, 0, 0), scale(1, 1, 1), rotation(0, 0, 0) {
+	Transform::Transform() : Component(), position(0, 0, 0), scale(1, 1, 1), orientation(glm::vec3(0.0)) {
 		addPublicVariable(&position, "position");
 		addPublicVariable(&scale, "scale");
-		addPublicVariable(&rotation, "rotation");
 	}
 
 	void Transform::move(const Vector3& vector) {
@@ -22,27 +21,27 @@ namespace glGame {
 	}
 
 	void Transform::rotate(const Vector3& vector) {
-		rotation.x += vector.x;
-		rotation.y += vector.y;
-		rotation.z += vector.z;
+		Quaternion q(glm::vec3(vector.x, vector.y, vector.z));
+		orientation *= q;
 	}
 
 	void Transform::rotate(const float& x, const float& y, const float& z) {
-		rotation.x += x;
-		rotation.y += y;
-		rotation.z += z;
+		rotate(Vector3(x, y, z));
 	}
 
 	glm::mat4 Transform::getTransformMatrix() const {
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, position.z));
 
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0, 1, 0));
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+		modelMatrix *= glm::toMat4(orientation);
 
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(scale.x, scale.y, scale.z));
 		
 		return modelMatrix;
+	}
+
+	Vector3 Transform::getEulerAngles() const {
+		glm::vec3 euler = glm::eulerAngles(orientation);
+		return Vector3(euler.x, euler.y, euler.z);
 	}
 
 }

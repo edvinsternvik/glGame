@@ -1,8 +1,7 @@
 #pragma once
-#include "../Math/Vector.h"
 #include "Component.h"
-
-#include <glm/glm.hpp>
+#include "../Math/Vector.h"
+#include "../Math/Quaternion.h"
 
 namespace glGame {
 
@@ -16,11 +15,14 @@ namespace glGame {
 		void move(const float& x, const float& y, const float& z);
 		void rotate(const Vector3& vector);
 		void rotate(const float& x, const float& y, const float& z);
+		void rotate(const Quaternion& quaternion);
 
 		glm::mat4 getTransformMatrix() const;
+		Vector3 getEulerAngles() const;
 
 	public:
-		Vector3 position, scale, rotation;
+		Vector3 position, scale;
+		Quaternion orientation;
 	};
 
 }

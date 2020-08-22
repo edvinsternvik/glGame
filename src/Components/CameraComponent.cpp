@@ -13,7 +13,7 @@ namespace glGame {
 
 	void CameraComponent::update(float deltatime) {
 		camera.position = getGameObject()->transform->position;
-		camera.rotation = getGameObject()->transform->rotation;
+		camera.orientation = getGameObject()->transform->orientation;
 	}
 
 }

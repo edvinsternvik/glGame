@@ -1,6 +1,6 @@
 #pragma once
 #include "../Math/Vector.h"
-#include <glm/glm.hpp>
+#include "../Math/Quaternion.h"
 
 namespace glGame {
 
@@ -12,7 +12,8 @@ namespace glGame {
 		glm::mat4 getViewMatrix();
 
     public:
-        Vector3 position, rotation;
+        Vector3 position;
+        Quaternion orientation;
 		float fov, aspectRatio, nearPlane, farPlane;
     };
 

@@ -54,7 +54,7 @@ namespace glGame {
     void Editor::renderEditor() {
         if(!getSelectedItem<GameObject>().expired()) {
             m_selectedObjectGizmoObject->transform->position = getSelectedItem<GameObject>().lock()->transform->position;
-            m_selectedObjectGizmoObject->transform->rotation = getSelectedItem<GameObject>().lock()->transform->rotation;
+            m_selectedObjectGizmoObject->transform->orientation = getSelectedItem<GameObject>().lock()->transform->orientation;
             m_selectedObjectGizmoObject->onRender();
         }
         m_editorGui->OnGuiRender();

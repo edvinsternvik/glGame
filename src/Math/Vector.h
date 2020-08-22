@@ -38,6 +38,10 @@ namespace glGame {
 				return Vector3(this->x + other.x, this->y + other.y, this->z + other.z);
 			}
 
+			Vector3 operator*(const float& scalar) {
+				return Vector3(this->x * scalar, this->y * scalar, this->z * scalar);
+			}
+
 			Vector3 operator-(const Vector3& other) {
 				return Vector3(this->x - other.x, this->y - other.y, this->z - other.z);
 			}

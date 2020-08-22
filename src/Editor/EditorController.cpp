@@ -17,7 +17,7 @@ namespace glGame {
     void EditorController::update(float deltatime) {
         if(Input::GetMouseKey(MOUSE_BUTTON_RIGHT)) {
             Input::SetCursorMode(CURSOR_DISABLED);
-            getGameObject()->transform->rotation.y += Input::GetMouseDeltaX() * 0.1;
+            getGameObject()->transform->rotate(0.0, Input::GetMouseDeltaX() * 0.005, 0.0);
         }
         else {
             Input::SetCursorMode(CURSOR_NORMAL);
@@ -25,18 +25,22 @@ namespace glGame {
 
         float movementSpeed = deltatime * 5.0;
         Vector3 movement(0.0, 0.0, 0.0);
-        if(Input::GetKey(KEY_W)) movement.z -= movementSpeed;
-        if(Input::GetKey(KEY_S)) movement.z += movementSpeed;
+        if(Input::GetKey(KEY_W)) movement.z += movementSpeed;
+        if(Input::GetKey(KEY_S)) movement.z -= movementSpeed;
         if(Input::GetKey(KEY_A)) movement.x -= movementSpeed;
         if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
+        if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
+        if(Input::GetKey(KEY_SPACE)) movement.y += movementSpeed;
+        if(Input::GetKey(KEY_LEFT_CONTROL)) movement.y -= movementSpeed;
 
         Vector3 worldMovement(0.0, 0.0, 0.0);
 
-        float rotationY = glm::radians(-getGameObject()->transform->rotation.y); 
-        worldMovement.z = std::cos(rotationY) * movement.z - std::sin(rotationY) * movement.x;
-        worldMovement.x = std::cos(rotationY) * movement.x + std::sin(rotationY) * movement.z;
+        glm::vec3 f = getGameObject()->transform->orientation * glm::vec3(0.0, 0.0, -1.0);
+        f.x *= -1.0;
+        glm::vec3 r = glm::cross(f, glm::vec3(0.0, 1.0, 0.0));
+        glm::vec3 move = f * movement.z + r * movement.x + glm::vec3(0.0, 1.0, 0.0) * movement.y;
 
-        getGameObject()->transform->move(worldMovement.x, worldMovement.y, worldMovement.z);
+        getGameObject()->transform->move(move.x, move.y, move.z);
 
         if(Input::GetMouseKeyDown(MOUSE_BUTTON_LEFT)) {
             if(m_editor && m_viewportWindow) {
