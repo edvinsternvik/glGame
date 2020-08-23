@@ -49,8 +49,8 @@ namespace glGame {
     }
 
     template<typename T>
-    internal::Vector2<T> createVector2FromString(std::string& str, T (*strToType)(const std::string& s)) {
-        internal::Vector2<T> vec2(0, 0);
+    glm::vec<2,T> createVector2FromString(std::string& str, T (*strToType)(const std::string& s)) {
+        glm::vec<2,T> vec2(0, 0);
 
         std::stringstream valueBuffer;
         valueBuffer << str.substr(1, str.size() - 2);
@@ -65,8 +65,8 @@ namespace glGame {
     }
 
     template<typename T>
-    internal::Vector3<T> createVector3FromString(std::string& str, T (*strToType)(const std::string& s)) {
-        internal::Vector3<T> vec3(0, 0, 0);
+    glm::vec<3,T> createVector3FromString(std::string& str, T (*strToType)(const std::string& s)) {
+        glm::vec<3,T> vec3(0, 0, 0);
 
         std::stringstream valueBuffer;
         valueBuffer << str.substr(1, str.size() - 2);
@@ -109,12 +109,12 @@ namespace glGame {
     }
 
     template<typename T>
-    std::string createStringFromVector2(const internal::Vector2<T>& vec) {
+    std::string createStringFromVector2(const glm::vec<2,T>& vec) {
         return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "}";
     }
 
     template<typename T>
-    std::string createStringFromVector3(const internal::Vector3<T>& vec) {
+    std::string createStringFromVector3(const glm::vec<3,T>& vec) {
         return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "," + std::to_string(vec.z) + "}";
     }
 

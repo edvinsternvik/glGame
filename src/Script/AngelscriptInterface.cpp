@@ -18,19 +18,19 @@ namespace glGame {
     void Vector3DefConstructor(void* memory) { new(memory) Vector3(0, 0, 0); }
     void Vector3Constructor(void* memory, float x, float y, float z) { new(memory) Vector3(x, y, z); }
     void Vector3Destructor(void* memory) { ((Vector3*)memory)->~Vector3(); }
+    void Vector3iDefConstructor(void* memory) { new(memory) Vector3i(0, 0, 0); }
+    void Vector3iConstructor(void* memory, int x, int y, int z) { new(memory) Vector3i(x, y, z); }
+    void Vector3iDestructor(void* memory) { ((Vector3i*)memory)->~Vector3i(); }
     void Vector2DefConstructor(void* memory) { new(memory) Vector2(0, 0); }
     void Vector2Constructor(void* memory, float x, float y) { new(memory) Vector2(x, y); }
     void Vector2Destructor(void* memory) { ((Vector2*)memory)->~Vector2(); }
+    void Vector2iDefConstructor(void* memory) { new(memory) Vector2i(0, 0); }
+    void Vector2iConstructor(void* memory, int x, int y) { new(memory) Vector2i(x, y); }
+    void Vector2iDestructor(void* memory) { ((Vector2i*)memory)->~Vector2i(); }
     void QuaternionConstructor(void* memory, float w, float x, float y, float z) { new(memory) Quaternion(w, x, y, z); }
     void QuaternionDefConstructor(void* memory) { new(memory) Quaternion(); }
     void QuaternionEulerConstructor(void* memory, Vector3 eulerAngles) { new(memory) Quaternion(glm::vec3(eulerAngles.x, eulerAngles.y, eulerAngles.z)); }
     void QuaternionDestructor(void* memory) { ((Quaternion*)memory)->~Quaternion(); }
-
-    Vector3 test(const Quaternion& quat, const Vector3& vec) {
-        glm::vec3 v(vec.x, vec.y, vec.z);
-        glm::vec3 res = quat * v;
-        return Vector3(res.x, res.y, res.z);
-    }
 
     void MessageCallback(const asSMessageInfo *msg, void *param) {
         const char *type = "ERR ";
@@ -47,39 +47,74 @@ namespace glGame {
         RegisterStdString(scriptEngine);
         RegisterScriptMath(scriptEngine);
 
+        // Vector2
         scriptEngine->RegisterObjectType("Vector2", sizeof(Vector2), asOBJ_VALUE | asGetTypeTraits<Vector2>() | asOBJ_APP_CLASS_ALLFLOATS);
         scriptEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT, "void Vector2(float x, float y)", asFUNCTION(Vector2Constructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT, "void Vector2()", asFUNCTION(Vector2DefConstructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_DESTRUCT, "void Vector2()", asFUNCTION(Vector2Destructor), asCALL_CDECL_OBJLAST);
         scriptEngine->RegisterObjectMethod("Vector2", "Vector2& opAssign(const Vector2& in)", asMETHODPR(Vector2, operator=, (const Vector2&), Vector2&), asCALL_THISCALL);
-        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opAdd(const Vector2& in)", asMETHODPR(Vector2, operator+, (const Vector2&), Vector2), asCALL_THISCALL);
-        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opSub(const Vector2& in)", asMETHODPR(Vector2, operator-, (const Vector2&), Vector2), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opAdd(const Vector2& in)", asFUNCTIONPR(glm::operator+, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opSub(const Vector2& in)", asFUNCTIONPR(glm::operator-, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opMul(const Vector2& in)", asFUNCTIONPR(glm::operator*, (const Vector2&, const Vector2&), Vector2), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2", "Vector2 opMul(float)", asFUNCTIONPR(glm::operator*, (const Vector2&, float), Vector2), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectProperty("Vector2", "float x", asOFFSET(Vector2, Vector2::x));
         scriptEngine->RegisterObjectProperty("Vector2", "float y", asOFFSET(Vector2, Vector2::y));
 
+        // Vector2i
+        scriptEngine->RegisterObjectType("Vector2i", sizeof(Vector2i), asOBJ_VALUE | asGetTypeTraits<Vector2i>() | asOBJ_APP_CLASS_ALLINTS);
+        scriptEngine->RegisterObjectBehaviour("Vector2i", asBEHAVE_CONSTRUCT, "void Vector2i(int x, int y)", asFUNCTION(Vector2iConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Vector2i", asBEHAVE_CONSTRUCT, "void Vector2i()", asFUNCTION(Vector2iDefConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Vector2i", asBEHAVE_DESTRUCT, "void Vector2i()", asFUNCTION(Vector2iDestructor), asCALL_CDECL_OBJLAST);
+        scriptEngine->RegisterObjectMethod("Vector2i", "Vector2i& opAssign(const Vector2i& in)", asMETHODPR(Vector2i, operator=, (const Vector2i&), Vector2i&), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Vector2i", "Vector2i opAdd(const Vector2i& in)", asFUNCTIONPR(glm::operator+, (const Vector2i&, const Vector2i&), Vector2i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2i", "Vector2i opSub(const Vector2i& in)", asFUNCTIONPR(glm::operator-, (const Vector2i&, const Vector2i&), Vector2i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2i", "Vector2i opMul(const Vector2i& in)", asFUNCTIONPR(glm::operator*, (const Vector2i&, const Vector2i&), Vector2i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector2i", "Vector2i opMul(int)", asFUNCTIONPR(glm::operator*, (const Vector2i&, int), Vector2i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectProperty("Vector2i", "int x", asOFFSET(Vector2i, Vector2i::x));
+        scriptEngine->RegisterObjectProperty("Vector2i", "int y", asOFFSET(Vector2i, Vector2i::y));
+
+        // Vector3
         scriptEngine->RegisterObjectType("Vector3", sizeof(Vector3), asOBJ_VALUE | asGetTypeTraits<Vector3>() | asOBJ_APP_CLASS_ALLFLOATS);
         scriptEngine->RegisterObjectBehaviour("Vector3", asBEHAVE_CONSTRUCT, "void Vector3(float x, float y, float z)", asFUNCTION(Vector3Constructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Vector3", asBEHAVE_CONSTRUCT, "void Vector3()", asFUNCTION(Vector3DefConstructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Vector3", asBEHAVE_DESTRUCT, "void Vector3()", asFUNCTION(Vector3Destructor), asCALL_CDECL_OBJLAST);
         scriptEngine->RegisterObjectMethod("Vector3", "Vector3& opAssign(const Vector3& in)", asMETHODPR(Vector3, operator=, (const Vector3&), Vector3&), asCALL_THISCALL);
-        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opAdd(const Vector3& in)", asMETHODPR(Vector3, operator+, (const Vector3&), Vector3), asCALL_THISCALL);
-        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opSub(const Vector3& in)", asMETHODPR(Vector3, operator-, (const Vector3&), Vector3), asCALL_THISCALL);
-        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opMul(const float& in)", asMETHODPR(Vector3, operator*, (const float&), Vector3), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opAdd(const Vector3& in)", asFUNCTIONPR(glm::operator+, (const Vector3&, const Vector3&), Vector3), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opSub(const Vector3& in)", asFUNCTIONPR(glm::operator-, (const Vector3&, const Vector3&), Vector3), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opMul(const Vector3& in)", asFUNCTIONPR(glm::operator*, (const Vector3&, const Vector3&), Vector3), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3", "Vector3 opMul(float)", asFUNCTIONPR(glm::operator*, (const Vector3&, float), Vector3), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectProperty("Vector3", "float x", asOFFSET(Vector3, Vector3::x));
         scriptEngine->RegisterObjectProperty("Vector3", "float y", asOFFSET(Vector3, Vector3::y));
         scriptEngine->RegisterObjectProperty("Vector3", "float z", asOFFSET(Vector3, Vector3::z));
 
+        // Vector3i
+        scriptEngine->RegisterObjectType("Vector3i", sizeof(Vector3i), asOBJ_VALUE | asGetTypeTraits<Vector3i>() | asOBJ_APP_CLASS_ALLFLOATS);
+        scriptEngine->RegisterObjectBehaviour("Vector3i", asBEHAVE_CONSTRUCT, "void Vector3i(float x, float y, float z)", asFUNCTION(Vector3iConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Vector3i", asBEHAVE_CONSTRUCT, "void Vector3i()", asFUNCTION(Vector3iDefConstructor), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectBehaviour("Vector3i", asBEHAVE_DESTRUCT, "void Vector3i()", asFUNCTION(Vector3iDestructor), asCALL_CDECL_OBJLAST);
+        scriptEngine->RegisterObjectMethod("Vector3i", "Vector3i& opAssign(const Vector3i& in)", asMETHODPR(Vector3i, operator=, (const Vector3i&), Vector3i&), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Vector3i", "Vector3i opAdd(const Vector3i& in)", asFUNCTIONPR(glm::operator+, (const Vector3i&, const Vector3i&), Vector3i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3i", "Vector3i opSub(const Vector3i& in)", asFUNCTIONPR(glm::operator-, (const Vector3i&, const Vector3i&), Vector3i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3i", "Vector3i opMul(const Vector3i& in)", asFUNCTIONPR(glm::operator*, (const Vector3i&, const Vector3i&), Vector3i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectMethod("Vector3i", "Vector3i opMul(int)", asFUNCTIONPR(glm::operator*, (const Vector3i&, int), Vector3i), asCALL_CDECL_OBJFIRST);
+        scriptEngine->RegisterObjectProperty("Vector3i", "float x", asOFFSET(Vector3i, Vector3i::x));
+        scriptEngine->RegisterObjectProperty("Vector3i", "float y", asOFFSET(Vector3i, Vector3i::y));
+        scriptEngine->RegisterObjectProperty("Vector3i", "float z", asOFFSET(Vector3i, Vector3i::z));
+
+        // Quaternion
         scriptEngine->RegisterObjectType("Quaternion", sizeof(Quaternion), asOBJ_VALUE | asGetTypeTraits<Quaternion>());
         scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion(float w, float x, float y, float z)", asFUNCTION(QuaternionConstructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion(Vector3 eulerAngles)", asFUNCTION(QuaternionEulerConstructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_CONSTRUCT, "void Quaternion()", asFUNCTION(QuaternionDefConstructor), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectBehaviour("Quaternion", asBEHAVE_DESTRUCT, "void Quaternion()", asFUNCTION(QuaternionDestructor), asCALL_CDECL_OBJLAST);
         scriptEngine->RegisterObjectMethod("Quaternion", "Quaternion& opAssign(const Quaternion& in)", asMETHODPR(Quaternion, operator=, (const Quaternion&), Quaternion&), asCALL_THISCALL);
+        scriptEngine->RegisterObjectMethod("Quaternion", "Vector3 opMul(const Vector3& in)", asFUNCTIONPR(glm::operator*, (const Quaternion&, const Vector3&), Vector3), asCALL_CDECL_OBJFIRST);
         scriptEngine->RegisterObjectProperty("Quaternion", "float w", asOFFSET(Quaternion, Quaternion::w));
         scriptEngine->RegisterObjectProperty("Quaternion", "float x", asOFFSET(Quaternion, Quaternion::x));
         scriptEngine->RegisterObjectProperty("Quaternion", "float y", asOFFSET(Quaternion, Quaternion::y));
         scriptEngine->RegisterObjectProperty("Quaternion", "float z", asOFFSET(Quaternion, Quaternion::z));
 
+        // Transform
         scriptEngine->RegisterObjectType("Transform", sizeof(Transform), asOBJ_REF | asOBJ_NOCOUNT);
         scriptEngine->RegisterObjectMethod("Transform", "void move(const Vector3 &in vector)", asMETHODPR(Transform, Transform::move, (const Vector3&), void), asCALL_THISCALL);
         scriptEngine->RegisterObjectMethod("Transform", "void move(const float &in x, const float &in y, const float &in z)", asMETHODPR(Transform, Transform::move, (const float&, const float&, const float&), void), asCALL_THISCALL);
@@ -90,8 +125,7 @@ namespace glGame {
         scriptEngine->RegisterObjectProperty("Transform", "Vector3 scale", asOFFSET(Transform, Transform::scale));
         scriptEngine->RegisterObjectProperty("Transform", "Quaternion orientation", asOFFSET(Transform, Transform::orientation));
         
-
-        
+        // Print
         scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTIONPR(print, (const std::string&), void), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("void print(const int &in)", asFUNCTIONPR(print, (const int&), void), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("void print(const float &in)", asFUNCTIONPR(print, (const float&), void), asCALL_CDECL);
@@ -104,7 +138,7 @@ namespace glGame {
         scriptEngine->RegisterGlobalFunction("void println(const Vector2 &in)", asFUNCTIONPR(println, (const Vector2&), void), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("void println(const Vector3 &in)", asFUNCTIONPR(println, (const Vector3&), void), asCALL_CDECL);
 
-
+        // Input
         scriptEngine->RegisterGlobalFunction("bool GetKeyDown(const int &in keycode)", asFUNCTION(Input::GetKeyDown), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("bool GetKeyUp(const int &in keycode)", asFUNCTION(Input::GetKeyUp), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("bool GetKey(const int &in keycode)", asFUNCTION(Input::GetKey), asCALL_CDECL);
@@ -117,8 +151,6 @@ namespace glGame {
         scriptEngine->RegisterGlobalFunction("float GetMouseX()", asFUNCTION(Input::GetMouseX), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("float GetMouseY()", asFUNCTION(Input::GetMouseY), asCALL_CDECL);
         scriptEngine->RegisterGlobalFunction("void SetCursorMode(const int &in cursorMode)", asFUNCTION(Input::SetCursorMode), asCALL_CDECL);
-
-        scriptEngine->RegisterGlobalFunction("Vector3 rotate(const Quaternion &in quat, const Vector3 &in vec)", asFUNCTION(test), asCALL_CDECL);
 
         const char* dNamespace = scriptEngine->GetDefaultNamespace();
         scriptEngine->SetDefaultNamespace("KEY");
