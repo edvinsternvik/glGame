@@ -75,6 +75,17 @@ namespace glGame {
 			ImGui::DragInt3(editorVariable->name.c_str(), (int*)std::get<Vector3i*>(editorVariable->data), editorVariable->editor_sliderSpeed * speedMultiplier);
 			registerChangePublicVariableAction<Vector3i>(std::get<Vector3i*>(editorVariable->data), &m_editor->actionManager);
 			break;
+		case toInt(PublicVariableType::Quaternion): {
+			float direction = 1.0;
+			Vector3 eulerAngles = glm::degrees(glm::eulerAngles(*std::get<Quaternion*>(editorVariable->data)));
+			Vector3 eulerAnglesBefore = eulerAngles;
+			ImGui::DragFloat3(editorVariable->name.c_str(), (float*)&eulerAngles, editorVariable->editor_sliderSpeed * speedMultiplier * direction);
+			Vector3 deltaEulerAngles = eulerAngles - eulerAnglesBefore;
+			Quaternion deltaRotation(glm::radians(deltaEulerAngles));
+			*std::get<Quaternion*>(editorVariable->data) *= deltaRotation;
+			registerChangePublicVariableAction<Quaternion>(std::get<Quaternion*>(editorVariable->data), &m_editor->actionManager);
+			break;
+		}
 		// case PublicVariableType::Color:
 		// 	ImGui::ColorPicker3(editorVariable->name.c_str(), (float*)editorVariable->data);
 		// 	break;

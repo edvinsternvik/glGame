@@ -1,5 +1,6 @@
 #pragma once
 #include "../Math/Vector.h"
+#include "../Math/Quaternion.h"
 #include <string>
 #include <variant>
 #include <memory>
@@ -32,10 +33,10 @@ namespace glGame {
 		std::vector<char*> options;
 	};
 
-	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, bool*, Vector2*, Vector2i*, Vector3*, Vector3i*, GameObject*, Component*, Color*, PublicVariableEnum*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*, Asset<Material>*>;
+	using PublicVarVariant = std::variant<int*, float*, double*, char*, std::string*, bool*, Vector2*, Vector2i*, Vector3*, Vector3i*, Quaternion*, GameObject*, Component*, Color*, PublicVariableEnum*, Asset<Model>*, Asset<Script>*, Asset<Texture>*, Asset<Shader>*, Asset<Material>*>;
 
     enum class PublicVariableType {
-		Int=0, Float, Double, Char, String, Boolean, Vec2, Vec2i, Vec3, Vec3i,
+		Int=0, Float, Double, Char, String, Boolean, Vec2, Vec2i, Vec3, Vec3i, Quaternion,
 		GameObject, Component, Color, PublicVariableEnum,
 		Model, Script, Texture, Shader, Material,
 		None

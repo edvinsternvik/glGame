@@ -6,6 +6,7 @@ namespace glGame {
 	Transform::Transform() : Component(), position(0, 0, 0), scale(1, 1, 1), orientation(glm::vec3(0.0)) {
 		addPublicVariable(&position, "position");
 		addPublicVariable(&scale, "scale");
+		addPublicVariable(&orientation, "orientation", 10.0);
 	}
 
 	void Transform::move(const Vector3& vector) {

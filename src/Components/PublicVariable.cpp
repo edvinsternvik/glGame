@@ -48,36 +48,20 @@ namespace glGame {
 
     }
 
-    template<typename T>
-    glm::vec<2,T> createVector2FromString(std::string& str, T (*strToType)(const std::string& s)) {
-        glm::vec<2,T> vec2(0, 0);
+    template<typename T, typename U, int size>
+    T createTypeFromString(std::string& str, U (*strToType)(const std::string& s)) {
+        T type;
 
         std::stringstream valueBuffer;
         valueBuffer << str.substr(1, str.size() - 2);
         std::string tmp;
-        for(int i = 0; i < 2; ++i) {
+        for(int i = 0; i < size; ++i) {
             std::getline(valueBuffer, tmp, ',');
             
-            ((T*)&vec2)[i] = strToType(tmp);
+            type[i] = strToType(tmp);
         };
 
-        return vec2;
-    }
-
-    template<typename T>
-    glm::vec<3,T> createVector3FromString(std::string& str, T (*strToType)(const std::string& s)) {
-        glm::vec<3,T> vec3(0, 0, 0);
-
-        std::stringstream valueBuffer;
-        valueBuffer << str.substr(1, str.size() - 2);
-        std::string tmp;
-        for(int i = 0; i < 3; ++i) {
-            std::getline(valueBuffer, tmp, ',');
-            
-            ((T*)&vec3)[i] = strToType(tmp);
-        };
-
-        return vec3;
+        return type;
     }
 
     float stofOverload(const std::string& str) { return std::stof(str); }
@@ -91,10 +75,11 @@ namespace glGame {
 		case toInt(PublicVariableType::Char): *std::get<char*>(data) = str[0]; return;
 		case toInt(PublicVariableType::String): *std::get<std::string*>(data) = str; return;
         case toInt(PublicVariableType::Boolean): *std::get<bool*>(data) = (bool)std::stoi(str); return;
-		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createVector2FromString<float>(str, stofOverload); return;
-        case toInt(PublicVariableType::Vec2i): *std::get<Vector2i*>(data) = createVector2FromString<int>(str, stoiOverload); return;
-		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createVector3FromString<float>(str, stofOverload); return;
-		case toInt(PublicVariableType::Vec3i): *std::get<Vector3i*>(data) = createVector3FromString<int>(str, stoiOverload); return;
+		case toInt(PublicVariableType::Vec2): *std::get<Vector2*>(data) = createTypeFromString<Vector2, float, 2>(str, stofOverload); return;
+        case toInt(PublicVariableType::Vec2i): *std::get<Vector2i*>(data) = createTypeFromString<Vector2i, int, 2>(str, stoiOverload); return;
+		case toInt(PublicVariableType::Vec3): *std::get<Vector3*>(data) = createTypeFromString<Vector3, float, 3>(str, stofOverload); return;
+		case toInt(PublicVariableType::Vec3i): *std::get<Vector3i*>(data) = createTypeFromString<Vector3, int, 3>(str, stoiOverload); return;
+        case toInt(PublicVariableType::Quaternion): *std::get<Quaternion*>(data) = createTypeFromString<Quaternion, float, 4>(str, stofOverload); return;
 		// case PublicVariableType::GameObject:
 		// case PublicVariableType::Component:
 		// case PublicVariableType::Color:
@@ -108,14 +93,16 @@ namespace glGame {
         
     }
 
-    template<typename T>
-    std::string createStringFromVector2(const glm::vec<2,T>& vec) {
-        return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "}";
-    }
-
-    template<typename T>
-    std::string createStringFromVector3(const glm::vec<3,T>& vec) {
-        return "{" + std::to_string(vec.x) + "," + std::to_string(vec.y) + "," + std::to_string(vec.z) + "}";
+    template<typename T, int size>
+    std::string createStringFromType(const T& type) {
+        std::stringstream ss;
+        ss << "{";
+        for(int i = 0; i < size; ++i) {
+            if(i > 0) ss << ",";
+            ss << type[i];
+        }
+        ss << "}";
+        return ss.str();
     }
 
     std::string PublicVariable::getPublicVariableString() {
@@ -126,10 +113,11 @@ namespace glGame {
 		case toInt(PublicVariableType::Char): return std::to_string(*(std::get<char*>(data)));
 		case toInt(PublicVariableType::String): return *(std::get<std::string*>(data));
         case toInt(PublicVariableType::Boolean): return std::to_string(*(std::get<bool*>(data)));
-		case toInt(PublicVariableType::Vec2): return createStringFromVector2(*(std::get<Vector2*>(data)));
-        case toInt(PublicVariableType::Vec2i): return createStringFromVector2(*(std::get<Vector2i*>(data)));
-        case toInt(PublicVariableType::Vec3): return createStringFromVector3(*(std::get<Vector3*>(data)));
-		case toInt(PublicVariableType::Vec3i): return createStringFromVector3(*(std::get<Vector3i*>(data)));
+		case toInt(PublicVariableType::Vec2): return createStringFromType<Vector2, 2>(*(std::get<Vector2*>(data)));
+        case toInt(PublicVariableType::Vec2i): return createStringFromType<Vector2i, 2>(*(std::get<Vector2i*>(data)));
+        case toInt(PublicVariableType::Vec3): return createStringFromType<Vector3, 3>(*(std::get<Vector3*>(data)));
+		case toInt(PublicVariableType::Vec3i): return createStringFromType<Vector3i, 3>(*(std::get<Vector3i*>(data)));
+        case toInt(PublicVariableType::Quaternion): return createStringFromType<Quaternion, 4>(*(std::get<Quaternion*>(data)));
 		case toInt(PublicVariableType::PublicVariableEnum): return std::to_string(std::get<PublicVariableEnum*>(data)->selection);
 		// case PublicVariableType::GameObject: return "";
 		// case PublicVariableType::Component: return "";
@@ -151,6 +139,7 @@ namespace glGame {
         else if(str == "Vector2i") return PublicVariableType::Vec2i;
         else if(str == "Vector3") return PublicVariableType::Vec3;
         else if(str == "Vector3i") return PublicVariableType::Vec3i;
+        else if(str == "Quaternion") return PublicVariableType::Quaternion;
         else if(str == "char") return PublicVariableType::Char;
         else if(str == "string") return PublicVariableType::String;
         else if(str == "boolean") return PublicVariableType::Boolean;
