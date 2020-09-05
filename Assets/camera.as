@@ -13,10 +13,9 @@ class Camera : ScriptObject {
         getTransform().rotate(0.0, deltaMouseX * 0.001 * sensitivity, 0.0);
 
         Quaternion q = getTransform().orientation;
-        Vector3 f(0.0, 0.0, -1.0);
-        Vector3 r(1.0, 0.0, 0.0);
-        Vector3 forward = rotate(q, f);
-        Vector3 right = rotate(q, r);
+        Vector3 forward = q * Vector3(0.0, 0.0, -1.0);
+        Vector3 right = q * Vector3(1.0, 0.0, 0.0);
+
 
         Vector3 localMovement;
         float movementSpeed = speed;
