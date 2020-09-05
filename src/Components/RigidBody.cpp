@@ -10,6 +10,7 @@ namespace glGame {
     RigidBody::RigidBody() {
         addPublicVariable(&gravityScale, "gravityScale");
         addPublicVariable(&mass, "mass");
+        addPublicVariable(&bounciness, "bounciness");
         addPublicVariable(&lockRotation, "lockRotation");
     }
 
@@ -34,6 +35,7 @@ namespace glGame {
         m_rigidBody->gravityScale = gravityScale;
         if(m_rigidBody->getMass() != mass) m_rigidBody->setMass(mass);
         m_rigidBody->lockRotation = lockRotation;
+        m_rigidBody->bounciness = bounciness;
     }
 
     redPhysics3d::CollisionBox* RigidBody::addBoxCollider() {
