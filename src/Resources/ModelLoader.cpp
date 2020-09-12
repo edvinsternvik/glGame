@@ -67,10 +67,27 @@ namespace glGame {
 					for(int j = 0; j < 3; ++j) {
 						std::getline(vertexBuffer, numberString, '/');
 
-						numbers[j] = std::stoi(numberString) - 1;
+						bool isDigit = true;
+						for(char& c : numberString) {
+							if(!std::isdigit(c)) {
+								isDigit = false;
+								break;
+							}
+						}
+
+						if(isDigit && numberString.size() > 0) {
+							numbers[j] = std::stoi(numberString) - 1;
+						}
+						else {
+							numbers[j] = 0;
+						}
 					}
 
-					data->push_back(ModelData(v[numbers[0]], vt[numbers[1]], vn[numbers[2]]));
+					ModelVec3 modelVert = numbers[0] >=  v.size() ? ModelVec3(0.0, 0.0, 0.0) : v[numbers[0]];
+					ModelVec2 modelTex  = numbers[1] >= vt.size() ? ModelVec2(0.0, 0.0)      : vt[numbers[1]];
+					ModelVec3 modelNorm = numbers[2] >= vn.size() ? ModelVec3(0.0, 0.0, 0.0) : vn[numbers[2]];
+
+					data->push_back(ModelData(modelVert, modelTex, modelNorm));
 					//TODO parse indicies
 				}
 			}
