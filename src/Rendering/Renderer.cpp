@@ -36,20 +36,20 @@ namespace glGame {
 		this->viewportSize = viewportSize;
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material) {
-		m_frameRenderData.push_back(ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix));
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& layer) {
+		m_renderDataList.insert(layer, ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix));
 	}
 
-	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material) {
-		m_frameRenderData.push_back(ObjectRenderData(vertexArray, verticies, material, modelMatrix));
+	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& layer) {
+		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, material, modelMatrix));
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader) {
-		m_frameRenderData.push_back(ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix));
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
+		m_renderDataList.insert(layer, ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix));
 	}
 
-	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader) {
-		m_frameRenderData.push_back(ObjectRenderData(vertexArray, verticies, shader, modelMatrix));
+	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
+		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, shader, modelMatrix));
 	}
 
 
@@ -86,10 +86,12 @@ namespace glGame {
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i).lock().get();
 
-			int frameRenderDataSize = m_frameRenderData.size();
+			int frameRenderDataSize = m_renderDataList.size();
 			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
-				gameObject->getComponent(j)->onRender();
-				if(frameRenderDataSize < m_frameRenderData.size()) m_frameRenderData.back().gameObjectId = i;
+				gameObject->getComponent(j)->onRender(); // Rendering components(MeshRenderer etc) submit renderingData through this method
+				if(frameRenderDataSize < m_renderDataList.size()) { // If new renderingData has been submitted
+					m_renderDataList.last()->gameObjectId = i;
+				}
 			}
 		}
 
@@ -103,7 +105,7 @@ namespace glGame {
 				glViewport(0, 0, light->shadowmapSize.x, light->shadowmapSize.y);
 				glClear(GL_DEPTH_BUFFER_BIT);
 				glCullFace(GL_FRONT);
-				renderObjectsShadow(m_frameRenderData);
+				renderObjectsShadow(m_renderDataList);
 				glCullFace(GL_BACK);
 			}
 		}
@@ -113,7 +115,7 @@ namespace glGame {
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
 		bindDefaultRenderTarget();
 
-		renderObjects(m_frameRenderData);
+		renderObjects(m_renderDataList);
 
 		if(m_skyboxRenderData.cubemap && m_skyboxRenderData.shader) {
 			glDepthMask(GL_FALSE);
@@ -129,8 +131,8 @@ namespace glGame {
 			glDepthFunc(GL_LESS);
 		}
 
-		previousFrameRenderData = m_frameRenderData;
-		m_frameRenderData.clear();
+		previousFrameRenderData = m_renderDataList;
+		m_renderDataList.clear();
 	}
 
 	void Renderer::renderGizmos(const std::vector<GameObject*>& gizmoObjects) {
@@ -148,7 +150,7 @@ namespace glGame {
 		m_defaultRenderTarget = renderTarget;
 	}
 
-	void Renderer::renderObjects(std::vector<ObjectRenderData>& renderData) {
+	void Renderer::renderObjects(RenderDataList& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
 			Shader* shader;
 			int hasTexture = 0, hasSpecularMap = 0;
@@ -180,7 +182,7 @@ namespace glGame {
 		}
 	}
 
-	void Renderer::renderObjectsShadow(std::vector<ObjectRenderData>& renderData) {
+	void Renderer::renderObjectsShadow(RenderDataList& renderData) {
 		for(ObjectRenderData& objRenderData : renderData) {
 			if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 				m_lightManager->shadowmapShader->useShader();

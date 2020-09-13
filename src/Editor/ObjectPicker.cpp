@@ -46,7 +46,7 @@ namespace glGame {
         return (int)pixel[2] + (((int)pixel[1]) << 8) + (((int)pixel[0]) << 16);
     }
 
-    void ObjectPicker::renderColorPickerTexture(std::vector<ObjectRenderData>* objRenderData, Camera* camera) {
+    void ObjectPicker::renderColorPickerTexture(RenderDataList* objRenderData, Camera* camera) {
         glm::mat4 projectionView = camera->getProjectionMatrix() * camera->getViewMatrix();
 
         m_colorPickerShader->useShader();

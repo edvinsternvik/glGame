@@ -10,7 +10,7 @@ namespace glGame {
     class Texture;
     class FrameBuffer;
     class Shader;
-    class ObjectRenderData;
+    class RenderDataList;
 
     class ObjectPicker {
     public:
@@ -18,7 +18,7 @@ namespace glGame {
         ~ObjectPicker();
 
         int getGameObjectIdFromScreen(const Vector2& normalizedScreenPosition);
-        void renderColorPickerTexture(std::vector<ObjectRenderData>* objRenderData, Camera* camera);
+        void renderColorPickerTexture(RenderDataList* objRenderData, Camera* camera);
 
     private:
         Vector2i m_resolution;

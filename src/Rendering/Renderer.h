@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "UniformBuffer.h"
 #include "../Math/Vector.h"
+#include "RenderDataList.h"
 #include <GL/glew.h>
 #include <memory>
 #include <vector>
@@ -14,26 +15,9 @@ namespace glGame {
 	class Scene;
 	class GameObject;
 	class Camera;
-	class Material;
 	class Cubemap;
 	class Light;
 	class LightManager;
-
-	struct ObjectRenderData {
-	public:
-		ObjectRenderData() {}
-		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix)
-			: vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix) {}
-		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix)
-			: vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix) {}
-
-		VertexArray* vao = nullptr;
-		unsigned int verticies = 0;
-		Material* material = nullptr;
-		Shader* shader = nullptr;
-		glm::mat4 modelMatrix;
-		int gameObjectId = -1;
-	};
 
 	class Renderer {
 	public:
@@ -42,10 +26,10 @@ namespace glGame {
 
 		void init(Vector2i viewportSize);
 
-		void submit(Model* model, const glm::mat4& modelMatrix, Material* material);
-		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material);
-		void submit(Model* model, const glm::mat4& modelMatrix, Shader* shader);
-		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader);
+		void submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& layer = 0);
+		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& layer = 0);
+		void submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& layer = 0);
+		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& layer = 0);
 		void submit(Cubemap* cubemap, Shader* shader);
 		void updateLight(std::shared_ptr<Light> light);
 		void deleteLight(const unsigned int& lightid);
@@ -66,8 +50,8 @@ namespace glGame {
 			Shader* shader;
 		};
 
-		void renderObjects(std::vector<ObjectRenderData>& renderData);
-		void renderObjectsShadow(std::vector<ObjectRenderData>& renderData);
+		void renderObjects(RenderDataList& renderData);
+		void renderObjectsShadow(RenderDataList& renderData);
 		void initGLEW();
 		void clearScreen();
 		bool bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit);
@@ -78,13 +62,13 @@ namespace glGame {
 
 	public:
 		Vector2i viewportSize;
-		std::vector<ObjectRenderData> previousFrameRenderData;
+		RenderDataList previousFrameRenderData;
 
 	private:
 		std::shared_ptr<FrameBuffer> m_defaultRenderTarget;
 		std::unique_ptr<UniformBuffer> m_cameraUniformBuffer;
-		std::unique_ptr<LightManager> m_lightManager;
-		std::vector<ObjectRenderData> m_frameRenderData;
+		std::unique_ptr<LightManager> m_lightManager; 
+		RenderDataList m_renderDataList;
 		SkyboxRenderData m_skyboxRenderData;
 	};
 }
