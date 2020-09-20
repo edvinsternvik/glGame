@@ -1,6 +1,44 @@
 #include "RenderDataList.h"
+#include "Shader.h"
 
 namespace glGame {
+
+    UniformData::UniformData(const std::string& name, const UniformDataVariant& data) 
+		: name(name), data(data) {
+	}
+
+	void UniformData::UniformData::setUniform(Shader* shader) {
+		std::visit(VisitUniformData(shader, name), data);
+	}
+
+    UniformData::VisitUniformData::VisitUniformData(Shader* shader, const std::string& name) 
+        : shader(shader), name(name) {
+    }
+
+	void UniformData::VisitUniformData::operator()(int& data) {
+		shader->setUniform1i(name.c_str(), data);
+	}
+
+	void UniformData::VisitUniformData::operator()(float& data) {
+
+	}
+
+	void UniformData::VisitUniformData::operator()(Vector3& data) {
+        shader->setUniform3f(name.c_str(), data.x, data.y, data.z);
+	}
+
+	void UniformData::VisitUniformData::operator()(glm::mat4& data) {
+		shader->setUniformMat4(name.c_str(), data);
+	}
+
+    ObjectRenderData::ObjectRenderData() {}
+    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix, const UniformArray& uniforms)
+        : vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix), uniformData(uniforms) {
+    }
+
+    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix, const UniformArray& uniforms)
+        : vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix), uniformData(uniforms) {
+    }
 
     RenderDataListIterator::RenderDataListIterator(ObjectRenderDataList::iterator objIterator, ObjectRenderLayerList::iterator layerIterator, ObjectRenderLayerList::iterator layerEnd)
         : m_objIterator(objIterator), m_layerIterator(layerIterator), m_layerEnd(layerEnd) {

@@ -37,19 +37,41 @@ namespace glGame {
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& layer) {
-		m_renderDataList.insert(layer, ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix));
+		m_renderDataList.insert(layer,
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, {})
+		);
+	}
+
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const UniformArray& uniforms, const int& layer) {
+		m_renderDataList.insert(layer,
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, uniforms)
+		);
 	}
 
 	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& layer) {
-		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, material, modelMatrix));
+		m_renderDataList.insert(layer, 
+			ObjectRenderData(vertexArray, verticies, material, modelMatrix, {})
+		);
 	}
 
 	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
-		m_renderDataList.insert(layer, ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix));
+		m_renderDataList.insert(layer,
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, {})
+		);
+	}
+
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const UniformArray& uniforms, const int& layer) {
+		m_renderDataList.insert(layer,
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, uniforms)
+		);
+	}
+
+	void Renderer::submit(const ObjectRenderData& objRenderData, const int& layer) {
+		m_renderDataList.insert(layer, objRenderData);
 	}
 
 	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
-		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, shader, modelMatrix));
+		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, shader, modelMatrix, {}));
 	}
 
 
@@ -100,7 +122,7 @@ namespace glGame {
 			if(light->m_shadowmapFramebuffer.get()) {
 				light->m_shadowmapFramebuffer->bind();
 				m_lightManager->shadowmapShader->useShader();
-				m_lightManager->shadowmapShader->setUniformMat4("u_lightSpaceMatrix", &(light->m_lightSpaceMatrix[0][0]));
+				m_lightManager->shadowmapShader->setUniformMat4("u_lightSpaceMatrix", light->m_lightSpaceMatrix);
 
 				glViewport(0, 0, light->shadowmapSize.x, light->shadowmapSize.y);
 				glClear(GL_DEPTH_BUFFER_BIT);
@@ -173,9 +195,10 @@ namespace glGame {
 			shader->setUniform1i("shadowMap", 2);
 
 			prepareRenderingConfiguration(shader);
+			for(auto& uniform : objRenderData.uniformData) uniform.setUniform(shader);
 			
 			objRenderData.vao->bind();
-			shader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+			shader->setUniformMat4("u_model", objRenderData.modelMatrix);
 			glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
 
 			revertRenderingConfiguration(shader);
@@ -187,7 +210,7 @@ namespace glGame {
 			if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
 				m_lightManager->shadowmapShader->useShader();
 				objRenderData.vao->bind();
-				m_lightManager->shadowmapShader->setUniformMat4("u_model", &(objRenderData.modelMatrix[0][0]));
+				m_lightManager->shadowmapShader->setUniformMat4("u_model", objRenderData.modelMatrix);
 				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
 			}
 		}

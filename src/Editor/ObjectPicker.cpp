@@ -50,7 +50,7 @@ namespace glGame {
         glm::mat4 projectionView = camera->getProjectionMatrix() * camera->getViewMatrix();
 
         m_colorPickerShader->useShader();
-        m_colorPickerShader->setUniformMat4("u_projectionView", &(projectionView[0][0]));
+        m_colorPickerShader->setUniformMat4("u_projectionView", projectionView);
 
         glViewport(0, 0, m_resolution.x, m_resolution.y);
 
@@ -63,7 +63,7 @@ namespace glGame {
 
         for(auto obj : *objRenderData) {
             obj.vao->bind();
-            m_colorPickerShader->setUniformMat4("u_model", &(obj.modelMatrix[0][0]));
+            m_colorPickerShader->setUniformMat4("u_model", obj.modelMatrix);
 
             Vector3i uniqueColor = calculateColorFromId(obj.gameObjectId);
             m_colorPickerShader->setUniform3f("u_uniqueColor", uniqueColor.x / 255.0, uniqueColor.y / 255.0, uniqueColor.z / 255.0);

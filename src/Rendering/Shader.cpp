@@ -55,9 +55,9 @@ namespace glGame {
 		glUniform3f(uniformLocation, v1, v2, v3);
 	}
 
-	void Shader::setUniformMat4(const char* name, const float* matrix) {
+	void Shader::setUniformMat4(const char* name, const glm::mat4& matrix) {
 		int uniformLocation = getUniformLocation(name);
-		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, &(matrix[0][0]));
 	}
 
 	void Shader::setUniformBlockBinding(const char* name, const unsigned int& bindingPoint) {
@@ -297,6 +297,5 @@ namespace glGame {
 		}
 		return 0;
 	}
-
 
 }

@@ -27,8 +27,11 @@ namespace glGame {
 		void init(Vector2i viewportSize);
 
 		void submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& layer = 0);
+		void submit(Model* model, const glm::mat4& modelMatrix, Material* material, const UniformArray& uniforms, const int& layer = 0);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& layer = 0);
 		void submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& layer = 0);
+		void submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const UniformArray& uniforms, const int& layer = 0);
+		void submit(const ObjectRenderData& objRenderData, const int& layer);
 		void submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& layer = 0);
 		void submit(Cubemap* cubemap, Shader* shader);
 		void updateLight(std::shared_ptr<Light> light);
