@@ -20,7 +20,7 @@ namespace glGame {
 	}
 
 	void UniformData::VisitUniformData::operator()(float& data) {
-
+        shader->setUniform1f(name.c_str(), data);
 	}
 
 	void UniformData::VisitUniformData::operator()(Vector3& data) {

@@ -16,6 +16,7 @@ namespace glGame {
 
 		void useShader();
 		void setUniform1i(const char* name, const int& integer);
+		void setUniform1f(const char* name, const float& value);
 		void setUniform3f(const char* name, float v1, float v2, float v3);
 		void setUniformMat4(const char* name, const glm::mat4& matrix);
 		void setUniformBlockBinding(const char* name, const unsigned int& bindingPoint);
