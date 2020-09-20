@@ -46,14 +46,9 @@ namespace glGame {
 				m_editor->update(deltatime, m_focused);
 			#endif
 
+			sceneManager->callSceneOnRender();
 
-			renderer.beginRender();
 			renderer.render(sceneManager->getActiveScene(), &sceneManager->getActiveScene()->activeCamera.lock()->camera);
-			
-			#ifdef GL_GAME_EDITOR
-			renderer.renderGizmos(m_editor->getGizmoObjects());
-			#endif
-			renderer.endRender();
 
 			#ifdef GL_GAME_EDITOR
 			m_editor->renderEditor();

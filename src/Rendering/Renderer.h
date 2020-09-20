@@ -37,10 +37,8 @@ namespace glGame {
 		void updateLight(std::shared_ptr<Light> light);
 		void deleteLight(const unsigned int& lightid);
 
-		void beginRender();
 		void render(Scene* scene, Camera* camera);
 		void renderGizmos(const std::vector<GameObject*>& gizmoObjects);
-		void endRender();
 
 		void setDefaultRenderTarget(std::shared_ptr<FrameBuffer> renderTarget);
 
@@ -53,6 +51,8 @@ namespace glGame {
 			Shader* shader;
 		};
 
+		void beginRender();
+		void endRender();
 		void renderObjects(ObjectRenderDataLayer& renderDataLayer);
 		void renderObjectsShadow(RenderDataList& renderData);
 		void renderSkybox();

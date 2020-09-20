@@ -97,21 +97,13 @@ namespace glGame {
 
 	void Renderer::render(Scene* scene, Camera* camera) {
 		if(scene->activeCamera.expired()) return;
+		beginRender();
 
 		const glm::mat4& projectionMatrix = camera->getProjectionMatrix();
 		const glm::mat4& viewMatrix = camera->getViewMatrix();
 
 		m_cameraUniformBuffer->setData(0, (void*)&(projectionMatrix[0][0]));
 		m_cameraUniformBuffer->setData(1, (void*)&(viewMatrix[0][0]));
-		
-		// Render scene
-		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
-			GameObject* gameObject = scene->getGameObject(i).lock().get();
-
-			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
-				gameObject->getComponent(j)->onRender();
-			}
-		}
 
 		// Render shadowmaps
 		for(auto& light : m_lightManager->m_lights) {
@@ -130,6 +122,7 @@ namespace glGame {
 		glActiveTexture(GL_TEXTURE2);
 		m_lightManager->m_shadowmapTextureArray->bind();
 
+		// Render scene
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
 		bindDefaultRenderTarget();
 
@@ -144,6 +137,8 @@ namespace glGame {
 
 		previousFrameRenderData = m_renderDataList;
 		m_renderDataList.clear();
+
+		endRender();
 	}
 
 	void Renderer::renderGizmos(const std::vector<GameObject*>& gizmoObjects) {

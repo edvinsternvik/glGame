@@ -22,6 +22,10 @@ namespace glGame {
 		m_activeScene->update(deltatime);
 	}
 
+	void SceneManager::callSceneOnRender() {
+		m_activeScene->onRender();
+	}
+
 	void SceneManager::addScene() {
 		m_scenes.push_back(std::make_unique<Scene>());
 	}
