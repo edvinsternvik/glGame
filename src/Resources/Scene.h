@@ -28,6 +28,7 @@ namespace glGame {
 		
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+		int nextId = 0;
 	};
 
 }

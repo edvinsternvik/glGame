@@ -8,7 +8,7 @@ namespace glGame {
 	}
 
 	std::shared_ptr<GameObject> Scene::createGameObject(std::string name) {
-		std::shared_ptr<GameObject> newGameObject = GameObject::Create(name);
+		std::shared_ptr<GameObject> newGameObject = GameObject::Create(name, nextId++);
 		m_gameObjects.push_back(newGameObject);
 		return newGameObject;
 	}

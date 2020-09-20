@@ -14,10 +14,10 @@ namespace glGame{
 
 	class GameObject {
 	private:
-		GameObject(const std::string& name);
+		GameObject(const std::string& name, const int& id);
 
 	public:
-		static std::shared_ptr<GameObject> Create(const std::string& name);
+		static std::shared_ptr<GameObject> Create(const std::string& name, const int& id);
 		~GameObject();
 
 		void onInit();
@@ -56,6 +56,7 @@ namespace glGame{
 		int getComponentSize() const { return m_components.size(); }
 
 	public:
+		const int id;
 		std::string name;
 		Transform* transform = nullptr;
 

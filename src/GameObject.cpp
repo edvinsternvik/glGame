@@ -3,16 +3,16 @@
 
 namespace glGame {
 
-	GameObject::GameObject(const std::string& name) : name(name) {
+	GameObject::GameObject(const std::string& name, const int& id) : name(name), id(id) {
 		init();
 	}
 
-	std::shared_ptr<GameObject> GameObject::Create(const std::string& name) {
+	std::shared_ptr<GameObject> GameObject::Create(const std::string& name, const int& id) {
 		struct MakeSharedEnabler : public GameObject { // This is needed to use make_shared, as GameObject has a private constructor
-			MakeSharedEnabler(const std::string& name) : GameObject(name) {}
+			MakeSharedEnabler(const std::string& name, const int& id) : GameObject(name, id) {}
 		};
 
-		std::shared_ptr<GameObject> newGameObject = std::make_shared<MakeSharedEnabler>(name);
+		std::shared_ptr<GameObject> newGameObject = std::make_shared<MakeSharedEnabler>(name, id);
 		newGameObject->m_this = newGameObject;
 		return newGameObject;
 	}
