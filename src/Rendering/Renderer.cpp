@@ -137,20 +137,13 @@ namespace glGame {
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
 		bindDefaultRenderTarget();
 
-		renderObjects(m_renderDataList);
+		bool firstLayer = true;
+		for(ObjectRenderDataLayer& renderDataLayer : m_renderDataList) {
+			clearDepthAndStencil();
+			renderObjects(renderDataLayer);
 
-		if(m_skyboxRenderData.cubemap && m_skyboxRenderData.shader) {
-			glDepthMask(GL_FALSE);
-			glDepthFunc(GL_LEQUAL);
-			
-			m_skyboxRenderData.shader->useShader();
-			glActiveTexture(GL_TEXTURE0);
-			m_skyboxRenderData.cubemap->bind();
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			m_skyboxRenderData = SkyboxRenderData();
-			glDepthMask(GL_TRUE);
-			glDepthFunc(GL_LESS);
+			if(firstLayer) renderSkybox();
+			firstLayer = false;
 		}
 
 		previousFrameRenderData = m_renderDataList;
@@ -172,8 +165,8 @@ namespace glGame {
 		m_defaultRenderTarget = renderTarget;
 	}
 
-	void Renderer::renderObjects(RenderDataList& renderData) {
-		for(ObjectRenderData& objRenderData : renderData) {
+	void Renderer::renderObjects(ObjectRenderDataLayer& renderDataLayer) {
+		for(ObjectRenderData& objRenderData : renderDataLayer) {
 			Shader* shader;
 			int hasTexture = 0, hasSpecularMap = 0;
 			if(objRenderData.material && !objRenderData.material->shader.expired()) {
@@ -206,13 +199,31 @@ namespace glGame {
 	}
 
 	void Renderer::renderObjectsShadow(RenderDataList& renderData) {
-		for(ObjectRenderData& objRenderData : renderData) {
-			if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
-				m_lightManager->shadowmapShader->useShader();
-				objRenderData.vao->bind();
-				m_lightManager->shadowmapShader->setUniformMat4("u_model", objRenderData.modelMatrix);
-				glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+		for(ObjectRenderDataLayer& renderDataLayer : m_renderDataList) {
+			for(ObjectRenderData& objRenderData : renderDataLayer) {
+				if(objRenderData.material && !objRenderData.material->texture.expired() && !objRenderData.material->shader.expired()) {
+					m_lightManager->shadowmapShader->useShader();
+					objRenderData.vao->bind();
+					m_lightManager->shadowmapShader->setUniformMat4("u_model", objRenderData.modelMatrix);
+					glDrawArrays(GL_TRIANGLES, 0, objRenderData.verticies);
+				}
 			}
+		}
+	}
+
+	void Renderer::renderSkybox() {
+		if(m_skyboxRenderData.cubemap && m_skyboxRenderData.shader) {
+			glDepthMask(GL_FALSE);
+			glDepthFunc(GL_LEQUAL);
+			
+			m_skyboxRenderData.shader->useShader();
+			glActiveTexture(GL_TEXTURE0);
+			m_skyboxRenderData.cubemap->bind();
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			m_skyboxRenderData = SkyboxRenderData();
+			glDepthMask(GL_TRUE);
+			glDepthFunc(GL_LESS);
 		}
 	}
 
@@ -229,6 +240,10 @@ namespace glGame {
 
 	void Renderer::clearScreen() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
+
+	void Renderer::clearDepthAndStencil() {
+		glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	bool Renderer::bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit) {

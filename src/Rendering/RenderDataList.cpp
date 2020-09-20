@@ -40,39 +40,11 @@ namespace glGame {
         : vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix), uniformData(uniforms) {
     }
 
-    RenderDataListIterator::RenderDataListIterator(ObjectRenderDataList::iterator objIterator, ObjectRenderLayerList::iterator layerIterator, ObjectRenderLayerList::iterator layerEnd)
-        : m_objIterator(objIterator), m_layerIterator(layerIterator), m_layerEnd(layerEnd) {
-
+    ObjectRenderDataLayer::Iterator ObjectRenderDataLayer::begin() {
+        return data.begin();
     }
-
-    RenderDataListIterator& RenderDataListIterator::operator++() {
-        m_objIterator++;
-        ObjectRenderDataList::iterator e = m_layerIterator->data.end();
-
-        if(m_objIterator == e) {
-            m_layerIterator++;
-            if(m_layerIterator != m_layerEnd) {
-                m_objIterator = m_layerIterator->data.begin();
-            }
-        }
-
-        return *this;
-    }
-
-    ObjectRenderData* RenderDataListIterator::operator->() {
-        return &(*m_objIterator);
-    }
-
-    ObjectRenderData& RenderDataListIterator::operator*() {
-        return *m_objIterator;
-    }
-
-    bool RenderDataListIterator::operator==(const RenderDataListIterator& other) const {
-        return m_objIterator == other.m_objIterator;
-    }
-
-    bool RenderDataListIterator::operator!=(const RenderDataListIterator& other) const {
-        return m_objIterator != other.m_objIterator;
+    ObjectRenderDataLayer::Iterator ObjectRenderDataLayer::end() {
+        return data.end();
     }
 
 
@@ -111,11 +83,11 @@ namespace glGame {
     }
     
     RenderDataList::Iterator RenderDataList::begin() {
-        return RenderDataList::Iterator(m_data.begin()->data.begin(), m_data.begin(), m_data.end());
+        return m_data.begin();
     }
 
     RenderDataList::Iterator RenderDataList::end() {
-        return RenderDataList::Iterator(m_data.rbegin()->data.end(), std::prev(m_data.end(), 1), m_data.end());
+        return m_data.end();
     }
 
     ObjectRenderDataLayer* RenderDataList::getLayer(int layer) {

@@ -51,35 +51,27 @@ namespace glGame {
 		int gameObjectId = -1;
 	};
 
-    struct ObjectRenderDataLayer {
+    class ObjectRenderDataLayer {
+    public:
+        using Iterator = std::vector<ObjectRenderData>::iterator;
+
+    public:
         ObjectRenderDataLayer(int layer) : layer(layer) {}
         int layer;
         std::vector<ObjectRenderData> data;
-    };
 
-    class RenderDataListIterator {
     public:
-        using ObjectRenderDataList = std::vector<ObjectRenderData>;
-        using ObjectRenderLayerList = std::list<ObjectRenderDataLayer>;
-        using LayerMap = std::map<int, ObjectRenderDataLayer*>;
-        
-    public:
-        RenderDataListIterator(ObjectRenderDataList::iterator objIterator, ObjectRenderLayerList::iterator layerIterator, ObjectRenderLayerList::iterator layerEnd);
-
-        RenderDataListIterator& operator++();
-        ObjectRenderData* operator->();
-        ObjectRenderData& operator*();
-        bool operator==(const RenderDataListIterator& other) const;
-        bool operator!=(const RenderDataListIterator& other) const;
-
-    private:
-        ObjectRenderDataList::iterator m_objIterator;
-        ObjectRenderLayerList::iterator m_layerIterator, m_layerEnd;
+        Iterator begin();
+        Iterator end();
     };
 
     class RenderDataList {
+    private:
+        using LayerMap = std::map<int, ObjectRenderDataLayer*>;
+        using LayerList = std::list<ObjectRenderDataLayer>;
+    
     public:
-        using Iterator = RenderDataListIterator;
+        using Iterator = LayerList::iterator;
 
     public:
         RenderDataList();
@@ -95,14 +87,11 @@ namespace glGame {
         Iterator end();
 
     private:
-        using LayerMap = std::map<int, ObjectRenderDataLayer*>;
-
-    private:
         ObjectRenderDataLayer* getLayer(int layer);
         ObjectRenderDataLayer* createLayer(int layer);
 
     private:
-        std::list<ObjectRenderDataLayer> m_data;
+        LayerList m_data;
         LayerMap m_layerMap;
         int m_size = 0;
         ObjectRenderData* m_last = nullptr;

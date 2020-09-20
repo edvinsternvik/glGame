@@ -53,10 +53,12 @@ namespace glGame {
 			Shader* shader;
 		};
 
-		void renderObjects(RenderDataList& renderData);
+		void renderObjects(ObjectRenderDataLayer& renderDataLayer);
 		void renderObjectsShadow(RenderDataList& renderData);
+		void renderSkybox();
 		void initGLEW();
 		void clearScreen();
+		void clearDepthAndStencil();
 		bool bindTexture(Texture* texture, Shader* shader, const char* samplerName, int textureUnit);
 		void prepareRenderingConfiguration(Shader* shader);
 		void revertRenderingConfiguration(Shader* shader);

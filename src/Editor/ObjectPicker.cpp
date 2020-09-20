@@ -61,13 +61,15 @@ namespace glGame {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for(auto obj : *objRenderData) {
-            obj.vao->bind();
-            m_colorPickerShader->setUniformMat4("u_model", obj.modelMatrix);
+        for(auto& layer : *objRenderData) {
+            for(auto& obj : layer) {
+                obj.vao->bind();
+                m_colorPickerShader->setUniformMat4("u_model", obj.modelMatrix);
 
-            Vector3i uniqueColor = calculateColorFromId(obj.gameObjectId);
-            m_colorPickerShader->setUniform3f("u_uniqueColor", uniqueColor.x / 255.0, uniqueColor.y / 255.0, uniqueColor.z / 255.0);
-            glDrawArrays(GL_TRIANGLES, 0, obj.verticies);
+                Vector3i uniqueColor = calculateColorFromId(obj.gameObjectId);
+                m_colorPickerShader->setUniform3f("u_uniqueColor", uniqueColor.x / 255.0, uniqueColor.y / 255.0, uniqueColor.z / 255.0);
+                glDrawArrays(GL_TRIANGLES, 0, obj.verticies);
+            }
         }
 
         m_colorPickerFramebuffer->unbind();
