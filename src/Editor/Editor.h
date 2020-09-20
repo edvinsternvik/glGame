@@ -25,7 +25,6 @@ namespace glGame {
 
         void update(const float& deltatime, const bool& viewportFocused);
         void renderEditor();
-        std::vector<GameObject*> getGizmoObjects() const;
         void setActiveScene(Scene* scene);
         void setAssetManager(AssetManager* assetManager);
 
@@ -48,7 +47,6 @@ namespace glGame {
     private:
         std::unique_ptr<Gui> m_editorGui;
         std::shared_ptr<GameObject> m_editorCameraGameObject;
-        std::shared_ptr<GameObject> m_selectedObjectGizmoObject;
         std::unique_ptr<EditorRenderer> m_editorRenderer;
 
         selectedItemVariant m_selectedItem;

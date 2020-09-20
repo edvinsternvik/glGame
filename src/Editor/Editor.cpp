@@ -27,11 +27,6 @@ namespace glGame {
         auto m_editorController = m_editorCameraGameObject->addComponent<EditorController>();
         m_editorController->setEditor(this);
         m_editorController->setViewportWindow(m_viewportWindow);
-
-        m_selectedObjectGizmoObject = GameObject::Create("SelectedObjectGizmoObject");
-        m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(1.0, 0.0, 0.0);
-        m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 1.0, 0.0);
-        m_selectedObjectGizmoObject->addComponent<LineRenderer>()->lineLength = Vector3(0.0, 0.0, 1.0);
     }
 
     Editor::~Editor() {
@@ -41,7 +36,6 @@ namespace glGame {
     void Editor::update(const float& deltatime, const bool& viewportFocused) {
         if(viewportFocused) {
             m_editorCameraGameObject->onUpdate(deltatime);
-            m_selectedObjectGizmoObject->onUpdate(deltatime);
         }
         else {
             Input::SetCursorMode(CURSOR_NORMAL);
@@ -52,18 +46,8 @@ namespace glGame {
     }
 
     void Editor::renderEditor() {
-        if(!getSelectedItem<GameObject>().expired()) {
-            m_selectedObjectGizmoObject->transform->position = getSelectedItem<GameObject>().lock()->transform->position;
-            m_selectedObjectGizmoObject->transform->orientation = getSelectedItem<GameObject>().lock()->transform->orientation;
-            m_selectedObjectGizmoObject->onRender();
-        }
         m_editorGui->OnGuiRender();
         m_editorRenderer->renderEditorGizmos();
-    }
-
-    std::vector<GameObject*> Editor::getGizmoObjects() const {
-        if(!getSelectedItem<GameObject>().expired()) return {m_selectedObjectGizmoObject.get()};
-        else return {};
     }
 
     void Editor::setActiveScene(Scene* scene) {
@@ -72,7 +56,6 @@ namespace glGame {
         if(m_propertiesWindow) m_propertiesWindow->setScene(scene);
         scene->activeCamera = m_camera;
         m_editorCameraGameObject->onInit();
-        m_selectedObjectGizmoObject->onInit();
     }
 
     void Editor::setAssetManager(AssetManager* assetManager) {
