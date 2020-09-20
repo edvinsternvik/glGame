@@ -39,8 +39,8 @@ namespace glGame {
     struct ObjectRenderData {
 	public:
 		ObjectRenderData();
-		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix, const UniformArray& uniforms);
-		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix, const UniformArray& uniforms);
+		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix, const UniformArray& uniforms, const int& gameObjectId);
+		ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix, const UniformArray& uniforms, const int& gameObjectId);
 
 		VertexArray* vao = nullptr;
 		unsigned int verticies = 0;

@@ -19,7 +19,7 @@ namespace glGame {
 	void MeshRenderer::onRender() {
 		if(!model.expired() && !material.expired()) {
 			updateModelMatrix();
-			Application::Get().renderer.submit(model.get(), modelMatrix, material.get());
+			Application::Get().renderer.submit(model.get(), modelMatrix, material.get(), getGameObject()->id);
 		}
 	}
 

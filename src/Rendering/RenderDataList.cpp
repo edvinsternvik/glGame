@@ -32,12 +32,12 @@ namespace glGame {
 	}
 
     ObjectRenderData::ObjectRenderData() {}
-    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix, const UniformArray& uniforms)
-        : vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix), uniformData(uniforms) {
+    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Material* material, const glm::mat4& modelMatrix, const UniformArray& uniforms, const int& gameObjectId)
+        : vao(vao), verticies(verticies), material(material), modelMatrix(modelMatrix), uniformData(uniforms), gameObjectId(gameObjectId) {
     }
 
-    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix, const UniformArray& uniforms)
-        : vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix), uniformData(uniforms) {
+    ObjectRenderData::ObjectRenderData(VertexArray* vao, const unsigned int& verticies, Shader* shader, const glm::mat4& modelMatrix, const UniformArray& uniforms, const int& gameObjectId)
+        : vao(vao), verticies(verticies), shader(shader), modelMatrix(modelMatrix), uniformData(uniforms), gameObjectId(gameObjectId) {
     }
 
     ObjectRenderDataLayer::Iterator ObjectRenderDataLayer::begin() {

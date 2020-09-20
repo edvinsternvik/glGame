@@ -36,33 +36,33 @@ namespace glGame {
 		this->viewportSize = viewportSize;
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& layer) {
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const int& gameObjectId, const int& layer) {
 		m_renderDataList.insert(layer,
-			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, {})
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, {}, gameObjectId)
 		);
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const UniformArray& uniforms, const int& layer) {
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Material* material, const UniformArray& uniforms, const int& gameObjectId, const int& layer) {
 		m_renderDataList.insert(layer,
-			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, uniforms)
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), material, modelMatrix, uniforms, gameObjectId)
 		);
 	}
 
-	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& layer) {
+	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Material* material, const int& gameObjectId, const int& layer) {
 		m_renderDataList.insert(layer, 
-			ObjectRenderData(vertexArray, verticies, material, modelMatrix, {})
+			ObjectRenderData(vertexArray, verticies, material, modelMatrix, {}, gameObjectId)
 		);
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const int& gameObjectId, const int& layer) {
 		m_renderDataList.insert(layer,
-			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, {})
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, {}, gameObjectId)
 		);
 	}
 
-	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const UniformArray& uniforms, const int& layer) {
+	void Renderer::submit(Model* model, const glm::mat4& modelMatrix, Shader* shader, const UniformArray& uniforms, const int& gameObjectId, const int& layer) {
 		m_renderDataList.insert(layer,
-			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, uniforms)
+			ObjectRenderData(model->getVertexArray(), model->getVerticiesCount(), shader, modelMatrix, uniforms, gameObjectId)
 		);
 	}
 
@@ -70,8 +70,8 @@ namespace glGame {
 		m_renderDataList.insert(layer, objRenderData);
 	}
 
-	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& layer) {
-		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, shader, modelMatrix, {}));
+	void Renderer::submit(VertexArray* vertexArray, const unsigned int& verticies, const glm::mat4& modelMatrix, Shader* shader, const int& gameObjectId, const int& layer) {
+		m_renderDataList.insert(layer, ObjectRenderData(vertexArray, verticies, shader, modelMatrix, {}, gameObjectId));
 	}
 
 
@@ -108,12 +108,8 @@ namespace glGame {
 		for(int i = 0; i < scene->getGameObjectCount(); ++i) {
 			GameObject* gameObject = scene->getGameObject(i).lock().get();
 
-			int frameRenderDataSize = m_renderDataList.size();
 			for(int j = 0; j < gameObject->getComponentSize(); ++j) {
-				gameObject->getComponent(j)->onRender(); // Rendering components(MeshRenderer etc) submit renderingData through this method
-				if(frameRenderDataSize < m_renderDataList.size()) { // If new renderingData has been submitted
-					m_renderDataList.last()->gameObjectId = i;
-				}
+				gameObject->getComponent(j)->onRender();
 			}
 		}
 
