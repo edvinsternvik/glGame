@@ -22,7 +22,7 @@ namespace glGame {
 		m_propertiesWindow = m_editorGui->addWindow(std::make_unique<PropertiesWindow>(), this);
         m_assetWindow = m_editorGui->addWindow(std::make_unique<AssetWindow>(), this);
 
-        m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject");
+        m_editorCameraGameObject = GameObject::Create("EditorCameraGameObject", -10);
         m_camera = m_editorCameraGameObject->addComponent<CameraComponent>();
         auto m_editorController = m_editorCameraGameObject->addComponent<EditorController>();
         m_editorController->setEditor(this);
