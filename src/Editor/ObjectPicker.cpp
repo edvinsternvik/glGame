@@ -63,6 +63,7 @@ namespace glGame {
 
         for(auto& layer : *objRenderData) {
             for(auto& obj : layer) {
+                if(obj.gameObjectId == -1) continue;
                 obj.vao->bind();
                 m_colorPickerShader->setUniformMat4("u_model", obj.modelMatrix);
 
@@ -70,6 +71,7 @@ namespace glGame {
                 m_colorPickerShader->setUniform3f("u_uniqueColor", uniqueColor.x / 255.0, uniqueColor.y / 255.0, uniqueColor.z / 255.0);
                 glDrawArrays(GL_TRIANGLES, 0, obj.verticies);
             }
+            glClear(GL_DEPTH_BUFFER_BIT);
         }
 
         m_colorPickerFramebuffer->unbind();
