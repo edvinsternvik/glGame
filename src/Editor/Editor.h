@@ -43,10 +43,12 @@ namespace glGame {
 
     public:
         ActionManager actionManager;
+        std::shared_ptr<GameObject> m_editorCameraGameObject;
+
+        static const int TransformGizmoMoveID;
 
     private:
         std::unique_ptr<Gui> m_editorGui;
-        std::shared_ptr<GameObject> m_editorCameraGameObject;
         std::unique_ptr<EditorRenderer> m_editorRenderer;
 
         selectedItemVariant m_selectedItem;

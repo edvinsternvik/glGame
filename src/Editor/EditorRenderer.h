@@ -10,6 +10,8 @@ namespace glGame {
     class FrameBuffer;
 	class Shader;
     class MeshRenderer;
+    class GameObject;
+    class Model;
 
     class EditorRenderer {
     public:
@@ -26,6 +28,8 @@ namespace glGame {
         std::unique_ptr<Shader> m_objectOutlineShader;
         std::weak_ptr<MeshRenderer> m_selectedMeshRenderer;
 
+        std::unique_ptr<Model> m_transformMoveArrowModel;
+        std::unique_ptr<Shader> m_transformGizmoShader;
     };
 
 }

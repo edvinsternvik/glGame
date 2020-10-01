@@ -19,9 +19,13 @@ namespace glGame {
 		virtual void update(float deltatime) override;
 
 	private:
+		Vector3 getDeltaMouseOnPlane(Vector3 planeOrigin, Vector3 dirAlongPlane);
+
+	private:
 		Editor* m_editor = nullptr;
 		ViewportWindow* m_viewportWindow = nullptr;
 		ObjectPicker m_objectPicker;
+		bool m_transformMoveSelected[3] = {false, false, false};
 	};
 
 }

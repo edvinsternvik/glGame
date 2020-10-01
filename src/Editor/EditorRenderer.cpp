@@ -67,8 +67,29 @@ namespace glGame {
             "#section fragment\n"
             "#version 330 core\n"
             "out vec4 FragColor;\n"
-            "void main() {FragColor = vec4(0.9, 0.0, 0.0, 1.0);}\n"
+            "void main() {FragColor = vec4(0.9, 0.1, 0.1, 1.0);}\n"
 		);
+
+        m_transformMoveArrowModel = std::make_unique<Model>("Assets/transformArrow.obj");
+
+        m_transformGizmoShader = std::make_unique<Shader>(nullptr, 
+			"#section vertex\n"
+            "#version 330 core\n"
+            "layout (location = 0) in vec3 aPos;\n"
+            "layout (std140) uniform Camera {\n"
+			"	mat4 u_projection;\n"
+			"	mat4 u_view;\n"
+			"};\n"
+            "uniform mat4 u_model;\n"
+            "void main() {\n"
+            "   gl_Position = u_projection * u_view * u_model * vec4(aPos, 1.0); }\n"
+            "\n"
+            "#section fragment\n"
+            "#version 330 core\n"
+            "out vec4 FragColor;\n"
+            "uniform vec3 u_color;\n"
+            "void main() {FragColor = vec4(u_color, 1.0);}\n"
+        );
     }
 
     EditorRenderer::~EditorRenderer() {
@@ -94,6 +115,24 @@ namespace glGame {
             m_objectOutlineShader->setUniform3f("u_scale", scale.x, scale.y, scale.z);
             Application::Get().renderer.submit(meshRenderer->model.get(), transformMatrix, m_objectOutlineStencilWriteShader.get());
             Application::Get().renderer.submit(meshRenderer->model.get(), transformMatrix, m_objectOutlineShader.get());
+        }
+
+        if(!selectedObj.expired() && m_transformMoveArrowModel.get() != nullptr) {
+            Transform tempTransform = *selectedObj.lock()->transform;
+            tempTransform.scale = Vector3(1.0, 1.0, 1.0);
+            glm::mat4 modelMatrixX = tempTransform.getTransformMatrix();
+
+            tempTransform.rotate(0.0, 0.0, glm::radians(90.0));
+            glm::mat4 modelMatrixY = tempTransform.getTransformMatrix();
+
+            tempTransform.rotate(0.0, glm::radians(90.0), 0.0);
+            glm::mat4 modelMatrixZ = tempTransform.getTransformMatrix();
+            
+            auto* tMoveArrowModel = m_transformMoveArrowModel.get();
+            auto* tShader = m_transformGizmoShader.get();
+            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixX, tShader, {{"u_color", Vector3(0.8, 0.0, 0.0)}}, Editor::TransformGizmoMoveID    , 10);
+            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixY, tShader, {{"u_color", Vector3(0.0, 0.8, 0.0)}}, Editor::TransformGizmoMoveID + 1, 10);
+            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixZ, tShader, {{"u_color", Vector3(0.0, 0.0, 0.8)}}, Editor::TransformGizmoMoveID + 2, 10);
         }
     }
 

@@ -14,6 +14,8 @@ namespace glGame {
         
     }
 
+    Vector2 getNormalizedScreenPos(const Vector2 viewportSize);
+
     void EditorController::update(float deltatime) {
         if(Input::GetMouseKey(MOUSE_BUTTON_RIGHT)) {
             Input::SetCursorMode(CURSOR_DISABLED);
@@ -42,21 +44,92 @@ namespace glGame {
 
         getGameObject()->transform->move(move.x, move.y, move.z);
 
+        if(m_transformMoveSelected[0] || m_transformMoveSelected[1] || m_transformMoveSelected[2]) {
+            auto selectedObj = m_editor->getSelectedItem<GameObject>();
+            if(!selectedObj.expired()) {
+                GameObject* obj = selectedObj.lock().get();
+                
+                Vector3 axis;
+                if     (m_transformMoveSelected[0]) axis = Vector3(1.0, 0.0, 0.0);
+                else if(m_transformMoveSelected[1]) axis = Vector3(0.0, 1.0, 0.0);
+                else if(m_transformMoveSelected[2]) axis = Vector3(0.0, 0.0, 1.0);
+                Vector3 dPos = getDeltaMouseOnPlane(obj->transform->position, axis);
+
+                obj->transform->move(dPos * axis); 
+            }
+        }
+
         if(Input::GetMouseKeyDown(MOUSE_BUTTON_LEFT)) {
             if(m_editor && m_viewportWindow) {
                 m_objectPicker.renderColorPickerTexture(&Application::Get().renderer.previousFrameRenderData, &Application::Get().sceneManager->getActiveScene()->activeCamera.lock()->camera);
-                Vector2 screenPos = Input::GetMousePosition();
-                Vector2 normalizedScreenPos(screenPos.x / m_viewportWindow->viewportWidth, screenPos.y / m_viewportWindow->viewportHeight);
+                Vector2 normalizedScreenPos = getNormalizedScreenPos(Vector2(m_viewportWindow->viewportWidth, m_viewportWindow->viewportHeight));
                 if(normalizedScreenPos.x <= 1.0 && normalizedScreenPos.x >= 0.0 && normalizedScreenPos.y <= 1.0 && normalizedScreenPos.y >= 0.0) {
                     int objectId = m_objectPicker.getGameObjectIdFromScreen(normalizedScreenPos);
-                    m_editor->selectItem(Application::Get().sceneManager->getActiveScene()->getGameObject(objectId));
+
+                    if(objectId < Editor::TransformGizmoMoveID) {
+                        m_editor->selectItem(Application::Get().sceneManager->getActiveScene()->getGameObject(objectId));
+                    }
+                    else {
+                        m_transformMoveSelected[objectId - Editor::TransformGizmoMoveID] = true;
+                    }
+
                 }
             }
             else {
                 std::cout << "Error in EditorController: m_editor or m_viewportWindow was not set" << std::endl;
             }
         }
+        else if(!Input::GetMouseKey(MOUSE_BUTTON_LEFT)) {
+            m_transformMoveSelected[0] = m_transformMoveSelected[1] = m_transformMoveSelected[2] = false;
+        }
 
+    }
+
+    Vector3 castRayOnPlane(Vector3 planePos, Vector3 planeNormal, Vector3 rayPos, Vector3 rayDirection) {
+        float d = glm::dot((planePos - rayPos), planeNormal) / glm::dot(rayDirection, planeNormal);
+        return rayPos + rayDirection * d;
+    }
+
+    Vector3 getRayDir(const Vector2& screenPos, const glm::mat4& invProjMat, const Quaternion& inverseOrientation) {
+        Vector3 rayDirLocal = invProjMat * Vector4(screenPos, 1.0, 1.0);
+        rayDirLocal = glm::normalize(Vector3(rayDirLocal));
+        return inverseOrientation * rayDirLocal;
+    }
+
+    Vector3 EditorController::getDeltaMouseOnPlane(Vector3 planeOrigin, Vector3 dirAlongPlane) {
+        std::weak_ptr<GameObject> camera = m_editor->m_editorCameraGameObject;
+        if(camera.expired()) return Vector3(0.0);
+
+        std::weak_ptr<CameraComponent> cc = camera.lock()->getComponent<CameraComponent>();
+        Transform& cTransform = *camera.lock()->transform;
+        glm::mat4 invProjMat = glm::inverse(cc.lock()->camera.getProjectionMatrix());
+        Quaternion invOrientation = glm::inverse(cTransform.orientation);
+        Vector3 lineOrigin = cTransform.position;
+
+        Vector3 forwardDir = cTransform.orientation * Vector4(0.0, 0.0, -1.0, 0.0);
+        Vector3 planeDirUp = glm::normalize(glm::cross(forwardDir, dirAlongPlane));
+        Vector3 planeNormal = glm::cross(dirAlongPlane, planeDirUp);
+
+        Vector2 viewportSize = Vector2(m_viewportWindow->viewportWidth, m_viewportWindow->viewportHeight);
+        Vector2 normalizedScreenPos = getNormalizedScreenPos(viewportSize);
+        Vector2 screenPos = normalizedScreenPos * Vector2(2.0, -2.0) - Vector2(1.0, -1.0);
+        Vector2 deltaScreenPos = Input::GetMouseDelta() * Vector2(2.0, -2.0) / viewportSize;
+        
+        Vector3 rayDir1 = getRayDir(screenPos - deltaScreenPos, invProjMat, invOrientation);
+        Vector3 rayDir2 = getRayDir(screenPos                 , invProjMat, invOrientation);
+
+        Vector3 ray1 = castRayOnPlane(planeOrigin, planeNormal, lineOrigin, rayDir1);
+        Vector3 ray2 = castRayOnPlane(planeOrigin, planeNormal, lineOrigin, rayDir2);
+        Vector3 deltaRay = ray2 - ray1;
+        if(std::isnan(deltaRay.x) || std::isnan(deltaRay.y) || std::isnan(deltaRay.z)) {
+            return Vector3(0.0);
+        }
+        return deltaRay;
+    }
+
+    Vector2 getNormalizedScreenPos(const Vector2 viewportSize) {
+        Vector2 screenPos = Input::GetMousePosition();
+        return Vector2(screenPos.x / viewportSize.x, screenPos.y / viewportSize.y);
     }
 
 }
