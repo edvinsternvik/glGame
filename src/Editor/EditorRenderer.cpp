@@ -6,6 +6,7 @@
 #include "../Rendering/Shader.h"
 #include "../Components/MeshRenderer.h"
 #include "../Components/Transform.h"
+#include "../Components/CameraComponent.h"
 
 namespace glGame {
 
@@ -119,7 +120,16 @@ namespace glGame {
 
         if(!selectedObj.expired() && m_transformMoveArrowModel.get() != nullptr) {
             Transform tempTransform = *selectedObj.lock()->transform;
-            tempTransform.scale = Vector3(1.0, 1.0, 1.0);
+            
+            std::weak_ptr<GameObject> camera = m_editor->m_editorCameraGameObject;
+            std::weak_ptr<CameraComponent> cc = camera.lock()->getComponent<CameraComponent>();
+            Transform& cTransform = *camera.lock()->transform;
+            glm::mat4 projMat = cc.lock()->camera.getProjectionMatrix();
+            glm::mat4 viewMat = cc.lock()->camera.getViewMatrix();
+
+            Vector3 d = (projMat * viewMat * Vector4(selectedObj.lock()->transform->position, 1.0));
+
+            tempTransform.scale = Vector3(std::sqrt(glm::length(d)) * 0.5);
             glm::mat4 modelMatrixX = tempTransform.getTransformMatrix();
 
             tempTransform.rotate(0.0, 0.0, glm::radians(90.0));
