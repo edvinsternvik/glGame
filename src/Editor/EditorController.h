@@ -26,6 +26,7 @@ namespace glGame {
 		ViewportWindow* m_viewportWindow = nullptr;
 		ObjectPicker m_objectPicker;
 		bool m_transformMoveSelected[3] = {false, false, false};
+		bool m_transformGizmoWasSelected = false;
 	};
 
 }

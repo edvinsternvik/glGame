@@ -33,7 +33,7 @@ namespace glGame {
         if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
         if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
         if(Input::GetKey(KEY_SPACE)) movement.y += movementSpeed;
-        if(Input::GetKey(KEY_LEFT_CONTROL)) movement.y -= movementSpeed;
+        if(Input::GetKey(KEY_Q)) movement.y -= movementSpeed;
 
         Vector3 worldMovement(0.0, 0.0, 0.0);
 
@@ -48,6 +48,7 @@ namespace glGame {
             auto selectedObj = m_editor->getSelectedItem<GameObject>();
             if(!selectedObj.expired()) {
                 GameObject* obj = selectedObj.lock().get();
+                Vector3 prevPos = obj->transform->position;
                 
                 Vector3 axis;
                 if     (m_transformMoveSelected[0]) axis = Vector3(1.0, 0.0, 0.0);
@@ -55,8 +56,21 @@ namespace glGame {
                 else if(m_transformMoveSelected[2]) axis = Vector3(0.0, 0.0, 1.0);
                 Vector3 dPos = getDeltaMouseOnPlane(obj->transform->position, axis);
 
-                obj->transform->move(dPos * axis); 
+                obj->transform->move(dPos * axis);
+                if(!m_transformGizmoWasSelected) {
+                    m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos);
+                }
             }
+            m_transformGizmoWasSelected = true;
+        }
+        else {
+            if(m_transformGizmoWasSelected) {
+                auto selectedObj = m_editor->getSelectedItem<GameObject>();
+                if(!selectedObj.expired()) {
+                    m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->position, selectedObj.lock()->transform->position);
+                }
+            }
+            m_transformGizmoWasSelected = false;
         }
 
         if(Input::GetMouseKeyDown(MOUSE_BUTTON_LEFT)) {
