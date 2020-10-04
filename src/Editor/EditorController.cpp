@@ -19,7 +19,14 @@ namespace glGame {
     void EditorController::update(float deltatime) {
         if(Input::GetMouseKey(MOUSE_BUTTON_RIGHT)) {
             Input::SetCursorMode(CURSOR_DISABLED);
-            getGameObject()->transform->rotate(0.0, Input::GetMouseDeltaX() * 0.005, 0.0);
+
+            float sensitivity = 5.0;
+            Vector3 v1(0.0, Input::GetMouseDeltaX() * 0.001 * sensitivity, 0.0);
+            Vector3 v2(Input::GetMouseDeltaY() * 0.001 * sensitivity, 0.0, 0.0);
+            Quaternion q1 = glm::quat(v1);
+            Quaternion q2 = glm::quat(v2);
+
+            getGameObject()->transform->orientation = q2 * getGameObject()->transform->orientation * q1;
         }
         else {
             Input::SetCursorMode(CURSOR_NORMAL);
@@ -27,22 +34,17 @@ namespace glGame {
 
         float movementSpeed = deltatime * 5.0;
         Vector3 movement(0.0, 0.0, 0.0);
-        if(Input::GetKey(KEY_W)) movement.z += movementSpeed;
-        if(Input::GetKey(KEY_S)) movement.z -= movementSpeed;
+        if(Input::GetKey(KEY_LEFT_SHIFT)) movementSpeed *= 2.0;
+        if(Input::GetKey(KEY_W)) movement.z -= movementSpeed;
+        if(Input::GetKey(KEY_S)) movement.z += movementSpeed;
         if(Input::GetKey(KEY_A)) movement.x -= movementSpeed;
         if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
-        if(Input::GetKey(KEY_D)) movement.x += movementSpeed;
-        if(Input::GetKey(KEY_SPACE)) movement.y += movementSpeed;
+        if(Input::GetKey(KEY_E)) movement.y += movementSpeed;
         if(Input::GetKey(KEY_Q)) movement.y -= movementSpeed;
 
-        Vector3 worldMovement(0.0, 0.0, 0.0);
+        glm::vec3 move = glm::inverse(getGameObject()->transform->orientation) * movement;
 
-        glm::vec3 f = getGameObject()->transform->orientation * glm::vec3(0.0, 0.0, -1.0);
-        f.x *= -1.0;
-        glm::vec3 r = glm::cross(f, glm::vec3(0.0, 1.0, 0.0));
-        glm::vec3 move = f * movement.z + r * movement.x + glm::vec3(0.0, 1.0, 0.0) * movement.y;
-
-        getGameObject()->transform->move(move.x, move.y, move.z);
+        getGameObject()->transform->move(move);
 
         if(m_transformMoveSelected[0] || m_transformMoveSelected[1] || m_transformMoveSelected[2]) {
             auto selectedObj = m_editor->getSelectedItem<GameObject>();
