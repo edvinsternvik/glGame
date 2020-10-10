@@ -58,10 +58,11 @@ namespace glGame {
                 switch(m_transformGizmoSelection) {
                 case TransformGizmoSelection::X: axis = Vector3(1.0, 0.0, 0.0); break;
                 case TransformGizmoSelection::Y: axis = Vector3(0.0, 1.0, 0.0); break;
-                case TransformGizmoSelection::Z: axis = Vector3(0.0, 0.0, 1.0); break;
+                case TransformGizmoSelection::Z: axis = Vector3(0.0, 0.0, -1.0); break;
                 }
+                axis = obj->transform->orientation * axis;
                 Vector3 dPos = getDeltaMouseOnPlane(obj->transform->position, axis);
-                Vector3 res = dPos * axis;
+                Vector3 res = axis * glm::dot(dPos, axis);
  
                 switch(m_editor->transformType) {
                 case TransformType::Move: obj->transform->move(res); break;
