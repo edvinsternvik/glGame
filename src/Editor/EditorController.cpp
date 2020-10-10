@@ -44,6 +44,10 @@ namespace glGame {
 
         getGameObject()->transform->move(move);
 
+        if(Input::GetKeyDown(KEY_Z)) m_editor->transformType = TransformType::Move;
+        if(Input::GetKeyDown(KEY_X)) m_editor->transformType = TransformType::Rotate;
+        if(Input::GetKeyDown(KEY_C)) m_editor->transformType = TransformType::Scale;
+
         if(m_transformGizmoSelection != TransformGizmoSelection::None) {
             auto selectedObj = m_editor->getSelectedItem<GameObject>();
             if(!selectedObj.expired()) {
