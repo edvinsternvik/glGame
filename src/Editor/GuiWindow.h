@@ -48,7 +48,7 @@ namespace glGame {
 		float viewportX, viewportY, viewportWidth, viewportHeight;
 
 	private:
-		std::shared_ptr<Texture> m_texture;
+		std::shared_ptr<Texture> m_viewportTexture;
 		Vector2i m_viewportSize;
 		bool m_focused;
 	};
