@@ -30,6 +30,10 @@ namespace glGame {
 		rotate(Vector3(x, y, z));
 	}
 
+	void Transform::resize(const Vector3& s) {
+		scale *= s;
+	}
+
 	glm::mat4 Transform::getTransformMatrix() const {
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, position.z));
 

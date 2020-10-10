@@ -16,6 +16,7 @@ namespace glGame {
 		void rotate(const Vector3& vector);
 		void rotate(const float& x, const float& y, const float& z);
 		void rotate(const Quaternion& quaternion);
+		void resize(const Vector3& s);
 
 		glm::mat4 getTransformMatrix() const;
 		Vector3 getEulerAngles() const;
