@@ -28,6 +28,7 @@ namespace glGame {
 	public:
 		bool isOpen = true;
 		std::function<void(Event&)>* m_eventFunction = nullptr;
+		int windowFlags = 0;
 
 	protected:
 		Editor* m_editor;

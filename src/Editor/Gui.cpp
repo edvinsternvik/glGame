@@ -71,7 +71,7 @@ void glGame::Gui::OnGuiRender() {
 	//Render Windows
 	for(int i = 0; i < m_windows.size(); ++i) {
 		if(m_windows[i]->isOpen) {
-			ImGui::Begin(m_windows[i]->getWindowName(), &m_windows[i]->isOpen);
+			ImGui::Begin(m_windows[i]->getWindowName(), &m_windows[i]->isOpen, m_windows[i]->windowFlags);
 			m_windows[i]->renderWindow();
 			ImGui::End();
 		}
