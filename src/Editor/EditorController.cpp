@@ -14,8 +14,6 @@ namespace glGame {
         
     }
 
-    Vector2 getNormalizedScreenPos(const Vector2 viewportSize);
-
     void EditorController::update(float deltatime) {
         if(Input::GetMouseKey(MOUSE_BUTTON_RIGHT)) {
             Input::SetCursorMode(CURSOR_DISABLED);
@@ -76,9 +74,9 @@ namespace glGame {
         }
 
         if(Input::GetMouseKeyDown(MOUSE_BUTTON_LEFT)) {
-            if(m_editor && m_viewportWindow) {
+            if(m_editor) {
                 m_objectPicker.renderColorPickerTexture(&Application::Get().renderer.previousFrameRenderData, &Application::Get().sceneManager->getActiveScene()->activeCamera.lock()->camera);
-                Vector2 normalizedScreenPos = getNormalizedScreenPos(Vector2(m_viewportWindow->viewportWidth, m_viewportWindow->viewportHeight));
+                Vector2 normalizedScreenPos = Input::GetMouseViewportPositon();
                 if(normalizedScreenPos.x <= 1.0 && normalizedScreenPos.x >= 0.0 && normalizedScreenPos.y <= 1.0 && normalizedScreenPos.y >= 0.0) {
                     int objectId = m_objectPicker.getGameObjectIdFromScreen(normalizedScreenPos);
 
@@ -92,7 +90,7 @@ namespace glGame {
                 }
             }
             else {
-                std::cout << "Error in EditorController: m_editor or m_viewportWindow was not set" << std::endl;
+                std::cout << "Error in EditorController: Editor was not set" << std::endl;
             }
         }
         else if(!Input::GetMouseKey(MOUSE_BUTTON_LEFT)) {
@@ -126,10 +124,9 @@ namespace glGame {
         Vector3 planeDirUp = glm::normalize(glm::cross(forwardDir, dirAlongPlane));
         Vector3 planeNormal = glm::cross(dirAlongPlane, planeDirUp);
 
-        Vector2 viewportSize = Vector2(m_viewportWindow->viewportWidth, m_viewportWindow->viewportHeight);
-        Vector2 normalizedScreenPos = getNormalizedScreenPos(viewportSize);
+        Vector2 normalizedScreenPos = Input::GetMouseViewportPositon();
         Vector2 screenPos = normalizedScreenPos * Vector2(2.0, -2.0) - Vector2(1.0, -1.0);
-        Vector2 deltaScreenPos = Input::GetMouseDelta() * Vector2(2.0, -2.0) / viewportSize;
+        Vector2 deltaScreenPos = Input::GetMouseViewportDelta() * Vector2(2.0, -2.0);
         
         Vector3 rayDir1 = getRayDir(screenPos - deltaScreenPos, invProjMat, invOrientation);
         Vector3 rayDir2 = getRayDir(screenPos                 , invProjMat, invOrientation);
@@ -141,11 +138,6 @@ namespace glGame {
             return Vector3(0.0);
         }
         return deltaRay;
-    }
-
-    Vector2 getNormalizedScreenPos(const Vector2 viewportSize) {
-        Vector2 screenPos = Input::GetMousePosition();
-        return Vector2(screenPos.x / viewportSize.x, screenPos.y / viewportSize.y);
     }
 
 }

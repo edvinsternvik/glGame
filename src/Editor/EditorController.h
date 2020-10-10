@@ -12,7 +12,6 @@ namespace glGame {
 		EditorController();
 
 		void setEditor(Editor* editor) { m_editor = editor; }
-		void setViewportWindow(ViewportWindow* viewportWindow) { m_viewportWindow = viewportWindow; }
 
 		virtual std::string getName() const { return "EditorController"; }
 
@@ -23,7 +22,6 @@ namespace glGame {
 
 	private:
 		Editor* m_editor = nullptr;
-		ViewportWindow* m_viewportWindow = nullptr;
 		ObjectPicker m_objectPicker;
 		bool m_transformMoveSelected[3] = {false, false, false};
 		bool m_transformGizmoWasSelected = false;

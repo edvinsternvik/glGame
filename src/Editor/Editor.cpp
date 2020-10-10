@@ -28,7 +28,6 @@ namespace glGame {
         m_camera = m_editorCameraGameObject->addComponent<CameraComponent>();
         auto m_editorController = m_editorCameraGameObject->addComponent<EditorController>();
         m_editorController->setEditor(this);
-        m_editorController->setViewportWindow(m_viewportWindow);
     }
 
     Editor::~Editor() {
