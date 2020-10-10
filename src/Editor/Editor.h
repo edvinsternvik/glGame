@@ -16,6 +16,10 @@ namespace glGame {
     class EditorRenderer;
     namespace assetInternal { class AssetT; }
 
+    enum class TransformType {
+        Move, Rotate, Scale
+    };
+
     using selectedItemVariant = std::variant<std::weak_ptr<GameObject>, std::weak_ptr<assetInternal::AssetT>>;
 
     class Editor {
@@ -44,6 +48,7 @@ namespace glGame {
     public:
         ActionManager actionManager;
         std::shared_ptr<GameObject> m_editorCameraGameObject;
+        TransformType transformType;
 
         static const int TransformGizmoMoveID;
 

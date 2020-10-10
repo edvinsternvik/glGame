@@ -10,7 +10,7 @@
 
 namespace glGame {
 
-    EditorController::EditorController() : m_objectPicker(Vector2i(512, 512)) {
+    EditorController::EditorController() : m_objectPicker(Vector2i(512, 512)), m_transformGizmoSelection(TransformGizmoSelection::None) {
         
     }
 
@@ -44,19 +44,26 @@ namespace glGame {
 
         getGameObject()->transform->move(move);
 
-        if(m_transformMoveSelected[0] || m_transformMoveSelected[1] || m_transformMoveSelected[2]) {
+        if(m_transformGizmoSelection != TransformGizmoSelection::None) {
             auto selectedObj = m_editor->getSelectedItem<GameObject>();
             if(!selectedObj.expired()) {
                 GameObject* obj = selectedObj.lock().get();
                 Vector3 prevPos = obj->transform->position;
                 
                 Vector3 axis;
-                if     (m_transformMoveSelected[0]) axis = Vector3(1.0, 0.0, 0.0);
-                else if(m_transformMoveSelected[1]) axis = Vector3(0.0, 1.0, 0.0);
-                else if(m_transformMoveSelected[2]) axis = Vector3(0.0, 0.0, 1.0);
+                switch(m_transformGizmoSelection) {
+                case TransformGizmoSelection::X: axis = Vector3(1.0, 0.0, 0.0); break;
+                case TransformGizmoSelection::Y: axis = Vector3(0.0, 1.0, 0.0); break;
+                case TransformGizmoSelection::Z: axis = Vector3(0.0, 0.0, 1.0); break;
+                }
                 Vector3 dPos = getDeltaMouseOnPlane(obj->transform->position, axis);
-
-                obj->transform->move(dPos * axis);
+                Vector3 res = dPos * axis;
+ 
+                switch(m_editor->transformType) {
+                case TransformType::Move: obj->transform->move(res); break;
+                case TransformType::Rotate: obj->transform->rotate(res); break;
+                case TransformType::Scale: obj->transform->resize(res + Vector3(1.0)); break;
+                }
                 if(!m_transformGizmoWasSelected) {
                     m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos);
                 }
@@ -84,7 +91,12 @@ namespace glGame {
                         m_editor->selectItem(Application::Get().sceneManager->getActiveScene()->getGameObject(objectId));
                     }
                     else {
-                        m_transformMoveSelected[objectId - Editor::TransformGizmoMoveID] = true;
+                        int dirId = objectId - Editor::TransformGizmoMoveID;
+                        switch(dirId) {
+                        case 0: m_transformGizmoSelection = TransformGizmoSelection::X; break;
+                        case 1: m_transformGizmoSelection = TransformGizmoSelection::Y; break;
+                        case 2: m_transformGizmoSelection = TransformGizmoSelection::Z; break;
+                        }
                     }
 
                 }
@@ -94,7 +106,7 @@ namespace glGame {
             }
         }
         else if(!Input::GetMouseKey(MOUSE_BUTTON_LEFT)) {
-            m_transformMoveSelected[0] = m_transformMoveSelected[1] = m_transformMoveSelected[2] = false;
+            m_transformGizmoSelection = TransformGizmoSelection::None;
         }
 
     }

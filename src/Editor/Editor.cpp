@@ -13,7 +13,7 @@ namespace glGame {
 
     const int Editor::TransformGizmoMoveID = ((1 << 24) - 1) - 3;
 
-    Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize) {
+    Editor::Editor(std::function<void(Event&)> eventFunction, Window* window, Vector2i viewportSize) : transformType(TransformType::Move) {
         m_editorRenderer = std::make_unique<EditorRenderer>(viewportSize, this);
 
         m_editorGui = std::make_unique<Gui>(window->getWindow());

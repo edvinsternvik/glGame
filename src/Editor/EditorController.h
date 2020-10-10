@@ -7,6 +7,10 @@ namespace glGame {
 	class Editor;
 	class ViewportWindow;
 
+	enum class TransformGizmoSelection {
+		None, X, Y, Z
+	};
+
 	class EditorController : public Component {
 	public:
 		EditorController();
@@ -23,7 +27,7 @@ namespace glGame {
 	private:
 		Editor* m_editor = nullptr;
 		ObjectPicker m_objectPicker;
-		bool m_transformMoveSelected[3] = {false, false, false};
+		TransformGizmoSelection m_transformGizmoSelection;
 		bool m_transformGizmoWasSelected = false;
 	};
 
