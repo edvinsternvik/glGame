@@ -71,7 +71,9 @@ namespace glGame {
             "void main() {FragColor = vec4(0.9, 0.1, 0.1, 1.0);}\n"
 		);
 
-        m_transformMoveArrowModel = std::make_unique<Model>("Assets/transformArrow.obj");
+        m_transformMoveArrowModel = std::make_unique<Model>("Assets/transformTranslate.obj");
+        m_transformScaleArrowModel = std::make_unique<Model>("Assets/transformScale.obj");
+        m_transformRotateModel = std::make_unique<Model>("Assets/transformRotate.obj");
 
         m_transformGizmoShader = std::make_unique<Shader>(nullptr, 
 			"#section vertex\n"
@@ -119,8 +121,6 @@ namespace glGame {
         }
 
         if(!selectedObj.expired() && m_transformMoveArrowModel.get() != nullptr) {
-            Transform tempTransform = *selectedObj.lock()->transform;
-            
             std::weak_ptr<GameObject> camera = m_editor->m_editorCameraGameObject;
             std::weak_ptr<CameraComponent> cc = camera.lock()->getComponent<CameraComponent>();
             Transform& cTransform = *camera.lock()->transform;
@@ -129,20 +129,25 @@ namespace glGame {
 
             Vector3 d = (projMat * viewMat * Vector4(selectedObj.lock()->transform->position, 1.0));
 
-            tempTransform.scale = Vector3(std::sqrt(glm::length(d)) * 0.5);
-            glm::mat4 modelMatrixX = tempTransform.getTransformMatrix();
+            Transform xTransform = *selectedObj.lock()->transform;
+            xTransform.scale = Vector3(std::sqrt(glm::length(d)) * 0.5);
+            Transform yTransform = xTransform, zTransform = xTransform;
 
-            tempTransform.rotate(0.0, 0.0, glm::radians(90.0));
-            glm::mat4 modelMatrixY = tempTransform.getTransformMatrix();
-
-            tempTransform.rotate(0.0, glm::radians(90.0), 0.0);
-            glm::mat4 modelMatrixZ = tempTransform.getTransformMatrix();
+            xTransform.rotate(0.0, glm::radians(-90.0), 0.0);
+            yTransform.rotate(glm::radians(90.0), 0.0, 0.0);
             
-            auto* tMoveArrowModel = m_transformMoveArrowModel.get();
+            Model* tModel = nullptr;
             auto* tShader = m_transformGizmoShader.get();
-            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixX, tShader, {{"u_color", Vector3(0.8, 0.0, 0.0)}}, Editor::TransformGizmoMoveID    , 10);
-            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixY, tShader, {{"u_color", Vector3(0.0, 0.8, 0.0)}}, Editor::TransformGizmoMoveID + 1, 10);
-            Application::Get().renderer.submit(tMoveArrowModel, modelMatrixZ, tShader, {{"u_color", Vector3(0.0, 0.0, 0.8)}}, Editor::TransformGizmoMoveID + 2, 10);
+            switch(m_editor->transformType) {
+            case TransformType::Move: tModel = m_transformMoveArrowModel.get(); break;
+            case TransformType::Rotate: tModel = m_transformRotateModel.get(); break;
+            case TransformType::Scale: tModel = m_transformScaleArrowModel.get(); break;
+            }
+            if(tModel) {
+                Application::Get().renderer.submit(tModel, xTransform.getTransformMatrix(), tShader, {{"u_color", Vector3(0.8, 0.0, 0.0)}}, Editor::TransformGizmoMoveID    , 10);
+                Application::Get().renderer.submit(tModel, yTransform.getTransformMatrix(), tShader, {{"u_color", Vector3(0.0, 0.8, 0.0)}}, Editor::TransformGizmoMoveID + 1, 10);
+                Application::Get().renderer.submit(tModel, zTransform.getTransformMatrix(), tShader, {{"u_color", Vector3(0.0, 0.0, 0.8)}}, Editor::TransformGizmoMoveID + 2, 10);
+            }
         }
     }
 

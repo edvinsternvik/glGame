@@ -56,18 +56,42 @@ namespace glGame {
                 
                 Vector3 axis;
                 switch(m_transformGizmoSelection) {
-                case TransformGizmoSelection::X: axis = Vector3(1.0, 0.0, 0.0); break;
-                case TransformGizmoSelection::Y: axis = Vector3(0.0, 1.0, 0.0); break;
-                case TransformGizmoSelection::Z: axis = Vector3(0.0, 0.0, -1.0); break;
+                    case TransformGizmoSelection::X: axis = Vector3(1.0, 0.0, 0.0); break;
+                    case TransformGizmoSelection::Y: axis = Vector3(0.0, 1.0, 0.0); break;
+                    case TransformGizmoSelection::Z: axis = Vector3(0.0, 0.0, -1.0); break;
                 }
-                axis = obj->transform->orientation * axis;
-                Vector3 dPos = getDeltaMouseOnPlane(obj->transform->position, axis);
-                Vector3 res = axis * glm::dot(dPos, axis);
- 
+                Vector2 mousePosPrev = Input::GetMouseViewportPositon() - Input::GetMouseViewportDelta();
+                Vector2 mousePosNow = Input::GetMouseViewportPositon();
+
+                Vector3 localAxis = obj->transform->orientation * axis;
+                Vector3 planeNormal = localAxis;
+                if(m_editor->transformType != TransformType::Rotate) planeNormal = getPlaneNormal(localAxis);
+                Vector3 ray1 = getScreenPosOnPlane(mousePosPrev, obj->transform->position, planeNormal);
+                Vector3 ray2 = getScreenPosOnPlane(mousePosNow, obj->transform->position, planeNormal);
+                Vector3 localRay1 = ray1 - obj->transform->position;
+                Vector3 localRay2 = ray2 - obj->transform->position;
+                Vector3 dPos = ray2 - ray1;
+
                 switch(m_editor->transformType) {
-                case TransformType::Move: obj->transform->move(res); break;
-                case TransformType::Rotate: obj->transform->rotate(res); break;
-                case TransformType::Scale: obj->transform->resize(res + Vector3(1.0)); break;
+                case TransformType::Move: {
+                    obj->transform->move(localAxis * glm::dot(dPos, localAxis));
+                    break;
+                }
+                case TransformType::Scale: {
+                    Vector3 res = axis * glm::dot(dPos, axis);
+                    res.z *= -1.0;
+                    obj->transform->resize(res + Vector3(1.0));
+                    break;
+                }
+                case TransformType::Rotate: {
+                    float circleLength = glm::length(localRay1);
+                    Vector3 ray2OnCircle = glm::normalize(localRay2) * circleLength;
+                    Vector3 circleDPos = ray2OnCircle - localRay1;
+                    Vector3 res = axis * glm::length(circleDPos);
+                    float sign = glm::sign(glm::dot(localAxis, glm::cross(ray2OnCircle, circleDPos)));
+                    obj->transform->rotate(res * sign);
+                    break;
+                }
                 }
                 if(!m_transformGizmoWasSelected) {
                     m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos);
@@ -127,7 +151,19 @@ namespace glGame {
         return inverseOrientation * rayDirLocal;
     }
 
-    Vector3 EditorController::getDeltaMouseOnPlane(Vector3 planeOrigin, Vector3 dirAlongPlane) {
+    Vector3 EditorController::getPlaneNormal(Vector3 vecAlongPlane) {
+        std::weak_ptr<GameObject> camera = m_editor->m_editorCameraGameObject;
+        if(camera.expired()) return Vector3(0.0, 0.0, 0.0);
+        Transform& cTransform = *camera.lock()->transform;
+        
+        Vector3 forwardDir = cTransform.orientation * Vector4(0.0, 0.0, -1.0, 0.0);
+        if(glm::dot(forwardDir, vecAlongPlane) == 1.0) forwardDir = cTransform.orientation * Vector4(1.0, 0.0, 0.0, 0.0);
+        Vector3 planeDirUp = glm::normalize(glm::cross(forwardDir, vecAlongPlane));
+        Vector3 planeNormal = glm::cross(vecAlongPlane, planeDirUp);
+        return planeNormal;
+    }
+
+    Vector3 EditorController::getScreenPosOnPlane(Vector2 normalizedScreenPos, Vector3 planeOrigin, Vector3 planeNormal) {
         std::weak_ptr<GameObject> camera = m_editor->m_editorCameraGameObject;
         if(camera.expired()) return Vector3(0.0);
 
@@ -137,24 +173,15 @@ namespace glGame {
         Quaternion invOrientation = glm::inverse(cTransform.orientation);
         Vector3 lineOrigin = cTransform.position;
 
-        Vector3 forwardDir = cTransform.orientation * Vector4(0.0, 0.0, -1.0, 0.0);
-        Vector3 planeDirUp = glm::normalize(glm::cross(forwardDir, dirAlongPlane));
-        Vector3 planeNormal = glm::cross(dirAlongPlane, planeDirUp);
-
-        Vector2 normalizedScreenPos = Input::GetMouseViewportPositon();
         Vector2 screenPos = normalizedScreenPos * Vector2(2.0, -2.0) - Vector2(1.0, -1.0);
-        Vector2 deltaScreenPos = Input::GetMouseViewportDelta() * Vector2(2.0, -2.0);
         
-        Vector3 rayDir1 = getRayDir(screenPos - deltaScreenPos, invProjMat, invOrientation);
-        Vector3 rayDir2 = getRayDir(screenPos                 , invProjMat, invOrientation);
+        Vector3 rayDir = getRayDir(screenPos, invProjMat, invOrientation);
 
-        Vector3 ray1 = castRayOnPlane(planeOrigin, planeNormal, lineOrigin, rayDir1);
-        Vector3 ray2 = castRayOnPlane(planeOrigin, planeNormal, lineOrigin, rayDir2);
-        Vector3 deltaRay = ray2 - ray1;
-        if(std::isnan(deltaRay.x) || std::isnan(deltaRay.y) || std::isnan(deltaRay.z)) {
+        Vector3 ray = castRayOnPlane(planeOrigin, planeNormal, lineOrigin, rayDir);
+        if(std::isnan(ray.x) || std::isnan(ray.y) || std::isnan(ray.z)) {
             return Vector3(0.0);
         }
-        return deltaRay;
+        return ray;
     }
 
 }

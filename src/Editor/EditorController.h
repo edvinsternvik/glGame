@@ -22,7 +22,8 @@ namespace glGame {
 		virtual void update(float deltatime) override;
 
 	private:
-		Vector3 getDeltaMouseOnPlane(Vector3 planeOrigin, Vector3 dirAlongPlane);
+		Vector3 getScreenPosOnPlane(Vector2 normalizedScreenPos, Vector3 planeOrigin, Vector3 planeNormal);
+		Vector3 getPlaneNormal(Vector3 vecAlongPlane);
 
 	private:
 		Editor* m_editor = nullptr;

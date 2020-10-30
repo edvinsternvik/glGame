@@ -28,7 +28,7 @@ namespace glGame {
         std::unique_ptr<Shader> m_objectOutlineShader;
         std::weak_ptr<MeshRenderer> m_selectedMeshRenderer;
 
-        std::unique_ptr<Model> m_transformMoveArrowModel;
+        std::unique_ptr<Model> m_transformMoveArrowModel, m_transformScaleArrowModel, m_transformRotateModel;
         std::unique_ptr<Shader> m_transformGizmoShader;
     };
 
