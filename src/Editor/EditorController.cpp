@@ -53,6 +53,8 @@ namespace glGame {
             if(!selectedObj.expired()) {
                 GameObject* obj = selectedObj.lock().get();
                 Vector3 prevPos = obj->transform->position;
+                Quaternion prevOrientation = obj->transform->orientation;
+                Vector3 prevScale = obj->transform->scale;
                 
                 Vector3 axis;
                 switch(m_transformGizmoSelection) {
@@ -94,7 +96,11 @@ namespace glGame {
                 }
                 }
                 if(!m_transformGizmoWasSelected) {
-                    m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos);
+                    switch(m_editor->transformType) {
+                    case TransformType::Move:   m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos); break;
+                    case TransformType::Scale:  m_editor->actionManager.beginChangePublicVariableAction<Quaternion>(&obj->transform->orientation, prevOrientation); break;
+                    case TransformType::Rotate: m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->scale, prevScale); break;
+                    }
                 }
             }
             m_transformGizmoWasSelected = true;
@@ -103,7 +109,11 @@ namespace glGame {
             if(m_transformGizmoWasSelected) {
                 auto selectedObj = m_editor->getSelectedItem<GameObject>();
                 if(!selectedObj.expired()) {
-                    m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->position, selectedObj.lock()->transform->position);
+                    switch(m_editor->transformType) {
+                    case TransformType::Move:   m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->position, selectedObj.lock()->transform->position); break;
+                    case TransformType::Scale:  m_editor->actionManager.endChangePublicVariableAction<Quaternion>(&selectedObj.lock()->transform->orientation, selectedObj.lock()->transform->orientation); break;
+                    case TransformType::Rotate: m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->scale, selectedObj.lock()->transform->scale); break;
+                    }
                 }
             }
             m_transformGizmoWasSelected = false;
