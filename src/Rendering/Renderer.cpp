@@ -122,17 +122,21 @@ namespace glGame {
 		glActiveTexture(GL_TEXTURE2);
 		m_lightManager->m_shadowmapTextureArray->bind();
 
-		// Render scene
+		// Prepare scene rendering
 		glViewport(0, 0, viewportSize.x, viewportSize.y);
 		bindDefaultRenderTarget();
 
-		bool firstLayer = true;
-		for(ObjectRenderDataLayer& renderDataLayer : m_renderDataList) {
-			clearDepthAndStencil();
-			renderObjects(renderDataLayer);
+		// Render scene
+		auto renderDataIterator = m_renderDataList.begin();
+		clearDepthAndStencil();
+		if(renderDataIterator != m_renderDataList.end()) renderObjects(*renderDataIterator);
+		renderSkybox();
 
-			if(firstLayer) renderSkybox();
-			firstLayer = false;
+		if(renderDataIterator != m_renderDataList.end()) renderDataIterator++;
+		while(renderDataIterator != m_renderDataList.end()) {
+			clearDepthAndStencil();
+			renderObjects(*renderDataIterator);
+			renderDataIterator++;
 		}
 
 		previousFrameRenderData = m_renderDataList;
