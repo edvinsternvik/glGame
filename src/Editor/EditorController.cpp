@@ -98,8 +98,8 @@ namespace glGame {
                 if(!m_transformGizmoWasSelected) {
                     switch(m_editor->transformType) {
                     case TransformType::Move:   m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->position, prevPos); break;
-                    case TransformType::Scale:  m_editor->actionManager.beginChangePublicVariableAction<Quaternion>(&obj->transform->orientation, prevOrientation); break;
-                    case TransformType::Rotate: m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->scale, prevScale); break;
+                    case TransformType::Rotate:  m_editor->actionManager.beginChangePublicVariableAction<Quaternion>(&obj->transform->orientation, prevOrientation); break;
+                    case TransformType::Scale: m_editor->actionManager.beginChangePublicVariableAction<Vector3>(&obj->transform->scale, prevScale); break;
                     }
                 }
             }
@@ -111,8 +111,8 @@ namespace glGame {
                 if(!selectedObj.expired()) {
                     switch(m_editor->transformType) {
                     case TransformType::Move:   m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->position, selectedObj.lock()->transform->position); break;
-                    case TransformType::Scale:  m_editor->actionManager.endChangePublicVariableAction<Quaternion>(&selectedObj.lock()->transform->orientation, selectedObj.lock()->transform->orientation); break;
-                    case TransformType::Rotate: m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->scale, selectedObj.lock()->transform->scale); break;
+                    case TransformType::Rotate:  m_editor->actionManager.endChangePublicVariableAction<Quaternion>(&selectedObj.lock()->transform->orientation, selectedObj.lock()->transform->orientation); break;
+                    case TransformType::Scale: m_editor->actionManager.endChangePublicVariableAction<Vector3>(&selectedObj.lock()->transform->scale, selectedObj.lock()->transform->scale); break;
                     }
                 }
             }
