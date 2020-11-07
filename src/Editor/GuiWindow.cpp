@@ -31,10 +31,10 @@ namespace glGame {
 		
 		int gameObjects = m_scene->getGameObjectCount();
 		for (int i = 0; i < gameObjects; ++i) {
-			bool selected = (current == m_scene->getGameObject(i).lock().get());
+			bool selected = (current == m_scene->getGameObjectByIndex(i).lock().get());
 			ImGui::PushID(i);
-			if (ImGui::Selectable(m_scene->getGameObject(i).lock()->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
-				std::weak_ptr<GameObject> gameObjectWeak = m_scene->getGameObjectShared(i);
+			if (ImGui::Selectable(m_scene->getGameObjectByIndex(i).lock()->name.c_str(), selected, ImGuiSelectableFlags_SpanAllColumns)) {
+				std::weak_ptr<GameObject> gameObjectWeak = m_scene->getGameObjectByIndex(i);
 				m_editor->selectItem(gameObjectWeak);
 			}
 			ImGui::PopID();

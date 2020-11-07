@@ -68,7 +68,7 @@ namespace glGame {
 
 		int gameObjects = m_activeScene->getGameObjectCount();
 		for(int i = 0; i < gameObjects; ++i) {
-			GameObject* gameObject = m_activeScene->getGameObject(i).lock().get();
+			GameObject* gameObject = m_activeScene->getGameObjectByIndex(i).lock().get();
 
 			file << "GameObject: " << gameObject->name << "\n";
 

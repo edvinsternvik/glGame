@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 namespace glGame {
 
@@ -15,8 +16,8 @@ namespace glGame {
 		std::shared_ptr<GameObject> createGameObject(std::string name);
 		std::shared_ptr<GameObject> createGameObject(std::shared_ptr<GameObject> gameObject);
 		void deleteGameObject(GameObject* gameObject);
-		std::weak_ptr<GameObject> getGameObject(int index);
-		std::shared_ptr<GameObject> getGameObjectShared(int index);
+		std::weak_ptr<GameObject> getGameObjectByIndex(int index);
+		std::weak_ptr<GameObject> getGameObject(int id);
 		int getGameObjectCount() { return m_gameObjects.size(); }
 
 		void init();
@@ -28,6 +29,7 @@ namespace glGame {
 		
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+		std::unordered_map<int, std::weak_ptr<GameObject>> m_gameObjectIdMap;
 		int nextId = 0;
 	};
 
