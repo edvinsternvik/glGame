@@ -36,6 +36,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Attribute: bounciness 0.200000
+Attribute: friction 0.500000
 Attribute: lockRotation 0
 GameObject: Object2
 Component: Transform
@@ -49,6 +50,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Attribute: bounciness 0.200000
+Attribute: friction 0.500000
 Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0,0,0}
@@ -62,15 +64,13 @@ Attribute: orientation {0,0,0,1}
 Component: MeshRenderer
 Attribute: Model ./Assets/cube.obj
 Attribute: Material ./Assets/materials/mat1.material
-Component: RigidBody
-Attribute: gravityScale 0.000000
-Attribute: mass 100000.000000
-Attribute: bounciness 0.200000
-Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0,0,0}
 Attribute: localRotation {0,0,0}
 Attribute: scale {10,10,10}
+Component: StaticBody
+Attribute: bounciness 0.200000
+Attribute: friction 0.500000
 GameObject: Object3
 Component: Transform
 Attribute: position {2.51,5.13,-11.32}
@@ -87,6 +87,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Attribute: bounciness 0.200000
+Attribute: friction 0.500000
 Attribute: lockRotation 0
 GameObject: Object4
 Component: Transform
@@ -100,6 +101,7 @@ Component: RigidBody
 Attribute: gravityScale 1.000000
 Attribute: mass 1.000000
 Attribute: bounciness 0.200000
+Attribute: friction 0.500000
 Attribute: lockRotation 0
 Component: BoxCollider
 Attribute: localPosition {0,0,0}

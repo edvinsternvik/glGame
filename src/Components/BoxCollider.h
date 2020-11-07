@@ -22,6 +22,7 @@ namespace glGame {
     private:
         redPhysics3d::CollisionBox* m_collisionBox = nullptr;
         friend class RigidBody;
+        friend class StaticBody;
     };
 
 }

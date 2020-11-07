@@ -1,5 +1,6 @@
 #include "Physics3d.h"
 #include "../Components/RigidBody.h"
+#include "../Components/StaticBody.h"
 #include "../GameObject.h"
 #include "../Components/Transform.h"
 
@@ -55,6 +56,30 @@ namespace glGame {
         m_physicsWorld.removeRigidBody(rigidbody->m_rigidBody);
         rigidbody->m_rigidBody = nullptr;
         m_rigidBodies.erase(rigidbody);
+    }
+
+    void Physics3d::addStaticBody(StaticBody* staticBody) {
+        auto search = m_staticBodies.find(staticBody);
+        if(search != m_staticBodies.end()) return;
+
+        m_staticBodies.insert(staticBody);
+        redPhysics3d::StaticBody* newStaticBody = m_physicsWorld.addStaticBody();
+        staticBody->m_staticBody = newStaticBody;
+
+        Vector3& position = staticBody->getGameObject()->transform->position;
+        Quaternion& orientation = staticBody->getGameObject()->transform->orientation;
+
+        newStaticBody->position = redPhysics3d::Vector3(position.x, position.y, position.z);
+        newStaticBody->orientation = redPhysics3d::Quaternion(orientation.w, orientation.x, orientation.y, orientation.z);
+    }
+
+    void Physics3d::removeStaticBody(StaticBody* staticBody) {
+        auto search = m_staticBodies.find(staticBody);
+        if(search == m_staticBodies.end()) return;
+
+        m_physicsWorld.removeStaticBody(staticBody->m_staticBody);
+        staticBody->m_staticBody = nullptr;
+        m_staticBodies.erase(staticBody);
     }
 
 

@@ -19,10 +19,13 @@ namespace glGame {
 
         void addRigidBody(RigidBody* rigidbody);
         void removeRigidBody(RigidBody* rigidbody);
+        void addStaticBody(StaticBody* staticBody);
+        void removeStaticBody(StaticBody* staticBody);
 
     private:
         redPhysics3d::PhysicsWorld m_physicsWorld;
         std::unordered_set<RigidBody*> m_rigidBodies;
+        std::unordered_set<StaticBody*> m_staticBodies;
     };
 
 }
